@@ -105,6 +105,7 @@
     <header class="hero">
         <h1>Is your website <span>secure?</span></h1>
         <p>Paste any URL. Get an instant security grade with specific recommendations. Free. No signup.</p>
+        <p style="font-size:0.75rem; color:var(--muted); margin-top:-20px; margin-bottom:30px;">Results are approximate until backend scanner is deployed. <a href="https://github.com/babakizo420/headerguard" style="color:var(--accent);">Use HeaderGuard CLI</a> for accurate results.</p>
     </header>
 
     <div class="scanner" id="scanner">
@@ -164,6 +165,9 @@
     </footer>
 
 <script>
+// When the Cloudflare Worker is deployed, set this URL and uncomment the Worker path below
+const WORKER_URL = ''; // e.g. 'https://securva-scan-api.your-subdomain.workers.dev'
+
 const HEADERS_TO_CHECK = [
     { name: "Strict-Transport-Security", severity: "HIGH", points: 15 },
     { name: "Content-Security-Policy", severity: "HIGH", points: 20 },
@@ -186,6 +190,44 @@ async function runScan() {
 
     btn.disabled = true;
     btn.textContent = 'Scanning...';
+
+    // Use Worker API if available (accurate), otherwise fall back to CORS proxy (approximate)
+    if (WORKER_URL) {
+        try {
+            const res = await fetch(WORKER_URL + '/?url=' + encodeURIComponent(url));
+            const data = await res.json();
+
+            if (data.error) throw new Error(data.error);
+
+            const gradeLetter = document.getElementById('grade-letter');
+            gradeLetter.textContent = data.grade;
+            gradeLetter.className = 'grade-letter ' + data.grade.toLowerCase();
+            document.getElementById('grade-url').textContent = data.url;
+            document.getElementById('grade-score').textContent = `${data.score}/${data.maxScore} points`;
+
+            document.getElementById('header-checks').innerHTML = data.headers.map(h => `
+                <div class="check-item">
+                    <div><div class="check-name">${h.name}</div><div class="check-sev">${h.severity}</div></div>
+                    <span class="${h.present ? 'check-pass' : 'check-fail'}">${h.present ? 'PASS' : 'FAIL'}</span>
+                </div>
+            `).join('');
+
+            document.getElementById('ndpa-checks').innerHTML = `
+                <div class="check-item"><div><div class="check-name">Cookie Consent</div><div class="check-sev">NDPA S.25</div></div><span class="${data.ndpa.cookieConsent ? 'check-pass' : 'check-fail'}">${data.ndpa.cookieConsent ? 'PASS' : 'FAIL'}</span></div>
+                <div class="check-item"><div><div class="check-name">Privacy Policy</div><div class="check-sev">NDPA S.26-27</div></div><span class="${data.ndpa.privacyPolicy ? 'check-pass' : 'check-fail'}">${data.ndpa.privacyPolicy ? 'PASS' : 'FAIL'}</span></div>
+            `;
+
+            document.getElementById('cta-box').style.display = (data.score / data.maxScore) < 0.8 ? 'block' : 'none';
+            document.getElementById('results').classList.add('show');
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            btn.disabled = false;
+            btn.textContent = 'Scan';
+            return;
+        } catch (err) {
+            // Fall through to proxy method
+            console.warn('Worker scan failed, falling back to proxy:', err);
+        }
+    }
 
     try {
         // Try multiple CORS proxies for reliability
