@@ -109,7 +109,7 @@
 
     <div class="scanner" id="scanner">
         <div class="scan-input">
-            <input type="text" id="url-input" placeholder="https://example.com" autofocus>
+            <input type="text" id="url-input" placeholder="e.g. pejji.com" autofocus>
             <button class="scan-btn" id="scan-btn" onclick="runScan()">Scan</button>
         </div>
     </div>
@@ -180,20 +180,38 @@ async function runScan() {
     let url = input.value.trim();
 
     if (!url) return;
-    if (!url.startsWith('http')) url = 'https://' + url;
+    // Clean up input: remove spaces, auto-add https
+    url = url.toLowerCase().replace(/\s+/g, '');
+    if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
 
     btn.disabled = true;
     btn.textContent = 'Scanning...';
 
     try {
-        // Use a CORS proxy to fetch headers
-        const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
-        const response = await fetch(proxyUrl);
-        const headerText = response.headers;
+        // Try multiple CORS proxies for reliability
+        const proxies = [
+            'https://api.allorigins.win/raw?url=',
+            'https://corsproxy.io/?' ,
+            'https://api.codetabs.com/v1/proxy?quest='
+        ];
 
-        // Since we can't read response headers from a proxy reliably,
-        // we'll fetch the HTML and check for meta-level indicators
-        const html = await response.text();
+        let html = '';
+        let fetched = false;
+
+        for (const proxy of proxies) {
+            try {
+                const response = await fetch(proxy + encodeURIComponent(url), { signal: AbortSignal.timeout(8000) });
+                if (response.ok) {
+                    html = await response.text();
+                    if (html.length > 100) { fetched = true; break; }
+                }
+            } catch (e) { continue; }
+        }
+
+        if (!fetched || html.length < 100) {
+            throw new Error('Could not reach the website');
+        }
+
         const htmlLower = html.toLowerCase();
 
         // Simulate header detection from HTML meta tags and common patterns
@@ -282,7 +300,21 @@ async function runScan() {
         results.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     } catch (err) {
-        alert('Could not scan this URL. Make sure it is a valid, publicly accessible website.');
+        // Show inline error instead of alert
+        const results = document.getElementById('results');
+        const headerList = document.getElementById('header-checks');
+        const ndpaList = document.getElementById('ndpa-checks');
+        const gradeCard = document.querySelector('.grade-card');
+
+        document.getElementById('grade-letter').textContent = '?';
+        document.getElementById('grade-letter').className = 'grade-letter f';
+        document.getElementById('grade-url').textContent = url;
+        document.getElementById('grade-score').textContent = 'Could not reach this website. Check the URL and try again.';
+        headerList.innerHTML = '';
+        ndpaList.innerHTML = '';
+        document.getElementById('cta-box').style.display = 'none';
+        results.classList.add('show');
+        results.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     btn.disabled = false;
