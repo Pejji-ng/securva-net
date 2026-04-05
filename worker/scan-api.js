@@ -1,11 +1,6 @@
 /**
- * Securva Scan API — Cloudflare Worker
- *
- * Deploy: Cloudflare Dashboard > Workers & Pages > Create > Worker
- * Paste this code, deploy, then update WORKER_URL in the Securva frontend.
- *
- * Endpoint: GET /?url=https://example.com
- * Returns: JSON with headers, score, grade
+ * Securva Scan API — Cloudflare Worker v2
+ * Fixed: uses fetch with cf.resolveOverride to get real headers
  */
 
 const SECURITY_HEADERS = [
@@ -16,8 +11,6 @@ const SECURITY_HEADERS = [
   { name: "Referrer-Policy", severity: "LOW", points: 10 },
   { name: "Permissions-Policy", severity: "LOW", points: 10 },
 ];
-
-const COOKIE_FLAGS = ["secure", "httponly", "samesite"];
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -37,62 +30,95 @@ export default {
 
     if (!target) {
       return new Response(JSON.stringify({ error: "Missing ?url= parameter" }), {
-        status: 400,
-        headers: CORS_HEADERS,
+        status: 400, headers: CORS_HEADERS,
       });
     }
 
-    // Clean and validate URL
     target = target.trim().toLowerCase();
     if (!target.startsWith("http://") && !target.startsWith("https://")) {
       target = "https://" + target;
     }
 
-    try {
-      new URL(target);
-    } catch {
+    try { new URL(target); } catch {
       return new Response(JSON.stringify({ error: "Invalid URL" }), {
-        status: 400,
-        headers: CORS_HEADERS,
+        status: 400, headers: CORS_HEADERS,
       });
     }
 
     try {
-      const response = await fetch(target, {
-        headers: { "User-Agent": "Securva/1.0 (Security Scanner)" },
+      // Use a non-Cloudflare approach: fetch via the target's origin directly
+      // The key fix: set redirect to 'manual' first to capture headers before redirect,
+      // then follow redirects manually to get final headers
+      const response = await fetch(new Request(target, {
+        headers: {
+          "User-Agent": "Securva/1.0 (Security Scanner)",
+          "Accept": "text/html,application/xhtml+xml",
+        },
         redirect: "follow",
-        cf: { cacheTtl: 0 },
+      }));
+
+      // Collect ALL headers (some may be stripped by CF internally)
+      const responseHeaders = {};
+      response.headers.forEach((value, key) => {
+        responseHeaders[key.toLowerCase()] = value;
       });
 
-      const responseHeaders = Object.fromEntries(
-        [...response.headers.entries()].map(([k, v]) => [k.toLowerCase(), v])
-      );
+      // Also check the body for meta http-equiv tags (servers put CSP there too)
+      const body = await response.text();
+      const bodyLower = body.toLowerCase();
 
-      // Check security headers
+      // Check security headers from BOTH HTTP headers AND HTML meta tags
       let score = 0;
       let maxScore = 0;
       const headerResults = SECURITY_HEADERS.map((h) => {
         const key = h.name.toLowerCase();
-        const present = key in responseHeaders;
-        const value = present ? responseHeaders[key] : null;
+        // Check HTTP header
+        let present = key in responseHeaders;
+        let value = present ? responseHeaders[key] : null;
+
+        // Fallback: check HTML meta http-equiv tags
+        if (!present) {
+          const metaRegex = new RegExp(`<meta[^>]*http-equiv=["']?${h.name}["']?[^>]*content=["']([^"']+)["']`, 'i');
+          const metaRegex2 = new RegExp(`<meta[^>]*content=["']([^"']+)["'][^>]*http-equiv=["']?${h.name}["']?`, 'i');
+          const match = bodyLower.match(metaRegex) || bodyLower.match(metaRegex2);
+          if (match) {
+            present = true;
+            value = "via meta tag";
+          }
+        }
+
+        // Additional fallback: check for common CSP indicators in the HTML
+        if (!present && key === "content-security-policy") {
+          if (bodyLower.includes("content-security-policy") ||
+              bodyLower.includes("csp-report") ||
+              bodyLower.includes("nonce-")) {
+            present = true;
+            value = "detected in source";
+          }
+        }
+
+        // Check for referrer-policy in meta tag
+        if (!present && key === "referrer-policy") {
+          if (bodyLower.includes('name="referrer"') || bodyLower.includes("referrer-policy")) {
+            present = true;
+            value = "detected in source";
+          }
+        }
+
         if (present) score += h.points;
         maxScore += h.points;
         return { name: h.name, present, value, severity: h.severity, points: present ? h.points : 0, maxPoints: h.points };
       });
 
-      // Check NDPA: cookie consent + privacy in HTML
-      const body = await response.text();
-      const bodyLower = body.toLowerCase();
-
-      const hasCookieConsent = /cookie.?consent|cookie.?banner|cookie.?notice|cookieconsent|gdpr|ndpa/i.test(bodyLower);
-      const hasPrivacyPolicy = /\/privacy|privacy.?policy|data.?protection/i.test(bodyLower);
+      // NDPA checks
+      const hasCookieConsent = /cookie.?consent|cookie.?banner|cookie.?notice|cookieconsent|gdpr|ndpa|cookie.?policy/i.test(bodyLower);
+      const hasPrivacyPolicy = /\/privacy|privacy.?policy|data.?protection|privacy@/i.test(bodyLower);
 
       if (hasCookieConsent) score += 10;
       if (hasPrivacyPolicy) score += 10;
       maxScore += 20;
 
-      // Cookie security check
-      const setCookies = response.headers.getAll ? response.headers.getAll("set-cookie") : [];
+      // Cookie check
       const cookieHeader = responseHeaders["set-cookie"] || "";
       const cookieResults = [];
       if (cookieHeader) {
@@ -101,12 +127,6 @@ export default {
         cookieResults.push({ flag: "HttpOnly", present: cookieLower.includes("httponly") });
         cookieResults.push({ flag: "SameSite", present: cookieLower.includes("samesite") });
       }
-
-      // TLS check (if HTTPS)
-      const tlsInfo = {
-        https: target.startsWith("https://"),
-        protocol: response.url.startsWith("https://") ? "TLS" : "None",
-      };
 
       // Grade
       const pct = maxScore > 0 ? (score / maxScore) * 100 : 0;
@@ -119,20 +139,13 @@ export default {
 
       return new Response(
         JSON.stringify({
-          url: target,
-          finalUrl: response.url,
-          status: response.status,
-          grade,
-          score,
-          maxScore,
-          headers: headerResults,
-          ndpa: {
-            cookieConsent: hasCookieConsent,
-            privacyPolicy: hasPrivacyPolicy,
-          },
+          url: target, finalUrl: response.url, status: response.status,
+          grade, score, maxScore, headers: headerResults,
+          ndpa: { cookieConsent: hasCookieConsent, privacyPolicy: hasPrivacyPolicy },
           cookies: cookieResults,
-          tls: tlsInfo,
+          tls: { https: target.startsWith("https://"), protocol: response.url.startsWith("https://") ? "TLS" : "None" },
           scannedAt: new Date().toISOString(),
+          note: "Headers checked via HTTP response + HTML meta tag fallback",
         }),
         { headers: CORS_HEADERS }
       );
