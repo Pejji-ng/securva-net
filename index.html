@@ -105,7 +105,7 @@
     <header class="hero">
         <h1>Is your website <span>secure?</span></h1>
         <p>Paste any URL. Get an instant security grade with specific recommendations. Free. No signup.</p>
-        <p style="font-size:0.75rem; color:var(--muted); margin-top:-20px; margin-bottom:30px;">Results are approximate until backend scanner is deployed. <a href="https://github.com/babakizo420/headerguard" style="color:var(--accent);">Use HeaderGuard CLI</a> for accurate results.</p>
+        <p style="font-size:0.75rem; color:var(--muted); margin-top:-20px; margin-bottom:30px;">Powered by <a href="https://github.com/babakizo420/headerguard" style="color:var(--accent);">HeaderGuard</a>. Open source.</p>
     </header>
 
     <div class="scanner" id="scanner">
@@ -166,7 +166,7 @@
 
 <script>
 // When the Cloudflare Worker is deployed, set this URL and uncomment the Worker path below
-const WORKER_URL = ''; // e.g. 'https://securva-scan-api.your-subdomain.workers.dev'
+const WORKER_URL = 'https://shrill-water-63f2.babakizo542.workers.dev';
 
 const HEADERS_TO_CHECK = [
     { name: "Strict-Transport-Security", severity: "HIGH", points: 15 },
