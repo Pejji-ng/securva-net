@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5 security headers every Nigerian business website needs | Securva</title>
+    <meta name="description" content="Your website might be leaking information right now. These 5 headers stop the most common attacks.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,600&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#030308;--surface:#0A0A12;--card:#101020;--border:#1a1a30;--text:#F0EDF7;--muted:#6a6680;--accent:#7B68EE;--green:#4ade80;--red:#f87171;--font:'Cabinet Grotesk',system-ui,sans-serif;--serif:'Newsreader',Georgia,serif;--mono:'IBM Plex Mono',monospace}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:var(--font);background:var(--bg);color:var(--text)}
+        .nav{padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+        .nav-logo{font-weight:900;font-size:1.3rem;color:var(--text);text-decoration:none}.nav-logo span{color:var(--accent)}
+        .nav a.back{color:var(--muted);text-decoration:none;font-size:0.85rem}
+        article{max-width:680px;margin:0 auto;padding:60px 24px 80px}
+        .tag{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:16px}
+        h1{font-size:clamp(2rem,5vw,2.8rem);font-weight:900;letter-spacing:-0.03em;line-height:1.15;margin-bottom:16px}
+        .meta{font-size:0.85rem;color:var(--muted);margin-bottom:40px}
+        article p{font-family:var(--serif);font-size:1.05rem;line-height:1.8;color:#c8c4d0;margin-bottom:24px}
+        article h2{font-size:1.4rem;font-weight:800;margin:40px 0 16px;letter-spacing:-0.02em}
+        article strong{color:var(--text)}
+        article ul{margin:0 0 24px 20px;font-family:var(--serif);font-size:1rem;color:#c8c4d0;line-height:1.8}
+        .header-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin:24px 0}
+        .header-name{font-family:var(--mono);font-size:0.9rem;color:var(--accent);font-weight:600;margin-bottom:8px}
+        .header-what{font-weight:700;color:var(--text);margin-bottom:4px}
+        .header-why{font-family:var(--serif);font-size:0.95rem;color:#c8c4d0}
+        .header-fix{font-family:var(--mono);font-size:0.8rem;color:var(--muted);margin-top:12px;padding:10px;background:var(--surface);border-radius:6px;word-break:break-all}
+        .cta-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:32px;text-align:center;margin:40px 0}
+        .cta-box h3{margin-bottom:8px}
+        .cta-box p{font-family:var(--font) !important;color:var(--muted);font-size:0.9rem;margin-bottom:16px}
+        .cta-link{display:inline-block;padding:12px 24px;background:var(--accent);color:white;text-decoration:none;border-radius:10px;font-weight:700;font-size:0.9rem}
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="nav-logo">Sec<span>urva</span></a>
+        <a href="/" class="back">&larr; Back to scanner</a>
+    </nav>
+    <article>
+        <div class="tag">Guide</div>
+        <h1>5 security headers every Nigerian business website needs</h1>
+        <div class="meta">April 2026 | 7 min read</div>
+
+        <p>Your website talks to browsers every time someone visits. Along with the page content, it sends invisible instructions called <strong>HTTP headers</strong>. These headers tell the browser how to handle your site securely.</p>
+
+        <p>Most Nigerian business websites send none of these security headers. That means the browser has to guess, and it usually guesses wrong. Here are the 5 headers you need and why each one matters.</p>
+
+        <div class="header-card">
+            <div class="header-name">1. Content-Security-Policy (CSP)</div>
+            <div class="header-what">Stops hackers from injecting malicious scripts</div>
+            <div class="header-why">Without CSP, any script can run on your page. An attacker who finds a way to inject JavaScript can steal form data, redirect customers to fake pages, or install malware. CSP tells the browser: "Only run scripts from sources I explicitly trust."</div>
+            <div class="header-fix">Content-Security-Policy: default-src 'self'; script-src 'self'</div>
+        </div>
+
+        <p>CSP is the most important security header. It is also the one that is missing from 96% of Nigerian business websites we scanned.</p>
+
+        <div class="header-card">
+            <div class="header-name">2. Strict-Transport-Security (HSTS)</div>
+            <div class="header-what">Forces encrypted connections</div>
+            <div class="header-why">HSTS tells browsers: "Always use HTTPS, never HTTP." Without it, someone on the same Wi-Fi network (a coffee shop, a co-working space, a hotel) could intercept your customers' traffic. HSTS makes downgrade attacks impossible.</div>
+            <div class="header-fix">Strict-Transport-Security: max-age=31536000; includeSubDomains; preload</div>
+        </div>
+
+        <p>Having an SSL certificate is not enough. HSTS makes sure the browser always uses it, even if someone types "http://" instead of "https://".</p>
+
+        <div class="header-card">
+            <div class="header-name">3. X-Frame-Options</div>
+            <div class="header-what">Prevents clickjacking attacks</div>
+            <div class="header-why">Without this header, an attacker can embed your website inside a transparent frame on their own page. The victim thinks they are clicking buttons on the attacker's site, but they are actually clicking on yours. This is how people get tricked into making payments or changing account settings.</div>
+            <div class="header-fix">X-Frame-Options: DENY</div>
+        </div>
+
+        <div class="header-card">
+            <div class="header-name">4. X-Content-Type-Options</div>
+            <div class="header-what">Prevents file type confusion</div>
+            <div class="header-why">Browsers sometimes try to "guess" what type of file they are receiving. An attacker can upload a file that looks like an image but is actually a script. This header tells the browser: "Don't guess. Use the file type I told you."</div>
+            <div class="header-fix">X-Content-Type-Options: nosniff</div>
+        </div>
+
+        <div class="header-card">
+            <div class="header-name">5. Permissions-Policy</div>
+            <div class="header-what">Blocks access to camera, microphone, and location</div>
+            <div class="header-why">By default, any script on your page can request access to your visitors' camera, microphone, and GPS location. A malicious script injected into your page could silently activate these. Permissions-Policy shuts them off unless you explicitly need them.</div>
+            <div class="header-fix">Permissions-Policy: camera=(), microphone=(), geolocation=()</div>
+        </div>
+
+        <h2>How to add these headers</h2>
+
+        <p>The exact method depends on your hosting setup:</p>
+
+        <ul>
+            <li><strong>Cloudflare Pages:</strong> Create a <code>_headers</code> file in your public folder</li>
+            <li><strong>Nginx:</strong> Add <code>add_header</code> directives to your server block</li>
+            <li><strong>Apache:</strong> Add headers in your <code>.htaccess</code> file</li>
+            <li><strong>WordPress:</strong> Use a security plugin like "Headers Security Advanced & HSTS WP"</li>
+        </ul>
+
+        <p>It takes about 30 minutes for a developer to add all 5. The difference between an F-grade site and an A-grade site is usually just these headers.</p>
+
+        <div class="cta-box">
+            <h3>Check your website now</h3>
+            <p>Find out which headers you are missing. Free, instant scan.</p>
+            <a href="/" class="cta-link">Scan on Securva</a>
+        </div>
+
+        <p>If you need help adding these headers, <a href="https://wa.me/15873201360?text=Hi!%20I%20need%20help%20adding%20security%20headers%20to%20my%20website." style="color:var(--accent)">reach out to Pejji</a>. Every site we build includes all 5 headers from day one.</p>
+    </article>
+</body>
+</html>
