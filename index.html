@@ -131,7 +131,7 @@
         <div class="cta-box" id="cta-box" style="display:none">
             <h3>Need help fixing these?</h3>
             <p>Pejji builds secure, NDPA-compliant websites for Nigerian businesses. We can fix your security headers and get you to an A.</p>
-            <a href="https://wa.me/15873201360?text=Hi%20Pejji!%20I%20just%20scanned%20my%20site%20on%20Securva%20and%20need%20help%20fixing%20my%20security%20headers." class="cta-btn" target="_blank" rel="noopener">
+            <a href="https://wa.me/2349044526924?text=Hi%20Pejji!%20I%20just%20scanned%20my%20site%20on%20Securva%20and%20need%20help%20fixing%20my%20security%20headers." class="cta-btn" target="_blank" rel="noopener">
                 Chat with Pejji on WhatsApp
             </a>
         </div>
@@ -165,17 +165,8 @@
     </footer>
 
 <script>
-// When the Cloudflare Worker is deployed, set this URL and uncomment the Worker path below
-const WORKER_URL = 'https://shrill-water-63f2.babakizo542.workers.dev';
-
-const HEADERS_TO_CHECK = [
-    { name: "Strict-Transport-Security", severity: "HIGH", points: 15 },
-    { name: "Content-Security-Policy", severity: "HIGH", points: 20 },
-    { name: "X-Frame-Options", severity: "MEDIUM", points: 10 },
-    { name: "X-Content-Type-Options", severity: "MEDIUM", points: 10 },
-    { name: "Referrer-Policy", severity: "LOW", points: 10 },
-    { name: "Permissions-Policy", severity: "LOW", points: 10 },
-];
+// Securva HeaderGuard API (DO box behind Cloudflare proxy)
+const API_URL = 'https://api.securva.net';
 
 async function runScan() {
     const input = document.getElementById('url-input');
@@ -191,169 +182,65 @@ async function runScan() {
     btn.disabled = true;
     btn.textContent = 'Scanning...';
 
-    // Use Worker API if available (accurate), otherwise fall back to CORS proxy (approximate)
-    if (WORKER_URL) {
-        try {
-            const res = await fetch(WORKER_URL + '/?url=' + encodeURIComponent(url));
-            const data = await res.json();
-
-            if (data.error) throw new Error(data.error);
-
-            const gradeLetter = document.getElementById('grade-letter');
-            gradeLetter.textContent = data.grade;
-            gradeLetter.className = 'grade-letter ' + data.grade.toLowerCase();
-            document.getElementById('grade-url').textContent = data.url;
-            document.getElementById('grade-score').textContent = `${data.score}/${data.maxScore} points`;
-
-            document.getElementById('header-checks').innerHTML = data.headers.map(h => `
-                <div class="check-item">
-                    <div><div class="check-name">${h.name}</div><div class="check-sev">${h.severity}</div></div>
-                    <span class="${h.present ? 'check-pass' : 'check-fail'}">${h.present ? 'PASS' : 'FAIL'}</span>
-                </div>
-            `).join('');
-
-            document.getElementById('ndpa-checks').innerHTML = `
-                <div class="check-item"><div><div class="check-name">Cookie Consent</div><div class="check-sev">NDPA S.25</div></div><span class="${data.ndpa.cookieConsent ? 'check-pass' : 'check-fail'}">${data.ndpa.cookieConsent ? 'PASS' : 'FAIL'}</span></div>
-                <div class="check-item"><div><div class="check-name">Privacy Policy</div><div class="check-sev">NDPA S.26-27</div></div><span class="${data.ndpa.privacyPolicy ? 'check-pass' : 'check-fail'}">${data.ndpa.privacyPolicy ? 'PASS' : 'FAIL'}</span></div>
-            `;
-
-            document.getElementById('cta-box').style.display = (data.score / data.maxScore) < 0.8 ? 'block' : 'none';
-            document.getElementById('results').classList.add('show');
-            document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
-            btn.disabled = false;
-            btn.textContent = 'Scan';
-            return;
-        } catch (err) {
-            // Fall through to proxy method
-            console.warn('Worker scan failed, falling back to proxy:', err);
-        }
-    }
+    // Strip protocol for the API domain param
+    let domain = url.replace(/^https?:\/\//, '').replace(/\/+$/, '');
 
     try {
-        // Try multiple CORS proxies for reliability
-        const proxies = [
-            'https://api.allorigins.win/raw?url=',
-            'https://corsproxy.io/?' ,
-            'https://api.codetabs.com/v1/proxy?quest='
-        ];
+        const res = await fetch(API_URL + '/api/scan?domain=' + encodeURIComponent(domain));
+        const data = await res.json();
 
-        let html = '';
-        let fetched = false;
+        if (data.error) throw new Error(data.error);
 
-        for (const proxy of proxies) {
-            try {
-                const response = await fetch(proxy + encodeURIComponent(url), { signal: AbortSignal.timeout(8000) });
-                if (response.ok) {
-                    html = await response.text();
-                    if (html.length > 100) { fetched = true; break; }
-                }
-            } catch (e) { continue; }
-        }
-
-        if (!fetched || html.length < 100) {
-            throw new Error('Could not reach the website');
-        }
-
-        const htmlLower = html.toLowerCase();
-
-        // Simulate header detection from HTML meta tags and common patterns
-        const detected = {};
-
-        // Check for CSP meta tag
-        detected['Content-Security-Policy'] = htmlLower.includes('content-security-policy') || htmlLower.includes('csp-');
-
-        // Check for common security indicators in the HTML
-        detected['X-Frame-Options'] = htmlLower.includes('x-frame-options') || htmlLower.includes('frame-ancestors');
-        detected['X-Content-Type-Options'] = htmlLower.includes('nosniff');
-        detected['Referrer-Policy'] = htmlLower.includes('referrer-policy') || htmlLower.includes('referrer');
-        detected['Permissions-Policy'] = htmlLower.includes('permissions-policy') || htmlLower.includes('feature-policy');
-        detected['Strict-Transport-Security'] = url.startsWith('https');
-
-        // NDPA checks
-        const hasCookieConsent = /cookie|consent|gdpr|ndpa|cookie.banner|cookie.consent/i.test(htmlLower);
-        const hasPrivacyPolicy = /privacy.policy|privacy|data.protection|\/privacy/i.test(htmlLower);
-
-        // Calculate score
-        let score = 0;
-        let maxScore = 0;
-        const headerResults = [];
-
-        for (const h of HEADERS_TO_CHECK) {
-            const present = detected[h.name] || false;
-            if (present) score += h.points;
-            maxScore += h.points;
-            headerResults.push({ ...h, present });
-        }
-
-        // NDPA points
-        if (hasCookieConsent) score += 10;
-        if (hasPrivacyPolicy) score += 10;
-        maxScore += 20;
-
-        const pct = (score / maxScore) * 100;
-        let grade;
-        if (pct >= 90) grade = 'A';
-        else if (pct >= 80) grade = 'B';
-        else if (pct >= 70) grade = 'C';
-        else if (pct >= 50) grade = 'D';
-        else grade = 'F';
-
-        // Render results
+        // Map DO API response to display format
         const gradeLetter = document.getElementById('grade-letter');
-        gradeLetter.textContent = grade;
-        gradeLetter.className = 'grade-letter ' + grade.toLowerCase();
-        document.getElementById('grade-url').textContent = url;
-        document.getElementById('grade-score').textContent = `${score}/${maxScore} points`;
+        gradeLetter.textContent = data.grade;
+        gradeLetter.className = 'grade-letter ' + data.grade.toLowerCase();
+        document.getElementById('grade-url').textContent = 'https://' + data.domain;
+        document.getElementById('grade-score').textContent = `${data.score}/10 points`;
 
-        const headerList = document.getElementById('header-checks');
-        headerList.innerHTML = headerResults.map(h => `
+        // Header severity mapping
+        const severityMap = {
+            'Strict-Transport-Security': 'HIGH',
+            'Content-Security-Policy': 'HIGH',
+            'X-Frame-Options': 'MEDIUM',
+            'X-Content-Type-Options': 'MEDIUM',
+            'Referrer-Policy': 'LOW',
+            'Permissions-Policy': 'LOW',
+        };
+
+        document.getElementById('header-checks').innerHTML = data.headers.map(h => `
             <div class="check-item">
-                <div>
-                    <div class="check-name">${h.name}</div>
-                    <div class="check-sev">${h.severity}</div>
-                </div>
-                <span class="${h.present ? 'check-pass' : 'check-fail'}">${h.present ? 'PASS' : 'FAIL'}</span>
+                <div><div class="check-name">${h.name}</div><div class="check-sev">${severityMap[h.name] || 'LOW'}</div></div>
+                <span class="${h.status === 'pass' ? 'check-pass' : 'check-fail'}">${h.status === 'pass' ? 'PASS' : 'FAIL'}</span>
             </div>
         `).join('');
 
-        const ndpaList = document.getElementById('ndpa-checks');
-        ndpaList.innerHTML = `
+        // SSL check row
+        const sslHtml = data.ssl ? `
             <div class="check-item">
-                <div>
-                    <div class="check-name">Cookie Consent</div>
-                    <div class="check-sev">NDPA S.25</div>
-                </div>
-                <span class="${hasCookieConsent ? 'check-pass' : 'check-fail'}">${hasCookieConsent ? 'PASS' : 'FAIL'}</span>
+                <div><div class="check-name">SSL Certificate</div><div class="check-sev">HIGH</div></div>
+                <span class="${data.ssl.valid ? 'check-pass' : 'check-fail'}">${data.ssl.valid ? 'PASS' : 'FAIL'}</span>
             </div>
-            <div class="check-item">
-                <div>
-                    <div class="check-name">Privacy Policy</div>
-                    <div class="check-sev">NDPA S.26-27</div>
-                </div>
-                <span class="${hasPrivacyPolicy ? 'check-pass' : 'check-fail'}">${hasPrivacyPolicy ? 'PASS' : 'FAIL'}</span>
-            </div>
+        ` : '';
+
+        document.getElementById('ndpa-checks').innerHTML = sslHtml + `
+            <div class="check-item"><div><div class="check-name">Cookie Consent</div><div class="check-sev">NDPA S.25</div></div><span class="${data.ndpa.cookie_consent ? 'check-pass' : 'check-fail'}">${data.ndpa.cookie_consent ? 'PASS' : 'FAIL'}</span></div>
+            <div class="check-item"><div><div class="check-name">Privacy Policy</div><div class="check-sev">NDPA S.26-27</div></div><span class="${data.ndpa.privacy_policy ? 'check-pass' : 'check-fail'}">${data.ndpa.privacy_policy ? 'PASS' : 'FAIL'}</span></div>
+            <div class="check-item"><div><div class="check-name">NDPA/NDPR Reference</div><div class="check-sev">NDPA</div></div><span class="${data.ndpa.ndpa_reference ? 'check-pass' : 'check-fail'}">${data.ndpa.ndpa_reference ? 'PASS' : 'FAIL'}</span></div>
         `;
 
-        // Show CTA if score is bad
-        const ctaBox = document.getElementById('cta-box');
-        ctaBox.style.display = pct < 80 ? 'block' : 'none';
-
-        results.classList.add('show');
-        results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        document.getElementById('cta-box').style.display = data.score < 8 ? 'block' : 'none';
+        document.getElementById('results').classList.add('show');
+        document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     } catch (err) {
-        // Show inline error instead of alert
         const results = document.getElementById('results');
-        const headerList = document.getElementById('header-checks');
-        const ndpaList = document.getElementById('ndpa-checks');
-        const gradeCard = document.querySelector('.grade-card');
-
         document.getElementById('grade-letter').textContent = '?';
         document.getElementById('grade-letter').className = 'grade-letter f';
         document.getElementById('grade-url').textContent = url;
         document.getElementById('grade-score').textContent = 'Could not reach this website. Check the URL and try again.';
-        headerList.innerHTML = '';
-        ndpaList.innerHTML = '';
+        document.getElementById('header-checks').innerHTML = '';
+        document.getElementById('ndpa-checks').innerHTML = '';
         document.getElementById('cta-box').style.display = 'none';
         results.classList.add('show');
         results.scrollIntoView({ behavior: 'smooth', block: 'start' });
