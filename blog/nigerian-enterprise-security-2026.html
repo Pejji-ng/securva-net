@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>We Scanned 20 Nigerian Enterprises. 64% Lack Basic Security Headers. | Securva</title>
+    <meta name="description" content="Securva scanned 4,336 subdomains across 20 major Nigerian enterprises. 64% lack HSTS protection, 57 servers are misconfigured, and most organizations have gaps that put customer data at risk. Here is what we found.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,600&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#030308;--surface:#0A0A12;--card:#101020;--border:#1a1a30;--text:#F0EDF7;--muted:#6a6680;--accent:#7B68EE;--font:'Cabinet Grotesk',system-ui,sans-serif;--serif:'Newsreader',Georgia,serif}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:var(--font);background:var(--bg);color:var(--text)}
+        .nav{padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+        .nav-logo{font-weight:900;font-size:1.3rem;color:var(--text);text-decoration:none}.nav-logo span{color:var(--accent)}
+        .nav a.back{color:var(--muted);text-decoration:none;font-size:0.85rem}
+        article{max-width:680px;margin:0 auto;padding:60px 24px 80px}
+        .tag{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:16px}
+        h1{font-size:clamp(2rem,5vw,2.8rem);font-weight:900;letter-spacing:-0.03em;line-height:1.15;margin-bottom:16px}
+        .meta{font-size:0.85rem;color:var(--muted);margin-bottom:40px}
+        article p{font-family:var(--serif);font-size:1.05rem;line-height:1.8;color:#c8c4d0;margin-bottom:24px}
+        article h2{font-size:1.4rem;font-weight:800;margin:40px 0 16px;letter-spacing:-0.02em}
+        article h3{font-size:1.1rem;font-weight:700;margin:32px 0 12px}
+        article strong{color:var(--text)}
+        article ul{margin:0 0 24px 20px;font-family:var(--serif);font-size:1rem;color:#c8c4d0;line-height:1.8}
+        article ol{margin:0 0 24px 20px;font-family:var(--serif);font-size:1rem;color:#c8c4d0;line-height:1.8}
+        .stat-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:32px;text-align:center;margin:32px 0}
+        .stat-big{font-size:4rem;font-weight:900;color:var(--accent)}
+        .stat-label{font-size:0.9rem;color:var(--muted);margin-top:4px}
+        .stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:32px 0}
+        .stat-grid .stat-box{margin:0}
+        .cta-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:32px;text-align:center;margin:40px 0}
+        .cta-box h3{margin-bottom:8px}
+        .cta-box p{font-family:var(--font) !important;color:var(--muted);font-size:0.9rem;margin-bottom:16px}
+        .cta-link{display:inline-block;padding:12px 24px;background:var(--accent);color:white;text-decoration:none;border-radius:10px;font-weight:700;font-size:0.9rem}
+        .data-table{width:100%;border-collapse:collapse;margin:24px 0 32px}
+        .data-table th,.data-table td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--border)}
+        .data-table th{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+        .data-table td{font-family:var(--serif);font-size:0.95rem;color:#c8c4d0}
+        .data-table td strong{color:var(--text)}
+        .data-table tr:hover{background:var(--surface)}
+        .disclaimer{margin-top:48px;padding-top:32px;border-top:1px solid var(--border)}
+        .disclaimer p{font-size:0.85rem !important;color:var(--muted) !important;font-style:italic}
+        code{font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--surface);padding:2px 6px;border-radius:4px;color:var(--accent)}
+        @media(max-width:500px){.stat-grid{grid-template-columns:1fr}.stat-big{font-size:3rem}}
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="nav-logo">Sec<span>urva</span></a>
+        <a href="/" class="back">&larr; Back to scanner</a>
+    </nav>
+    <article>
+        <div class="tag">Research</div>
+        <h1>We Scanned 20 Nigerian Enterprises. 64% Lack Basic Security Headers.</h1>
+        <div class="meta">April 2026 | 8 min read</div>
+
+        <p>Every day, millions of Nigerians trust their banks, mobile networks, and fintech apps with sensitive personal data. But how well are these platforms actually protecting that data at the infrastructure level?</p>
+
+        <p>We decided to find out.</p>
+
+        <p>Our research team at Securva ran a Phase 1 DNS infrastructure mapping across 20 major Nigerian organizations spanning banking, telecommunications, fintech, e-commerce, and government. The results were sobering: nearly two-thirds of the live hosts we discovered are missing a basic security header that has been an industry standard for over a decade.</p>
+
+        <p>This is not a theoretical risk. It is a measurable, fixable gap - and it affects some of the biggest names in the Nigerian digital economy.</p>
+
+        <div class="stat-grid">
+            <div class="stat-box">
+                <div class="stat-big">64%</div>
+                <div class="stat-label">of enterprise hosts lack basic HSTS protection</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-big">4,336</div>
+                <div class="stat-label">subdomains discovered across 20 organizations</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-big">1,180</div>
+                <div class="stat-label">alive hosts confirmed responding</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-big">57</div>
+                <div class="stat-label">servers showing default installation pages</div>
+            </div>
+        </div>
+
+        <h2>What We Did</h2>
+
+        <p>We conducted passive DNS reconnaissance against 20 organizations across five sectors:</p>
+
+        <ul>
+            <li><strong>Banking</strong> - including Central Bank of Nigeria (CBN) and five of the largest commercial banks</li>
+            <li><strong>Telecommunications</strong> - all four major carriers</li>
+            <li><strong>Fintech</strong> - four leading payment and digital banking platforms</li>
+            <li><strong>E-commerce</strong> - two major online marketplaces</li>
+            <li><strong>Government/Regulatory</strong> - two key technology and communications agencies</li>
+        </ul>
+
+        <p>Our methodology was straightforward. We enumerated subdomains, confirmed which hosts were alive, fingerprinted their technology stacks, and checked for the presence of critical security headers. No exploitation was attempted. No vulnerabilities were probed. This was purely an outside-in assessment of publicly visible infrastructure.</p>
+
+        <h2>The HSTS Problem</h2>
+
+        <p>HTTP Strict Transport Security (HSTS) is a security header that tells browsers to only communicate with a website over encrypted HTTPS connections. Without it, users can be silently downgraded to unencrypted HTTP, making them vulnerable to man-in-the-middle attacks where attackers can intercept login credentials, session tokens, and personal data.</p>
+
+        <p>HSTS has been around since 2012. It is trivial to implement - a single line in your web server configuration.</p>
+
+        <p>Yet only <strong>425 of 1,180 alive hosts (36%) had HSTS enabled</strong>.</p>
+
+        <p>That means <strong>755 hosts - 64% - lack this basic protection</strong>.</p>
+
+        <p>To put this in context: a customer logging into their bank on a public Wi-Fi network at a Lagos coffee shop could have their session hijacked if that bank's subdomain does not enforce HSTS. The attack is well-documented, easy to execute, and completely preventable.</p>
+
+        <p>This is not a niche concern. We are talking about the infrastructure serving tens of millions of Nigerian users daily.</p>
+
+        <h2>Forgotten Servers and Shadow Infrastructure</h2>
+
+        <p>Beyond the HSTS gap, we found <strong>57 hosts displaying default web server pages</strong> - the generic "Welcome to nginx" or "IIS Windows Server" pages that ship with a fresh installation.</p>
+
+        <p>These are servers that were spun up, assigned a subdomain, pointed at via DNS, and then either forgotten or never properly configured. Each one represents a potential entry point. Default installations often ship with known vulnerabilities, debugging features enabled, or administrative interfaces exposed.</p>
+
+        <p>One major Nigerian bank had multiple subdomains pointing to default server pages. A leading fintech platform had similar exposures. These are not hypothetical risks - they are live, publicly reachable hosts that an attacker could discover in minutes using the same techniques we used.</p>
+
+        <h2>Who Is Protecting What</h2>
+
+        <p>The technology and Content Delivery Network (CDN) distribution tells an interesting story about how Nigerian enterprises approach infrastructure security:</p>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Technology</th>
+                    <th>Hosts</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Cloudflare</strong></td><td>292</td></tr>
+                <tr><td><strong>Akamai</strong></td><td>291</td></tr>
+                <tr><td><strong>F5 Distributed Cloud</strong></td><td>213</td></tr>
+                <tr><td><strong>Nginx</strong></td><td>109</td></tr>
+                <tr><td><strong>Windows Server / IIS</strong></td><td>83</td></tr>
+                <tr><td><strong>ASP.NET</strong></td><td>81</td></tr>
+                <tr><td><strong>Imperva WAF</strong></td><td>72</td></tr>
+            </tbody>
+        </table>
+
+        <p>Cloudflare and Akamai are nearly tied as the dominant CDN providers, which is encouraging - both offer robust security features out of the box. F5 Distributed Cloud also has a significant footprint.</p>
+
+        <p>However, having a CDN or WAF in front of your application does not automatically mean your security headers are configured correctly. Many of those 755 hosts without HSTS are sitting behind these very platforms. The tools are there. They are just not being configured properly.</p>
+
+        <p>We also noted 83 hosts running Windows Server with IIS (Internet Information Services) and 81 running ASP.NET. Legacy Microsoft stacks are not inherently insecure, but they require diligent patching and configuration - something that becomes harder to maintain as these deployments age.</p>
+
+        <h2>The Tech Stack Landscape</h2>
+
+        <p>On the application side, the fingerprinting revealed a diverse but telling picture:</p>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Technology</th>
+                    <th>Hosts</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>jQuery</strong></td><td>88</td></tr>
+                <tr><td><strong>Node.js</strong></td><td>74</td></tr>
+                <tr><td><strong>Bootstrap</strong></td><td>51</td></tr>
+                <tr><td><strong>React</strong></td><td>45</td></tr>
+                <tr><td><strong>Google Analytics</strong></td><td>43</td></tr>
+                <tr><td><strong>Next.js</strong></td><td>37</td></tr>
+                <tr><td><strong>PHP</strong></td><td>37</td></tr>
+                <tr><td><strong>MySQL</strong></td><td>37</td></tr>
+            </tbody>
+        </table>
+
+        <p>The mix of modern frameworks alongside older technology stacks suggests that many organizations are running parallel infrastructure - newer customer-facing applications built on React or Next.js alongside legacy internal systems running PHP or jQuery. Each of these surfaces needs its own security attention, and the legacy systems are often the ones that get neglected.</p>
+
+        <h2>What This Means for NDPA Compliance</h2>
+
+        <p>The Nigeria Data Protection Act (NDPA), signed into law in 2023, and its accompanying regulations under the Nigeria Data Protection Commission (NDPC) impose real obligations on organizations that process personal data.</p>
+
+        <p>Under the NDPA, data controllers and processors must implement "appropriate technical and organisational measures" to protect personal data. The NDPC has been increasingly active in enforcement, moving sector by sector through banking, education, and payments, with telecommunications, healthcare, and e-commerce expected next.</p>
+
+        <p>Here is the uncomfortable truth: <strong>missing HSTS headers and misconfigured servers are exactly the kind of "inappropriate technical measures" that draw regulatory attention</strong>. If a data breach occurs and an investigation reveals that basic, well-known security controls were not in place, the organization's compliance posture becomes very difficult to defend.</p>
+
+        <p>The fines under NDPA can reach up to 2% of annual gross revenue or 10 million naira (whichever is greater) for data controllers. For a major Nigerian bank or telco, 2% of gross revenue is not a rounding error.</p>
+
+        <p>Beyond fines, there is reputational damage. Nigerian consumers are becoming more aware of data privacy. A headline reading "Bank X exposed customer data because it forgot to enable a basic security setting" is the kind of story that moves accounts.</p>
+
+        <h2>What Nigerian Businesses Should Do</h2>
+
+        <p>The good news is that every issue we identified in this scan is fixable, most of them within hours. Here is a practical checklist:</p>
+
+        <p><strong>1. Enable HSTS on every public-facing host.</strong> This is a single configuration line. For Nginx, it is <code>add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload";</code> For Apache, IIS, and CDN providers, equivalent settings exist. There is no valid reason for a production host to lack this header in 2026.</p>
+
+        <p><strong>2. Audit your DNS records.</strong> Every subdomain in your DNS should point to a host that serves a purpose. If you find subdomains pointing to default server pages or hosts that no longer serve a function, remove the DNS records and decommission the servers.</p>
+
+        <p><strong>3. Implement a full security header policy.</strong> HSTS is the floor, not the ceiling. Your hosts should also have Content-Security-Policy (CSP), X-Content-Type-Options, X-Frame-Options, Referrer-Policy, and Permissions-Policy headers configured.</p>
+
+        <p><strong>4. Patch and update legacy stacks.</strong> If you are running jQuery, PHP, or older Windows Server installations, ensure they are on the latest supported versions with all security patches applied.</p>
+
+        <p><strong>5. Run regular external scans.</strong> The kind of reconnaissance we performed is exactly what attackers do before they strike. The difference is that we are telling you about it. You should be doing this to yourself on a regular schedule.</p>
+
+        <p><strong>6. Document everything for NDPA compliance.</strong> The NDPC wants to see evidence that you are taking data protection seriously. Regular security assessments, remediation timelines, and configuration audits all build the compliance record you need.</p>
+
+        <h2>The Bottom Line</h2>
+
+        <p>Nigerian enterprises are investing in modern infrastructure. The presence of Cloudflare, Akamai, React, and Next.js across these organizations shows that the technology choices are often sound. But technology only protects you if it is configured correctly.</p>
+
+        <p>64% of the hosts we scanned are missing a security header that takes five minutes to enable. 57 servers are sitting on the public internet showing default installation pages. These are not sophisticated vulnerabilities. They are oversights - and they are the oversights that attackers exploit first.</p>
+
+        <p>The NDPC is watching. Your customers are trusting you. The fixes are straightforward.</p>
+
+        <div class="cta-box">
+            <h3>Scan your own website</h3>
+            <p>Find out your security grade in under 60 seconds. Free, no signup required.</p>
+            <a href="/" class="cta-link">Scan now on Securva</a>
+        </div>
+
+        <p>Need help fixing what you find? The team at <a href="https://pejji.com" style="color:var(--accent)">Pejji</a> builds secure, NDPA-compliant websites and can remediate infrastructure issues fast. <a href="https://wa.me/2349044526924?text=Hi%20Pejji!%20I%20scanned%20my%20enterprise%20on%20Securva%20and%20need%20help%20fixing%20security%20headers." style="color:var(--accent)">Start with a free consultation.</a></p>
+
+        <div class="disclaimer">
+            <h3>Ethical Disclaimer</h3>
+            <p>This research was conducted by the Securva Research Team as part of our ongoing Nigerian Digital Infrastructure Security series. All scanning was performed passively against publicly accessible infrastructure. No exploitation or unauthorized access was attempted. No vulnerabilities were probed. Organizations are not identified alongside specific vulnerabilities. The goal of this research is to raise awareness and help Nigerian businesses improve their security posture.</p>
+        </div>
+    </article>
+</body>
+</html>
