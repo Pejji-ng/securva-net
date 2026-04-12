@@ -62,7 +62,7 @@
 
         <p>Our research team at Securva ran a Phase 1 DNS infrastructure mapping across 20 major Nigerian organizations spanning banking, telecommunications, fintech, e-commerce, and government. The results were sobering: nearly two-thirds of the live hosts we discovered are missing a basic security header that has been an industry standard for over a decade.</p>
 
-        <p>This is not a theoretical risk. It is a measurable, fixable gap - and it affects some of the biggest names in the Nigerian digital economy.</p>
+        <p>This is not a theoretical risk. It is a measurable, fixable gap, and it affects some of the biggest names in the Nigerian digital economy.</p>
 
         <div class="stat-grid">
             <div class="stat-box">
@@ -101,7 +101,7 @@
 
         <p>HTTP Strict Transport Security (HSTS) is a security header that tells browsers to only communicate with a website over encrypted HTTPS connections. Without it, users can be silently downgraded to unencrypted HTTP, making them vulnerable to man-in-the-middle attacks where attackers can intercept login credentials, session tokens, and personal data.</p>
 
-        <p>HSTS has been around since 2012. It is trivial to implement - a single line in your web server configuration.</p>
+        <p>HSTS has been around since 2012. It is trivial to implement, a single line in your web server configuration.</p>
 
         <p>Yet only <strong>425 of 1,180 alive hosts (36%) had HSTS enabled</strong>.</p>
 
@@ -113,11 +113,11 @@
 
         <h2>Forgotten Servers and Shadow Infrastructure</h2>
 
-        <p>Beyond the HSTS gap, we found <strong>57 hosts displaying default web server pages</strong> - the generic "Welcome to nginx" or "IIS Windows Server" pages that ship with a fresh installation.</p>
+        <p>Beyond the HSTS gap, we found <strong>57 hosts displaying default web server pages</strong>, the generic "Welcome to nginx" or "IIS Windows Server" pages that ship with a fresh installation.</p>
 
         <p>These are servers that were spun up, assigned a subdomain, pointed at via DNS, and then either forgotten or never properly configured. Each one represents a potential entry point. Default installations often ship with known vulnerabilities, debugging features enabled, or administrative interfaces exposed.</p>
 
-        <p>One major Nigerian bank had multiple subdomains pointing to default server pages. A leading fintech platform had similar exposures. These are not hypothetical risks - they are live, publicly reachable hosts that an attacker could discover in minutes using the same techniques we used.</p>
+        <p>One major Nigerian bank had multiple subdomains pointing to default server pages. A leading fintech platform had similar exposures. These are not hypothetical risks, they are live, publicly reachable hosts that an attacker could discover in minutes using the same techniques we used.</p>
 
         <h2>Who Is Protecting What</h2>
 
@@ -141,11 +141,11 @@
             </tbody>
         </table>
 
-        <p>Cloudflare and Akamai are nearly tied as the dominant CDN providers, which is encouraging - both offer robust security features out of the box. F5 Distributed Cloud also has a significant footprint.</p>
+        <p>Cloudflare and Akamai are nearly tied as the dominant CDN providers, which is encouraging, both offer robust security features out of the box. F5 Distributed Cloud also has a significant footprint.</p>
 
         <p>However, having a CDN or WAF in front of your application does not automatically mean your security headers are configured correctly. Many of those 755 hosts without HSTS are sitting behind these very platforms. The tools are there. They are just not being configured properly.</p>
 
-        <p>We also noted 83 hosts running Windows Server with IIS (Internet Information Services) and 81 running ASP.NET. Legacy Microsoft stacks are not inherently insecure, but they require diligent patching and configuration - something that becomes harder to maintain as these deployments age.</p>
+        <p>We also noted 83 hosts running Windows Server with IIS (Internet Information Services) and 81 running ASP.NET. Legacy Microsoft stacks are not inherently insecure, but they require diligent patching and configuration, something that becomes harder to maintain as these deployments age.</p>
 
         <h2>The Tech Stack Landscape</h2>
 
@@ -170,7 +170,7 @@
             </tbody>
         </table>
 
-        <p>The mix of modern frameworks alongside older technology stacks suggests that many organizations are running parallel infrastructure - newer customer-facing applications built on React or Next.js alongside legacy internal systems running PHP or jQuery. Each of these surfaces needs its own security attention, and the legacy systems are often the ones that get neglected.</p>
+        <p>The mix of modern frameworks alongside older technology stacks suggests that many organizations are running parallel infrastructure, newer customer-facing applications built on React or Next.js alongside legacy internal systems running PHP or jQuery. Each of these surfaces needs its own security attention, and the legacy systems are often the ones that get neglected.</p>
 
         <h2>What This Means for NDPA Compliance</h2>
 
@@ -204,7 +204,7 @@
 
         <p>Nigerian enterprises are investing in modern infrastructure. The presence of Cloudflare, Akamai, React, and Next.js across these organizations shows that the technology choices are often sound. But technology only protects you if it is configured correctly.</p>
 
-        <p>64% of the hosts we scanned are missing a security header that takes five minutes to enable. 57 servers are sitting on the public internet showing default installation pages. These are not sophisticated vulnerabilities. They are oversights - and they are the oversights that attackers exploit first.</p>
+        <p>64% of the hosts we scanned are missing a security header that takes five minutes to enable. 57 servers are sitting on the public internet showing default installation pages. These are not sophisticated vulnerabilities. They are oversights, and they are the oversights that attackers exploit first.</p>
 
         <p>The NDPC is watching. Your customers are trusting you. The fixes are straightforward.</p>
 
