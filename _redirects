@@ -1,1 +1,14 @@
+# Block sensitive paths
+/.env 404
+/.git/* 404  
+/.env.* 404
+/wp-admin 404
+/wp-login.php 404
+/config.php 404
+/admin/config.php 404
+/.DS_Store 404
+/.htaccess 404
+/server-status 404
+
+# Existing redirect
 https://securva-net.pages.dev/* https://securva.net/:splat 301
