@@ -1,0 +1,388 @@
+/*
+ * Securva Snapshot — PDF stylesheet
+ * Target: WeasyPrint 68+
+ * Fonts: Cabinet Grotesk (sans, headings) + Newsreader (serif, body)
+ * Theme: dark with purple accent, matching securva.net blog style
+ */
+
+@page {
+  size: letter;
+  margin: 2cm 1.8cm;
+  background: #030308;
+
+  @top-right {
+    content: "Securva Snapshot Report";
+    font-family: 'Cabinet Grotesk', system-ui, sans-serif;
+    font-size: 9pt;
+    color: #6a6680;
+    margin-top: 1cm;
+  }
+
+  @bottom-center {
+    content: counter(page) " of " counter(pages);
+    font-family: 'Cabinet Grotesk', system-ui, sans-serif;
+    font-size: 9pt;
+    color: #6a6680;
+  }
+
+  @bottom-right {
+    content: "securva.net";
+    font-family: 'Cabinet Grotesk', system-ui, sans-serif;
+    font-size: 9pt;
+    color: #7B68EE;
+  }
+}
+
+@page :first {
+  margin: 0;
+  background: #030308;
+  @top-right { content: none; }
+  @bottom-center { content: none; }
+  @bottom-right { content: none; }
+}
+
+/* ---- base ---- */
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #030308;
+  color: #F0EDF7;
+  font-family: 'Cabinet Grotesk', system-ui, -apple-system, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.55;
+}
+
+* { box-sizing: border-box; }
+
+h1, h2, h3, h4 {
+  font-family: 'Cabinet Grotesk', system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #F0EDF7;
+  margin: 0 0 0.6em 0;
+}
+
+h1 { font-size: 28pt; line-height: 1.1; }
+h2 { font-size: 18pt; line-height: 1.2; margin-top: 1.2em; page-break-after: avoid; }
+h3 { font-size: 13pt; line-height: 1.3; margin-top: 1em; page-break-after: avoid; }
+h4 { font-size: 11pt; line-height: 1.35; margin-top: 0.8em; }
+
+p {
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 10.5pt;
+  line-height: 1.7;
+  color: #c8c4d0;
+  margin: 0 0 0.8em 0;
+}
+
+strong { color: #F0EDF7; font-weight: 600; }
+
+ul, ol {
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 10.5pt;
+  line-height: 1.7;
+  color: #c8c4d0;
+  margin: 0 0 0.8em 1.2em;
+  padding: 0;
+}
+
+li { margin-bottom: 0.25em; }
+
+code {
+  font-family: 'IBM Plex Mono', Consolas, monospace;
+  font-size: 9pt;
+  background: #0A0A12;
+  padding: 2px 5px;
+  border-radius: 3px;
+  color: #7B68EE;
+}
+
+a {
+  color: #7B68EE;
+  text-decoration: none;
+}
+
+/* ---- cover page ---- */
+.cover {
+  width: 100%;
+  height: 100vh;
+  min-height: 27.94cm;
+  background: linear-gradient(180deg, #030308 0%, #101020 100%);
+  padding: 3cm 2.5cm;
+  page-break-after: always;
+  position: relative;
+}
+
+.cover .brand {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 900;
+  font-size: 20pt;
+  color: #F0EDF7;
+  letter-spacing: -0.02em;
+}
+
+.cover .brand .accent { color: #7B68EE; }
+
+.cover .tag {
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #7B68EE;
+  margin-top: 4cm;
+  margin-bottom: 0.8cm;
+}
+
+.cover h1 {
+  font-size: 34pt;
+  line-height: 1.05;
+  color: #F0EDF7;
+  letter-spacing: -0.03em;
+}
+
+.cover .domain {
+  font-family: 'IBM Plex Mono', Consolas, monospace;
+  font-size: 14pt;
+  color: #7B68EE;
+  margin: 0.6cm 0 1.2cm 0;
+}
+
+.cover .meta-grid {
+  display: block;
+  margin-top: 3cm;
+  border-top: 1px solid #1a1a30;
+  padding-top: 1cm;
+}
+
+.cover .meta-row {
+  display: block;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 9pt;
+  color: #6a6680;
+  margin-bottom: 0.3cm;
+}
+
+.cover .meta-row strong {
+  color: #F0EDF7;
+  font-weight: 600;
+  display: inline-block;
+  width: 4.5cm;
+}
+
+.cover .grade-seal {
+  position: absolute;
+  right: 2.5cm;
+  top: 3cm;
+  width: 4cm;
+  height: 4cm;
+  border: 3px solid #7B68EE;
+  border-radius: 50%;
+  text-align: center;
+  padding-top: 0.6cm;
+}
+
+.cover .grade-seal .grade-letter {
+  font-size: 54pt;
+  font-weight: 900;
+  color: #7B68EE;
+  line-height: 1;
+}
+
+.cover .grade-seal .grade-score {
+  font-size: 10pt;
+  color: #F0EDF7;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.cover .footer {
+  position: absolute;
+  bottom: 2cm;
+  left: 2.5cm;
+  right: 2.5cm;
+  font-size: 8pt;
+  color: #6a6680;
+  border-top: 1px solid #1a1a30;
+  padding-top: 0.6cm;
+}
+
+/* ---- section layout ---- */
+.section {
+  page-break-before: always;
+}
+
+.section:first-of-type { page-break-before: auto; }
+
+.section-tag {
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #7B68EE;
+  margin-bottom: 0.4em;
+}
+
+.section h2 {
+  border-bottom: 2px solid #1a1a30;
+  padding-bottom: 0.3em;
+  margin-bottom: 1em;
+}
+
+/* ---- stat grid ---- */
+.stat-grid {
+  width: 100%;
+  margin: 1em 0;
+}
+
+.stat-grid table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.stat-grid td {
+  width: 50%;
+  padding: 0.6em;
+}
+
+.stat-box {
+  background: #101020;
+  border: 1px solid #1a1a30;
+  border-radius: 6pt;
+  padding: 0.8cm;
+  text-align: center;
+}
+
+.stat-box .big {
+  font-size: 28pt;
+  font-weight: 900;
+  color: #7B68EE;
+  line-height: 1;
+}
+
+.stat-box .label {
+  font-size: 8pt;
+  color: #6a6680;
+  margin-top: 0.3em;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+/* ---- tables ---- */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.8em 0 1.2em 0;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 9.5pt;
+}
+
+.data-table th {
+  background: #0A0A12;
+  color: #6a6680;
+  text-align: left;
+  padding: 0.5em 0.7em;
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #1a1a30;
+}
+
+.data-table td {
+  padding: 0.5em 0.7em;
+  border-bottom: 1px solid #1a1a30;
+  color: #c8c4d0;
+  vertical-align: top;
+}
+
+.data-table td.pass {
+  color: #34d399;
+  font-weight: 600;
+}
+
+.data-table td.fail {
+  color: #ff6b6b;
+  font-weight: 600;
+}
+
+.data-table td.warn {
+  color: #fbbf24;
+  font-weight: 600;
+}
+
+.data-table tr:last-child td { border-bottom: none; }
+
+/* ---- status badges ---- */
+.badge {
+  display: inline-block;
+  padding: 2pt 8pt;
+  border-radius: 3pt;
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 0.5pt;
+  text-transform: uppercase;
+}
+
+.badge.pass { background: rgba(52, 211, 153, 0.15); color: #34d399; }
+.badge.fail { background: rgba(255, 107, 107, 0.15); color: #ff6b6b; }
+.badge.warn { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+.badge.info { background: rgba(123, 104, 238, 0.15); color: #7B68EE; }
+
+/* ---- callout boxes ---- */
+.callout {
+  background: #0A0A12;
+  border-left: 3pt solid #7B68EE;
+  padding: 0.8cm 1cm;
+  margin: 1em 0;
+}
+
+.callout.warn { border-left-color: #fbbf24; }
+.callout.fail { border-left-color: #ff6b6b; }
+.callout.pass { border-left-color: #34d399; }
+
+.callout h4 {
+  margin: 0 0 0.4em 0;
+  color: #F0EDF7;
+}
+
+.callout p:last-child { margin-bottom: 0; }
+
+/* ---- remediation upsell ---- */
+.upsell {
+  background: linear-gradient(135deg, #101020 0%, #1a1a30 100%);
+  border: 1px solid #7B68EE;
+  border-radius: 8pt;
+  padding: 1cm;
+  margin: 1.5em 0;
+  text-align: center;
+}
+
+.upsell h3 {
+  color: #7B68EE;
+  margin-bottom: 0.4em;
+}
+
+.upsell .cta {
+  display: inline-block;
+  margin-top: 0.6em;
+  padding: 10pt 20pt;
+  background: #7B68EE;
+  color: #F0EDF7;
+  font-weight: 700;
+  font-size: 10pt;
+  border-radius: 4pt;
+  text-decoration: none;
+}
+
+/* ---- disclaimer / back matter ---- */
+.disclaimer {
+  margin-top: 2em;
+  padding-top: 1em;
+  border-top: 1px solid #1a1a30;
+  font-size: 8.5pt;
+  color: #6a6680;
+  font-style: italic;
+}
+
+.disclaimer p { font-size: 8.5pt; color: #6a6680; }
