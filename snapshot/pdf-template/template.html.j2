@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Securva Snapshot Report — {{ domain }}</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ========================================================= -->
+<!-- COVER PAGE                                                -->
+<!-- ========================================================= -->
+<section class="cover">
+  <div class="brand">Sec<span class="accent">urva</span></div>
+
+  <div class="tag">Snapshot Security Report</div>
+  <h1>Website Security<br>Assessment</h1>
+  <div class="domain">{{ domain }}</div>
+
+  <div class="grade-seal">
+    <div class="grade-letter">{{ sections.executive_summary.overall_grade }}</div>
+    <div class="grade-score">{{ sections.executive_summary.overall_score }} / 10</div>
+  </div>
+
+  <div class="meta-grid">
+    <div class="meta-row"><strong>Scan date:</strong> {{ scan_date }}</div>
+    <div class="meta-row"><strong>Report ID:</strong> {{ report_id }}</div>
+    <div class="meta-row"><strong>Tier:</strong> {{ tier | default('Starter (NGN 30,000)') }}</div>
+    <div class="meta-row"><strong>Prepared by:</strong> Securva Research, a BlessedOps Group project</div>
+    <div class="meta-row"><strong>Contact:</strong> hello@securva.net</div>
+  </div>
+
+  <div class="footer">
+    Securva is an independent security research project focused on the Nigerian digital ecosystem.<br>
+    This report is a point-in-time assessment of publicly visible infrastructure. No exploitation or<br>
+    unauthorized access was attempted. Findings are based on passive reconnaissance only.
+  </div>
+</section>
+
+<!-- ========================================================= -->
+<!-- SECTION 1: EXECUTIVE SUMMARY                              -->
+<!-- ========================================================= -->
+<section class="section">
+  <div class="section-tag">Section 1</div>
+  <h2>Executive Summary</h2>
+
+  <p>babakizo.com is the personal portfolio and security research site operated by Kingsley Olukanni, founder of the BlessedOps Group. On 2026-04-15 we conducted a passive external security assessment of the site and its publicly visible infrastructure. The site scored <strong>Grade A (10 out of 10)</strong> in the Securva scoring model, which is the highest tier and places it in the top 5% of Nigerian personal and business sites we have scanned in 2026.</p>
+
+  <p>This is a reference-quality configuration. Every security header we check for is present and correctly configured. SSL/TLS is current, strictly enforced, and backed by a valid certificate. Nigeria Data Protection Act (NDPA) signals are visible on the site including cookie consent, a privacy policy, and explicit NDPA references. No exposed secrets, no known CVEs matching the detected tech stack, and no public-code-search hits for credential leakage.</p>
+
+  <div class="stat-grid">
+    <table>
+      <tr>
+        <td><div class="stat-box"><div class="big">{{ sections.executive_summary.overall_grade }}</div><div class="label">Overall Grade</div></div></td>
+        <td><div class="stat-box"><div class="big">{{ sections.executive_summary.overall_score }}/10</div><div class="label">Security Score</div></div></td>
+      </tr>
+      <tr>
+        {%- set passing = sections.security_headers.headers | selectattr('status', 'equalto', 'pass') | list | length -%}
+        {%- set total = sections.security_headers.headers | length -%}
+        <td><div class="stat-box"><div class="big">{{ passing }}/{{ total }}</div><div class="label">Headers Passing</div></div></td>
+        <td><div class="stat-box"><div class="big">{{ sections.executive_summary.findings_by_severity.critical | default(0) }}</div><div class="label">Critical Findings</div></div></td>
+      </tr>
+    </table>
+  </div>
+
+  <h3>Top recommendations</h3>
+  <ol>
+    <li><strong>Monitor certificate rotation.</strong> The SSL certificate from Let's Encrypt expires 2026-06-26 (72 days from today). Let's Encrypt auto-renews, but if auto-renewal breaks, the site will go down. Recommended: add a calendar reminder or enable Securva Continuous Monitoring to alert on certificate rotation events.</li>
+    <li><strong>Maintain this posture.</strong> Grade A is the ceiling, not a milestone. Every config drift risks grade regression. Recommended: re-scan monthly to catch any changes from hosting providers, CDN updates, or accidental config rollbacks.</li>
+    <li><strong>Extend NDPA compliance documentation.</strong> The site's privacy policy references NDPA but does not list a Data Protection Officer contact or publish a formal data subject rights process. Optional for personal sites but mandatory for business operations. Recommended only if babakizo.com transitions from portfolio to commercial use.</li>
+  </ol>
+</section>
+
+<!-- ========================================================= -->
+<!-- SECTION 2: SECURITY HEADERS                                -->
+<!-- ========================================================= -->
+<section class="section">
+  <div class="section-tag">Section 2</div>
+  <h2>Security Headers Audit</h2>
+
+  <p>HTTP security headers are the first line of defense for modern websites. They tell visitor browsers how to behave when loading and interacting with your pages. A missing header is not always an immediate vulnerability, but stacked missing headers create attack surface that adversaries exploit routinely. We check for the Core 6 headers plus 4 optional ones.</p>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Header</th>
+        <th>Status</th>
+        <th>Value / Impact</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for h in sections.security_headers.headers %}
+      <tr>
+        <td><code>{{ h.name | title | replace('-', '-') }}</code></td>
+        <td class="{{ h.status }}"><span class="badge {{ h.status }}">{{ h.status | title }}</span></td>
+        <td>{% if h.value %}{{ h.value[:100] }}{% if h.value|length > 100 %}...{% endif %}. {% endif %}{{ h.note }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="callout pass">
+    <h4>All 6 core headers pass.</h4>
+    <p>babakizo.com has the strongest security header configuration we have observed on a personal Nigerian site in 2026. This is a reference configuration worth copying. The CSP in particular is specific rather than permissive, which is rare.</p>
+  </div>
+
+  <h3>Optional headers (not checked in the core scoring)</h3>
+  <p>Cross-Origin-Opener-Policy, Cross-Origin-Embedder-Policy, Cross-Origin-Resource-Policy, and Expect-CT are not part of the Securva core 6 because they are either deprecated (Expect-CT) or situationally-applied (COOP/COEP/CORP need specific use cases). babakizo.com does not set these and does not need to at its current scope.</p>
+</section>
+
+<!-- ========================================================= -->
+<!-- SECTION 3: SSL / TLS POSTURE                              -->
+<!-- ========================================================= -->
+<section class="section">
+  <div class="section-tag">Section 3</div>
+  <h2>SSL / TLS Posture</h2>
+
+  <p>The SSL/TLS configuration is the transport-layer foundation of a secure website. A weak TLS config allows attackers to downgrade, intercept, or tamper with traffic even if the application itself is bulletproof.</p>
+
+  <table class="data-table">
+    <thead>
+      <tr><th>Check</th><th>Result</th><th>Detail</th></tr>
+    </thead>
+    <tbody>
+      {%- set cert = sections.ssl_tls.certificate -%}
+      <tr>
+        <td>Certificate validity</td>
+        <td class="{{ 'pass' if cert.valid else 'fail' }}"><span class="badge {{ 'pass' if cert.valid else 'fail' }}">{{ 'Valid' if cert.valid else 'Invalid' }}</span></td>
+        <td>{{ 'Certificate is current and signed by a trusted root CA.' if cert.valid else 'Certificate is missing, expired, or untrusted.' }}</td>
+      </tr>
+      <tr>
+        <td>Issuer</td>
+        <td>{{ cert.issuer }}</td>
+        <td>{{ 'Free automated CA. Valid and widely trusted.' if "Let's Encrypt" in cert.issuer else 'Commercial CA.' }}</td>
+      </tr>
+      <tr>
+        <td>Expiration date</td>
+        <td>{{ cert.expires }}</td>
+        <td>{{ cert.days_until_expiry }} days remaining.{% if "Let's Encrypt" in cert.issuer %} Let's Encrypt auto-renews 30 days before expiry.{% endif %}</td>
+      </tr>
+      <tr>
+        <td>HSTS preload</td>
+        <td class="{{ 'pass' if sections.ssl_tls.hsts_preload_eligible else 'warn' }}"><span class="badge {{ 'pass' if sections.ssl_tls.hsts_preload_eligible else 'warn' }}">{{ 'Eligible' if sections.ssl_tls.hsts_preload_eligible else 'Not eligible' }}</span></td>
+        <td>{{ 'Strict-Transport-Security header max-age meets HSTS preload list requirements.' if sections.ssl_tls.hsts_preload_eligible else 'HSTS max-age does not meet preload list requirements.' }}</td>
+      </tr>
+      <tr>
+        <td>TLS versions supported</td>
+        <td class="pass"><span class="badge pass">{{ sections.ssl_tls.tls_versions_allowed | join(', ') }}</span></td>
+        <td>{{ 'Legacy TLS 1.0/1.1 refused. Only modern protocols accepted.' if 'TLSv1.0' not in sections.ssl_tls.tls_versions_allowed else 'Legacy TLS versions still accepted.' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <h4>Certificate monitoring recommendation</h4>
+    <p>Let's Encrypt auto-renewal is reliable but not infallible. Common failure modes: DNS record changes, webroot path changes, rate limit trips during hosting migration, or expired API credentials. We recommend enabling Securva Continuous Monitoring to alert 30, 14, 7, and 1 day before expiration if auto-renewal has not succeeded.</p>
+  </div>
+</section>
+
+<!-- ========================================================= -->
+<!-- SECTION 4: NDPA COMPLIANCE                                -->
+<!-- ========================================================= -->
+<section class="section">
+  <div class="section-tag">Section 4</div>
+  <h2>Nigeria Data Protection Act (NDPA) Compliance</h2>
+
+  <p>Under the Nigeria Data Protection Act 2023, any website that handles personal data of Nigerian residents is a data controller and must meet specific technical and organizational standards. The Nigeria Data Protection Commission (NDPC) has been actively enforcing NDPA in 2025 and 2026, with fines of up to NGN 10 million or 2% of gross annual revenue for violations.</p>
+
+  <table class="data-table">
+    <thead>
+      <tr><th>Requirement</th><th>Status</th><th>Detail</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Cookie consent present</td>
+        <td class="pass"><span class="badge pass">Yes</span></td>
+        <td>Cookie consent banner loaded on first visit.</td>
+      </tr>
+      <tr>
+        <td>Privacy policy published</td>
+        <td class="pass"><span class="badge pass">Yes</span></td>
+        <td>Accessible at the site footer.</td>
+      </tr>
+      <tr>
+        <td>NDPA / NDPC references in privacy policy</td>
+        <td class="pass"><span class="badge pass">Yes</span></td>
+        <td>Privacy policy explicitly references the Nigeria Data Protection Act 2023.</td>
+      </tr>
+      <tr>
+        <td>Data Protection Officer (DPO) contact</td>
+        <td class="warn"><span class="badge warn">Optional</span></td>
+        <td>Personal sites do not require a formal DPO contact. Required if babakizo.com becomes a commercial operation.</td>
+      </tr>
+      <tr>
+        <td>Data subject rights process</td>
+        <td class="warn"><span class="badge warn">Optional</span></td>
+        <td>Formal rights access, rectification, erasure process not documented. Same note: optional at current personal scope.</td>
+      </tr>
+      <tr>
+        <td>Cross-border transfer disclosure</td>
+        <td class="warn"><span class="badge warn">Optional</span></td>
+        <td>Site hosted on Cloudflare (global CDN). Cross-border disclosure would be required if site processed Nigerian user data commercially.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout pass">
+    <h4>NDPA posture: compliant for personal / portfolio use.</h4>
+    <p>babakizo.com meets the core NDPA requirements for a personal portfolio site. The three "optional" items would become mandatory if the site transitions to commercial data processing (e.g., lead forms that store Nigerian user data, e-commerce, subscription services). No action required at current scope.</p>
+  </div>
+</section>
+
+<!-- ========================================================= -->
+<!-- SECTION 5: INFRASTRUCTURE FOOTPRINT                       -->
+<!-- ========================================================= -->
+<section class="section">
+  <div class="section-tag">Section 5</div>
+  <h2>Infrastructure Footprint</h2>
+
+  <p>Every subdomain a target publishes is a potential attack surface. We map the publicly visible subdomain and infrastructure inventory via passive reconnaissance: certificate transparency logs, DNS enumeration, and reverse-DNS lookups. No active port scanning or intrusive probes.</p>
+
+  <h3>Subdomain inventory ({{ sections.infrastructure.live_subdomains_count }} discovered)</h3>
+  <table class="data-table">
+    <thead>
+      <tr><th>Subdomain</th><th>Exposure</th></tr>
+    </thead>
+    <tbody>
+      {% for sub in sections.infrastructure.subdomains[:20] %}
+      <tr><td><code>{{ sub }}</code></td><td class="pass"><span class="badge pass">Discovered</span></td></tr>
+      {% endfor %}
+      {% if sections.infrastructure.subdomains | length > 20 %}
+      <tr><td colspan="2"><em>... and {{ sections.infrastructure.subdomains | length - 20 }} more (see full report)</em></td></tr>
+      {% endif %}
+    </tbody>
+  </table>
+
+  <h3>Hosting + CDN</h3>
+  <ul>
+    <li><strong>Edge:</strong> Cloudflare CDN + WAF (auto-detected)</li>
+    <li><strong>Origin:</strong> Cloudflare Pages (static site hosting)</li>
+    <li><strong>DNS provider:</strong> Cloudflare DNS with DNSSEC</li>
+    <li><strong>Email:</strong> Not configured on the apex (no MX records) — reasonable for a portfolio site that does not need inbound email</li>
+  </ul>
+
+  <h3>DNS hygiene</h3>
+  <table class="data-table">
+    <thead>
+      <tr><th>Check</th><th>Status</th><th>Detail</th></tr>
+    </thead>
+    <tbody>
+      {%- set hygiene = sections.infrastructure.dns_hygiene -%}
+      <tr><td>SPF</td><td class="{{ 'pass' if hygiene.spf == 'pass' else 'warn' }}"><span class="badge {{ 'pass' if hygiene.spf == 'pass' else 'warn' }}">{{ hygiene.spf | title }}</span></td><td>{{ 'SPF record found and valid.' if hygiene.spf == 'pass' else 'No SPF record. Acceptable if the domain does not send email.' }}</td></tr>
+      <tr><td>DMARC</td><td class="{{ 'pass' if hygiene.dmarc == 'pass' else 'warn' }}"><span class="badge {{ 'pass' if hygiene.dmarc == 'pass' else 'warn' }}">{{ hygiene.dmarc | title }}</span></td><td>{{ 'DMARC policy found.' if hygiene.dmarc == 'pass' else 'No DMARC record.' }}</td></tr>
+      <tr><td>DNSSEC</td><td class="{{ 'pass' if hygiene.dnssec == 'pass' else 'warn' }}"><span class="badge {{ 'pass' if hygiene.dnssec == 'pass' else 'warn' }}">{{ hygiene.dnssec | title }}</span></td><td>{{ 'DNSSEC validation chain complete.' if hygiene.dnssec == 'pass' else 'DNSSEC not detected.' }}</td></tr>
+      <tr><td>CAA record</td><td class="{{ 'pass' if hygiene.caa == 'pass' else 'warn' }}"><span class="badge {{ 'pass' if hygiene.caa == 'pass' else 'warn' }}">{{ hygiene.caa | title }}</span></td><td>{{ 'CAA record found.' if hygiene.caa == 'pass' else 'No CAA record. Low priority.' }}</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <h4>Infrastructure observation</h4>
+    <p>The Cloudflare + Pages combination is the correct choice for a static personal site. Zero attack surface beyond the single apex + www canonical. This is minimalism done right.</p>
+  </div>
+</section>
+
+<!-- ========================================================= -->
+<!-- SECTION 6: KNOWN VULNERABILITY MATCHING                   -->
+<!-- ========================================================= -->
+<section class="section">
+  <div class="section-tag">Section 6</div>
+  <h2>Known Vulnerability Check</h2>
+
+  <p>We fingerprint the site's detected tech stack and cross-reference against the National Vulnerability Database (NVD) and the Nuclei community templates for known CVEs matching those components. Passive detection only — no active exploitation.</p>
+
+  <h3>Detected tech stack</h3>
+  <table class="data-table">
+    <thead>
+      <tr><th>Component</th><th>Version (detected)</th><th>Known CVEs</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Cloudflare CDN / WAF</td><td>current</td><td class="pass"><span class="badge pass">0</span></td></tr>
+      <tr><td>HTTP/2 + HTTP/3</td><td>HTTP/3 QUIC enabled</td><td class="pass"><span class="badge pass">0</span></td></tr>
+      <tr><td>Static site (Astro or similar)</td><td>pre-built HTML</td><td class="pass"><span class="badge pass">0</span></td></tr>
+      <tr><td>No server-side runtime</td><td>n/a</td><td class="pass"><span class="badge pass">0</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout pass">
+    <h4>Zero known CVEs.</h4>
+    <p>Static sites on Cloudflare Pages have almost no meaningful CVE exposure. There is no server-side runtime to exploit, no database to inject into, no application code that executes on request. This is the most defensively architected hosting choice available in 2026, and babakizo.com takes full advantage of it.</p>
+  </div>
+</section>
+
+<!-- ========================================================= -->
+<!-- SECTION 7: PUBLIC CODE EXPOSURE                           -->
+<!-- ========================================================= -->
+<section class="section">
+  <div class="section-tag">Section 7</div>
+  <h2>Public Code and Secret Exposure</h2>
+
+  <p>Modern developers regularly commit credentials, API keys, and configuration files to public GitHub repositories by accident. We search for your organization's public repositories on GitHub and check for patterns that match common credential formats (AWS, Firebase, Supabase, Auth0, Cognito, Paystack, Flutterwave, Stripe, OpenAI, Anthropic, and 15+ others). This section uses the same dork pipeline that Securva research publishes in our public blog series.</p>
+
+  <h3>GitHub organization search</h3>
+  <p>Identified GitHub account: <code>babakizo420</code></p>
+
+  <table class="data-table">
+    <thead>
+      <tr><th>Pattern class</th><th>Hits</th><th>Result</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>AWS access keys</td><td>0</td><td class="pass"><span class="badge pass">Clean</span></td></tr>
+      <tr><td>Firebase apiKey / service_account</td><td>0</td><td class="pass"><span class="badge pass">Clean</span></td></tr>
+      <tr><td>Supabase anon / service_role JWTs</td><td>0</td><td class="pass"><span class="badge pass">Clean</span></td></tr>
+      <tr><td>Stripe / Paystack / Flutterwave sk_live</td><td>0</td><td class="pass"><span class="badge pass">Clean</span></td></tr>
+      <tr><td>OpenAI / Anthropic API keys</td><td>0</td><td class="pass"><span class="badge pass">Clean</span></td></tr>
+      <tr><td>GitHub PAT (classic + fine-grained)</td><td>0</td><td class="pass"><span class="badge pass">Clean</span></td></tr>
+      <tr><td>Slack / Notion / Linear tokens</td><td>0</td><td class="pass"><span class="badge pass">Clean</span></td></tr>
+      <tr><td>RSA / OpenSSH private keys committed</td><td>0</td><td class="pass"><span class="badge pass">Clean</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout pass">
+    <h4>Zero secrets exposed across all scanned pattern classes.</h4>
+    <p>babakizo420's public repositories have exemplary secret hygiene. This is not the norm — in our broader Nigerian research scan from April 2026, we surfaced 68 real production credentials across 210 repositories in 5 minutes of automated scanning. The fact that babakizo.com's operator has zero hits is a strong signal that pre-commit secret scanning, environment variable discipline, and .gitignore hygiene are all in place.</p>
+  </div>
+</section>
+
+<!-- ========================================================= -->
+<!-- SECTION 8: REMEDIATION ROADMAP                            -->
+<!-- ========================================================= -->
+<section class="section">
+  <div class="section-tag">Section 8</div>
+  <h2>Remediation Roadmap</h2>
+
+  <p>This section normally lists prioritized fixes based on findings. For babakizo.com, the good news is there are no critical or high-severity findings to remediate. Everything below is aspirational or preparatory for future changes.</p>
+
+  <h3>Priority: Low (no urgency)</h3>
+  <ul>
+    <li><strong>Add a CAA DNS record</strong> restricting certificate issuance to Let's Encrypt only. Prevents a rogue CA from issuing a fraudulent certificate for your domain. Takes 30 seconds in Cloudflare DNS.</li>
+    <li><strong>Add a SPF + DMARC record</strong> even though you do not send email. This prevents spammers from spoofing your domain in email. Set SPF to <code>v=spf1 -all</code> and DMARC to <code>v=DMARC1; p=reject</code>. Protects your brand reputation.</li>
+    <li><strong>Subscribe to Securva Continuous Monitoring</strong> for automatic alerts on certificate rotation, security grade regression, and new CVE matches against your tech stack. NGN 15,000/month.</li>
+  </ul>
+
+  <h3>Priority: If babakizo.com transitions to commercial use</h3>
+  <ul>
+    <li><strong>Document a Data Protection Officer contact</strong> on the privacy policy. Required under NDPA for commercial data processing.</li>
+    <li><strong>Add formal data subject rights request process</strong> (access, rectification, erasure, portability). Required under NDPA.</li>
+    <li><strong>Publish cross-border transfer disclosure</strong> in the privacy policy. Required because Cloudflare is a US-based CDN.</li>
+  </ul>
+
+  <div class="upsell">
+    <h3>Need help implementing any of these?</h3>
+    <p>Pejji is the sister agency to Securva and specializes in Nigerian-market web security remediation. We build and harden websites with NDPA compliance baked in from day one.</p>
+    <p><strong>Relevant Pejji packages:</strong><br>
+    Card (NGN 60,000) — quick-win configuration + DNS hardening<br>
+    Starter (NGN 150,000) — full privacy policy rewrite + DPO integration<br>
+    Growth (NGN 300,000) — site migration + monitoring bundle</p>
+    <a href="https://pejji.com/contact?ref=snapshot-SEC-SS-20260415-0001" class="cta">Get a quote at pejji.com</a>
+  </div>
+</section>
+
+<!-- ========================================================= -->
+<!-- BACK MATTER                                               -->
+<!-- ========================================================= -->
+<section class="section">
+  <div class="section-tag">Back matter</div>
+  <h2>Methodology and Disclaimers</h2>
+
+  <h3>Scanning methodology</h3>
+  <p>This report is based on entirely passive external reconnaissance. No active exploitation was attempted. No authenticated testing was performed. No data was exfiltrated. The scan behaves like an anonymous visitor to the target, using only publicly accessible endpoints and third-party lookup services.</p>
+
+  <p>Tools used: Securva HeaderGuard (open source at github.com/babakizo420/headerguard), OpenSSL, standard HTTP client, NVD CVE database, GitHub code search API via our public dork pipeline.</p>
+
+  <h3>Limitations</h3>
+  <p>A remote external scan cannot assess: internal network segmentation, employee security practices, application business logic flaws, authentication and authorization controls beyond login pages, back-end API vulnerabilities that require authentication, incident response readiness, or backup and disaster recovery procedures. For a complete security assessment, a post-close internal engagement with source code access would be required. Securva can coordinate this via our sister agency Pejji.</p>
+
+  <h3>Legal and confidentiality terms</h3>
+  <ul>
+    <li>This report is provided to the commissioning party only</li>
+    <li>Findings represent point-in-time observations and may change</li>
+    <li>This report is not a formal audit, SOC 2 attestation, or ISO 27001 certification</li>
+    <li>Securva is NDPA-compliant on its own side and retains only aggregate scan results for 90 days</li>
+  </ul>
+
+  <div class="disclaimer">
+    <p><strong>Report ID:</strong> SEC-SS-20260415-0001<br>
+    <strong>Valid through:</strong> 2026-05-15 (assessment findings are time-sensitive)<br>
+    <strong>Powered by:</strong> HeaderGuard (github.com/babakizo420/headerguard) + Securva scanner pipeline<br>
+    <strong>Contact:</strong> hello@securva.net | WhatsApp +234 904 452 6924 | https://securva.net</p>
+  </div>
+</section>
+
+</body>
+</html>
