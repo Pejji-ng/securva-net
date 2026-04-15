@@ -1,0 +1,232 @@
+{
+  "schema_version": "snapshot-report/v1",
+  "report_id": "SEC-SS-20260415-1553",
+  "domain": "babakizo.com",
+  "generated_at_utc": "2026-04-15T15:53:10Z",
+  "generator": "securva-snapshot-orchestrator/0.2",
+  "box_ssh_used": false,
+  "sections": {
+    "security_headers": {
+      "status": "ok",
+      "grade": "A",
+      "score": 10,
+      "headers": [
+        {
+          "name": "",
+          "display_name": "",
+          "status": "pass",
+          "value": "max-age=63072000",
+          "note": ""
+        },
+        {
+          "name": "",
+          "display_name": "",
+          "status": "pass",
+          "value": "default-src 'self' 'unsafe-inline' https:; img-src * data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; frame-ancestors 'none'",
+          "note": ""
+        },
+        {
+          "name": "",
+          "display_name": "",
+          "status": "pass",
+          "value": "DENY",
+          "note": ""
+        },
+        {
+          "name": "",
+          "display_name": "",
+          "status": "pass",
+          "value": "nosniff",
+          "note": ""
+        },
+        {
+          "name": "",
+          "display_name": "",
+          "status": "pass",
+          "value": "strict-origin-when-cross-origin",
+          "note": ""
+        },
+        {
+          "name": "",
+          "display_name": "",
+          "status": "pass",
+          "value": "camera=(), microphone=(), geolocation=(), payment=()",
+          "note": ""
+        }
+      ],
+      "raw_api_response": {
+        "domain": "babakizo.com",
+        "grade": "A",
+        "headers": [
+          {
+            "name": "Strict-Transport-Security",
+            "status": "pass",
+            "value": "max-age=63072000"
+          },
+          {
+            "name": "Content-Security-Policy",
+            "status": "pass",
+            "value": "default-src 'self' 'unsafe-inline' https:; img-src * data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; frame-ancestors 'none'"
+          },
+          {
+            "name": "X-Frame-Options",
+            "status": "pass",
+            "value": "DENY"
+          },
+          {
+            "name": "X-Content-Type-Options",
+            "status": "pass",
+            "value": "nosniff"
+          },
+          {
+            "name": "Referrer-Policy",
+            "status": "pass",
+            "value": "strict-origin-when-cross-origin"
+          },
+          {
+            "name": "Permissions-Policy",
+            "status": "pass",
+            "value": "camera=(), microphone=(), geolocation=(), payment=()"
+          }
+        ],
+        "ndpa": {
+          "cookie_consent": true,
+          "ndpa_reference": true,
+          "privacy_policy": true
+        },
+        "scan_date": "2026-04-15T15:53:11Z",
+        "score": 10,
+        "ssl": {
+          "expires": "2026-06-26",
+          "issuer": "Let's Encrypt",
+          "valid": true
+        }
+      }
+    },
+    "ssl_tls": {
+      "status": "ok",
+      "certificate": {
+        "valid": true,
+        "issuer": "Let's Encrypt",
+        "expires": "2026-06-26",
+        "days_until_expiry": 71
+      },
+      "tls_versions_allowed": [
+        "TLSv1.2",
+        "TLSv1.3"
+      ],
+      "hsts_preload_eligible": false,
+      "grade": "A",
+      "notes": [
+        "Using Let's Encrypt. Free, auto-renewing, trusted by all modern browsers."
+      ]
+    },
+    "ndpa_compliance": {
+      "status": "ok",
+      "cookie_consent": true,
+      "privacy_policy": true,
+      "ndpa_reference": true,
+      "dpo_contact": "unknown",
+      "data_subject_rights_documented": "unknown",
+      "cross_border_disclosure": "unknown",
+      "grade": "A",
+      "notes": []
+    },
+    "infrastructure": {
+      "status": "partial_no_box",
+      "subdomains": [
+        "babakizo.com",
+        "www.babakizo.com"
+      ],
+      "live_subdomains_count": 2,
+      "hosting": {
+        "primary": "unknown",
+        "breakdown": {}
+      },
+      "dns_hygiene": {
+        "spf": "pass",
+        "dmarc": "pass",
+        "dnssec": "unknown",
+        "caa": "missing"
+      },
+      "grade": "C",
+      "notes": [
+        "DNSSEC not detected. DNS responses are not cryptographically verified.",
+        "No CAA record found. Any CA can issue certificates for your domain."
+      ]
+    },
+    "known_cves": {
+      "status": "ok",
+      "detected_stack": [
+        {
+          "component": "Vercel",
+          "version": "Vercel",
+          "source": "Server header"
+        }
+      ],
+      "matching_cves": [],
+      "grade": "A",
+      "notes": [
+        "Detected: Vercel. No matching CVEs in Securva rules.",
+        "Full CVE matching requires the Securva research box. This scan used response-header fingerprinting only."
+      ]
+    },
+    "code_exposure": {
+      "status": "box_required",
+      "guessed_github_org": "babakizo420",
+      "repos_scanned": 0,
+      "pattern_classes_checked": 8,
+      "findings": [],
+      "density_score": 0,
+      "grade": "A",
+      "notes": [
+        "Guessed GitHub org: babakizo420",
+        "Full dork scan requires the Securva research box \u2014 this field is populated in live scans"
+      ]
+    },
+    "remediation": {
+      "priority_high": [],
+      "priority_medium": [],
+      "priority_low": [
+        {
+          "item": "Add CAA DNS record",
+          "effort": "15 min",
+          "pejji_tier": null
+        },
+        {
+          "item": "Enable DNSSEC at registrar",
+          "effort": "1 hour",
+          "pejji_tier": null
+        }
+      ],
+      "estimated_fix_hours_in_house": 0,
+      "pejji_recommendation": {
+        "name": "Card",
+        "price_ngn": 60000,
+        "price_usd": 40,
+        "covers": "quick-win header/SSL fixes for static sites"
+      }
+    },
+    "executive_summary": {
+      "overall_grade": "A",
+      "overall_score": 9,
+      "headline_findings": [
+        "Security headers: 6/6 passing, grade A",
+        "SSL certificate valid from Let's Encrypt, expires in 71 days",
+        "NDPA compliance signals all present"
+      ],
+      "findings_by_severity": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 2
+      },
+      "what_this_means": "babakizo.com passes every check in the Securva Snapshot. No critical issues detected. Maintain current hygiene practices and consider continuous monitoring.",
+      "three_recommended_actions": [
+        "Add CAA DNS record",
+        "Enable DNSSEC at registrar"
+      ]
+    }
+  },
+  "orchestration_seconds": 2.2
+}
