@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why we built a scanner commercial tools can't replace | Securva</title>
+    <meta name="description" content="GitGuardian covers 1,000+ secret types. TruffleHog runs 700+ detectors. Neither catches the Nigerian fintech provider stack. Here's what we built and why.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,600&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#030308;--surface:#0A0A12;--card:#101020;--border:#1a1a30;--text:#F0EDF7;--muted:#6a6680;--accent:#7B68EE;--green:#4ade80;--red:#f87171;--yellow:#fbbf24;--font:'Cabinet Grotesk',system-ui,sans-serif;--serif:'Newsreader',Georgia,serif;--mono:'IBM Plex Mono',monospace}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:var(--font);background:var(--bg);color:var(--text)}
+        .nav{padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+        .nav-logo{font-weight:900;font-size:1.3rem;color:var(--text);text-decoration:none}.nav-logo span{color:var(--accent)}
+        .nav a.back{color:var(--muted);text-decoration:none;font-size:0.85rem}
+        article{max-width:720px;margin:0 auto;padding:60px 24px 80px}
+        .tag{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:16px}
+        h1{font-size:clamp(2rem,5vw,2.8rem);font-weight:900;letter-spacing:-0.03em;line-height:1.15;margin-bottom:16px}
+        .meta{font-size:0.85rem;color:var(--muted);margin-bottom:40px}
+        .lede{font-family:var(--serif);font-size:1.2rem;line-height:1.7;color:var(--text);margin-bottom:32px;font-style:italic;border-left:3px solid var(--accent);padding-left:20px}
+        article p{font-family:var(--serif);font-size:1.05rem;line-height:1.8;color:#c8c4d0;margin-bottom:24px}
+        article h2{font-size:1.5rem;font-weight:800;margin:48px 0 16px;letter-spacing:-0.02em;color:var(--text)}
+        article h3{font-size:1.2rem;font-weight:700;margin:32px 0 12px;color:var(--text)}
+        article strong{color:var(--text)}
+        article ul{margin:0 0 24px 20px;font-family:var(--serif);font-size:1rem;color:#c8c4d0;line-height:1.8}
+        article li{margin-bottom:8px}
+        article code{font-family:var(--mono);font-size:0.9em;background:var(--surface);padding:2px 6px;border-radius:4px;color:var(--accent)}
+        .scorecard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin:32px 0;overflow-x:auto}
+        .scorecard table{width:100%;border-collapse:collapse;font-family:var(--font);font-size:0.85rem;min-width:500px}
+        .scorecard th{text-align:left;padding:10px 8px;color:var(--muted);text-transform:uppercase;font-size:0.7rem;letter-spacing:1px;border-bottom:1px solid var(--border)}
+        .scorecard td{padding:10px 8px;border-bottom:1px solid var(--border)}
+        .scorecard td:first-child{color:var(--text);font-weight:600}
+        .scorecard td.yes{color:var(--green);text-align:center;font-weight:700}
+        .scorecard td.no{color:var(--red);text-align:center;font-weight:700;opacity:0.6}
+        .scorecard td.securva{color:var(--accent);text-align:center;font-weight:700}
+        .callout{background:var(--card);border-left:3px solid var(--accent);padding:20px 24px;margin:32px 0;border-radius:0 8px 8px 0}
+        .callout h3{margin-top:0}
+        .callout p{margin-bottom:0;font-size:0.95rem}
+        .cta-box{background:var(--card);border:1px solid var(--accent);border-radius:12px;padding:32px;text-align:center;margin:48px 0}
+        .cta-box h3{margin-bottom:12px;color:var(--text)}
+        .cta-box p{font-family:var(--font) !important;color:var(--muted);font-size:0.95rem;margin-bottom:20px;font-style:normal}
+        .cta-link{display:inline-block;padding:14px 28px;background:var(--accent);color:white;text-decoration:none;border-radius:10px;font-weight:700;font-size:0.95rem}
+        .footer-note{font-family:var(--font);font-size:0.75rem;color:var(--muted);margin-top:48px;padding-top:24px;border-top:1px solid var(--border);line-height:1.6}
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="nav-logo">Sec<span>urva</span></a>
+        <a href="/#blog" class="back">&larr; Back to blog</a>
+    </nav>
+
+    <article>
+        <div class="tag">Scanner Architecture</div>
+        <h1>Why we built a scanner commercial tools can't replace</h1>
+        <div class="meta">By Kingsley Olukanni &middot; Securva Research &middot; April 2026</div>
+
+        <p class="lede">GitGuardian detects 1,000+ secret types. TruffleHog runs 700+ detectors. Gitleaks ships with 100+ rules. None of them catch the Nigerian fintech provider stack, and the architecture of all three has a blind spot that affects every Nigerian fintech backend in production today. Here is what that blind spot looks like, why we built Securva's scanner to close it, and what we found in the first seventy-two hours of running it.</p>
+
+        <h2>The problem with how secret scanners work</h2>
+
+        <p>Your backend integrates with Flutterwave, Paystack, Monnify, WalletAfrica, Seerbit, and three Nigerian banks. Your <code>config.js</code> file has fourteen API credentials. You ran GitGuardian against your codebase, and it flagged two of them. The other twelve never got surfaced.</p>
+
+        <p>This is not a GitGuardian bug. Their detectors are correct for the providers they cover. The problem is architectural: every commercial secret scanner in the market checks for one provider at a time. When they find a Flutterwave key, they flag it and move on. They do not know that the same file contains thirteen more credentials sitting next to the one they found.</p>
+
+        <p>For a US SaaS startup with one Stripe integration in one service, this works perfectly. For a Nigerian fintech aggregator backend with fourteen payment provider integrations in one <code>config.js</code> file, it is a 7% detection rate, and a 7% detection rate is not a scanner — it is a false sense of security.</p>
+
+        <h2>What commercial tools do well</h2>
+
+        <p>Before explaining what we built, I want to acknowledge what commercial tools do well, because this matters for honest positioning.</p>
+
+        <p><strong>GitGuardian</strong> detects over 550 distinct secret types with entropy-based verification, ML-driven false positive suppression, and enterprise-grade tooling. If you are a global SaaS company scanning a monorepo of microservices, GitGuardian is probably the right choice for you. Their coverage of Stripe, AWS, Salesforce, Slack, and hundreds of other universal providers is excellent, and their enterprise features (SSO, Jira integration, SOC 2 audit trails) are things Securva will not be able to match for years.</p>
+
+        <p><strong>TruffleHog</strong> runs roughly 700 detectors with a feature we do not have: live verification. When TruffleHog finds a secret, it can optionally call the provider's API to confirm whether the secret is actually still valid. That is a genuinely useful feature, especially for security teams who get a lot of false positives from historical commits.</p>
+
+        <p><strong>Gitleaks</strong> is the popular open-source scanner with 100+ default rules and a fast Go binary that scans gigabytes of git history in seconds. It is the right choice for a developer who wants a free pre-commit hook without signing up for a commercial product.</p>
+
+        <p>All three are excellent tools for their intended use cases. What they share is an architectural assumption: each scan finds independent, isolated secrets. That assumption breaks down for Nigerian fintech.</p>
+
+        <h2>Why Nigerian fintech is different</h2>
+
+        <p>A typical Nigerian fintech backend is an <strong>aggregator</strong>. One Node.js or Python or PHP application wraps multiple payment providers — Flutterwave for card payments, Monnify for bank transfers, Paystack for subscriptions, WalletAfrica for USD wallets, Seerbit for Pan-African reach — and routes customer traffic through whichever provider has the best uptime or lowest fees. This makes business sense. A Nigerian fintech does not want to bet their entire customer experience on one payment processor's availability.</p>
+
+        <p>But it means the backend's <code>.env</code> or <code>config.js</code> file has dozens of provider credentials, not one.</p>
+
+        <p>Commercial scanners were designed for the "one startup, one provider per service category" model. When they scan a Nigerian fintech aggregator backend, they find the first credential they have a rule for and stop. They report a single finding. The security team fixes that one finding and believes the job is done. Meanwhile, the same file contains thirteen more credentials for providers the commercial scanner has never heard of.</p>
+
+        <p>We found a real example of this during our research. One public GitHub repository with a single 38-line <code>config/.env</code> file leaked production credentials for sixteen distinct service integrations — ten payment processors, two Nigerian commercial banks, a production MySQL database, a KYC provider, a transactional email service, and an SMS gateway. The file had been public for nearly four years. Existing secret scanners would have flagged it as "1 Flutterwave leak," because that is the only rule any of them had for the Nigerian fintech stack. Nobody rotated the other fifteen.</p>
+
+        <h2>Three things Securva does differently</h2>
+
+        <h3>1. Nigerian provider coverage</h3>
+
+        <p>Securva is the only secret scanner that detects these providers out of the box. We verified this by checking each tool's published detector list against each Nigerian provider we care about.</p>
+
+        <div class="scorecard">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Provider</th>
+                        <th>GitGuardian</th>
+                        <th>TruffleHog</th>
+                        <th>Gitleaks</th>
+                        <th>Securva</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Flutterwave</td><td class="yes">&check;</td><td class="yes">&check;</td><td class="no">&times;</td><td class="securva">&check;</td></tr>
+                    <tr><td>Paystack</td><td class="yes">&check;</td><td class="yes">&check;</td><td class="no">&times;</td><td class="securva">&check;</td></tr>
+                    <tr><td>Monnify / Moniepoint</td><td class="no">&times;</td><td class="no">&times;</td><td class="no">&times;</td><td class="securva">&check;</td></tr>
+                    <tr><td>Seerbit</td><td class="no">&times;</td><td class="no">&times;</td><td class="no">&times;</td><td class="securva">&check;</td></tr>
+                    <tr><td>Korapay</td><td class="no">&times;</td><td class="no">&times;</td><td class="no">&times;</td><td class="securva">&check;</td></tr>
+                    <tr><td>WalletAfrica</td><td class="no">&times;</td><td class="no">&times;</td><td class="no">&times;</td><td class="securva">&check;</td></tr>
+                    <tr><td>Bancore</td><td class="no">&times;</td><td class="no">&times;</td><td class="no">&times;</td><td class="securva">&check;</td></tr>
+                    <tr><td>Providus Bank API</td><td class="no">&times;</td><td class="no">&times;</td><td class="no">&times;</td><td class="securva">&check;</td></tr>
+                    <tr><td>GTBank API</td><td class="no">&times;</td><td class="no">&times;</td><td class="no">&times;</td><td class="securva">&check;</td></tr>
+                    <tr><td>SPENN</td><td class="no">&times;</td><td class="no">&times;</td><td class="no">&times;</td><td class="securva">&check;</td></tr>
+                    <tr><td>Kaleyra SMS</td><td class="no">&times;</td><td class="no">&times;</td><td class="no">&times;</td><td class="securva">&check;</td></tr>
+                    <tr><td>Global Accelerex</td><td class="no">&times;</td><td class="no">&times;</td><td class="no">&times;</td><td class="securva">&check;</td></tr>
+                    <tr><td>Verve / Interswitch</td><td class="no">&times;</td><td class="no">&times;</td><td class="no">&times;</td><td class="securva">&check;</td></tr>
+                    <tr><td>OnePipe, Rubbies, Payant, CGate</td><td class="no">&times;</td><td class="no">&times;</td><td class="no">&times;</td><td class="securva">&check;</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>Securva is the only scanner covering eleven or more Nigerian-specific payment providers, banks, and SMS gateways. This is a verifiable claim. You can check the commercial tools' published detector lists and confirm.</p>
+
+        <p>Why does this matter? The commercial vendors are not going to add Monnify to their default rule set. The total addressable market for a Nigerian-specific detector is too small for them to allocate engineering time. Our insight is that the Nigerian fintech market is big enough to matter for the Nigerian fintech community, even if it is too small for international vendors to care. That gap is the market niche Securva exists to serve.</p>
+
+        <h3>2. Multi-provider density scoring</h3>
+
+        <p>Every commercial scanner reports findings as a flat list. One credential per row. Fourteen credentials in one file become fourteen flat rows. The scanner does not know that those fourteen findings are all in the same file.</p>
+
+        <p>Securva does. We compute a <strong>credential density score</strong> per file and automatically flag any file with five or more distinct provider categories as CRITICAL, independent of the severity of any individual credential in the file.</p>
+
+        <p>Why this matters: a fourteen-credential aggregator file is not fourteen independent incidents. It is one systemic incident with fourteen blast radii. The remediation is not "rotate one key" — it is "rotate fourteen credentials across fourteen providers and audit the backend template that generated the leak." Commercial scanners miss this distinction entirely. In the 38-line file I mentioned earlier, GitGuardian would have reported "density 1" (one Flutterwave match). Securva scored it as "density 16, CRITICAL, systemic aggregator failure." The difference is the mental model, and it changes what a security team does next.</p>
+
+        <h3>3. Owner expansion and template clustering</h3>
+
+        <p>When Securva finds a CRITICAL hit on a public GitHub owner, we automatically enumerate all of that owner's other public repositories and scan them for the same patterns. This catches the freelance template reuse class of leak — where a developer builds the same backend template for multiple clients, and all the clients inherit the same hardcoded secrets.</p>
+
+        <p>We also detect template clone signatures across owners. When the same hardcoded value (like an AES master encryption key) appears in multiple repositories owned by different developers, Securva groups them as a single cluster representing the shared template's total blast radius.</p>
+
+        <p>This is how we recently discovered that one freelance developer had built five different gambling backends for five different clients, all sharing the same hardcoded Flutterwave secret key, the same Twilio auth token, the same SPENN API key, and the same AES-256-CBC master encryption key. Commercial scanners would have reported five independent incidents across five repositories. Securva reports one template-scale security failure affecting every operator who hired that developer. We also identified a second freelance developer — completely unknown to us until the signature search surfaced him — who uses the same AES master key in his own four gambling backend repositories. That is a new class of finding: not "one developer made one mistake" but "the same template code is being cloned across multiple freelance developers in the African gambling ecosystem." No commercial scanner catches this pattern.</p>
+
+        <h2>Honest positioning</h2>
+
+        <div class="callout">
+            <h3>We are not broader than GitGuardian.</h3>
+            <p>Commercial scanners cover more universal providers. If you are a US SaaS startup with one Stripe integration, commercial tools are the right choice. We are deeper in a specific vertical. If you are Nigerian fintech, African gambling backend, or Web3 developer tooling, Securva catches patterns commercial tools are structurally unable to catch — because our vertical is not big enough for them to care.</p>
+        </div>
+
+        <h2>When to use Securva</h2>
+
+        <p><strong>Use Securva if you are:</strong></p>
+        <ul>
+            <li>A Nigerian fintech integrating any local provider beyond Flutterwave and Paystack — Monnify, Seerbit, WalletAfrica, Providus, GTBank, SPENN, Kaleyra</li>
+            <li>An African payments aggregator routing traffic through three or more providers</li>
+            <li>A gambling or gaming backend built by a freelance developer from a template</li>
+            <li>A Web3 or DeFi team worried about Ethereum private keys, BIP39 mnemonics, or Privy credentials in your codebase</li>
+            <li>Already running GitGuardian or TruffleHog and want Nigerian-specific rule coverage on top</li>
+        </ul>
+
+        <p><strong>Use a commercial scanner if you are:</strong></p>
+        <ul>
+            <li>Primarily integrating global providers like Stripe, AWS, or Salesforce</li>
+            <li>Scanning a monorepo with thousands of microservices and needing breadth over depth</li>
+            <li>Required by compliance to use a specific vendor with SOC 2 certification</li>
+        </ul>
+
+        <p>The best setup for most Nigerian fintech teams is both: commercial scanner for universal coverage plus Securva for the Nigerian plus aggregator plus template gap that commercial tools structurally miss. We are not trying to replace GitGuardian. We are trying to close the vertical gap that GitGuardian will never close.</p>
+
+        <h2>What we built in 72 hours</h2>
+
+        <p>The Securva scanner went through eight versions in three days during the research sprint that produced this article. Version 1 scanned seven auth providers. Version 4.2 added depth-check and owner expansion. Version 4.3 added thirteen Web3 patterns including Ethereum private key detection, BIP39 mnemonic phrase detection, and Privy credential detection. The full evolution is visible in our private scanner repository, and the architectural decisions are documented in the commit history.</p>
+
+        <p>What we found with it, also in seventy-two hours, is the subject of several follow-up research posts that will appear on this blog in the coming weeks. Each one is gated on coordinated disclosure practice — vendors get notified first, given time to verify and remediate, and only after rotation is confirmed do we write about the findings publicly. That is how security research is supposed to work.</p>
+
+        <div class="cta-box">
+            <h3>Free multi-provider density audit</h3>
+            <p>The first twenty Nigerian fintech teams to reach out in April 2026 get a free density audit of their public GitHub footprint. No sales call, no follow-up spam. Just the audit, delivered as a one-page PDF within 48 hours.</p>
+            <a href="mailto:hello@securva.net?subject=Free%20density%20audit" class="cta-link">Email hello@securva.net</a>
+        </div>
+
+        <p>Nigerian fintech deserves tooling built for its actual ecosystem, not a global tool with a regional add-on pack bolted on. That is why Securva exists, and that is the gap we will keep closing one provider at a time.</p>
+
+        <div class="footer-note">
+            <strong>About Securva.</strong> Securva is an independent security research project run by Kingsley Olukanni, a Nigerian security researcher based in Calgary. We publish ecosystem-level research on credential exposure in African fintech, run coordinated disclosure with affected vendors, and build the security tooling the Nigerian fintech community needs and international vendors are not going to build. More at <a href="/">securva.net</a>.
+            <br><br>
+            GitGuardian, TruffleHog, and Gitleaks are trademarks of their respective owners. This article is a factual comparison of feature coverage, not a legal or commercial claim against those products. All three are excellent tools for their intended use cases. This article identifies the vertical gap Securva was built to fill.
+        </div>
+    </article>
+</body>
+</html>
