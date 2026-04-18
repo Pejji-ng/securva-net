@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Sterling Got Breached. And Why 60% of Nigerian Enterprises Are Next. | Securva</title>
+    <meta name="description" content="A single unpatched CVE on a testing server gave an attacker 9 days inside Sterling Bank, 3TB of customer KYC data, and a pivot into Remita. The attack is not sophisticated. It is the same six structural weaknesses hiding in most Nigerian enterprises right now. Here is the pattern, and what to do about it.">
+    <meta property="og:title" content="How Sterling Got Breached. And Why 60% of Nigerian Enterprises Are Next.">
+    <meta property="og:description" content="A single unpatched vulnerability on a testing server gave an attacker 9 days inside Sterling Bank, 3TB of customer KYC data, and a pivot into Remita. The same six structural weaknesses hide in most Nigerian enterprises right now.">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Securva">
+    <meta property="og:image" content="https://securva.net/images/og-blog-default.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://securva.net/blog/how-sterling-got-breached-2026-04.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="How Sterling Got Breached. And Why 60% of Nigerian Enterprises Are Next.">
+    <meta name="twitter:description" content="A single unpatched CVE + 9 days inside + 3TB exfiltrated. The same six structural weaknesses are hiding in most Nigerian enterprises right now.">
+    <meta name="twitter:image" content="https://securva.net/images/og-blog-default.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,600&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#030308;--surface:#0A0A12;--card:#101020;--border:#1a1a30;--text:#F0EDF7;--muted:#6a6680;--accent:#7B68EE;--font:'Cabinet Grotesk',system-ui,sans-serif;--serif:'Newsreader',Georgia,serif}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:var(--font);background:var(--bg);color:var(--text)}
+        .nav{padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+        .nav-logo{font-weight:900;font-size:1.3rem;color:var(--text);text-decoration:none}.nav-logo span{color:var(--accent)}
+        .nav a.back{color:var(--muted);text-decoration:none;font-size:0.85rem}
+        article{max-width:680px;margin:0 auto;padding:60px 24px 80px}
+        .tag{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:16px}
+        h1{font-size:clamp(2rem,5vw,2.8rem);font-weight:900;letter-spacing:-0.03em;line-height:1.15;margin-bottom:16px}
+        .meta{font-size:0.85rem;color:var(--muted);margin-bottom:40px}
+        article p{font-family:var(--serif);font-size:1.05rem;line-height:1.8;color:#c8c4d0;margin-bottom:24px}
+        article h2{font-size:1.75rem;font-weight:800;margin:48px 0 16px;letter-spacing:-0.02em;border-left:3px solid var(--accent);padding-left:16px}
+        article h3{font-size:1.3rem;font-weight:700;margin:36px 0 12px;color:var(--accent)}
+        article strong{color:var(--text)}
+        article ul{margin:0 0 24px 20px;font-family:var(--serif);font-size:1rem;color:#c8c4d0;line-height:1.8}
+        article ol{margin:0 0 24px 20px;font-family:var(--serif);font-size:1rem;color:#c8c4d0;line-height:1.8}
+        .stat-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:32px;text-align:center;margin:32px 0}
+        .stat-big{font-size:4rem;font-weight:900;color:var(--accent)}
+        .stat-label{font-size:0.9rem;color:var(--muted);margin-top:4px}
+        .stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:32px 0}
+        .stat-grid .stat-box{margin:0}
+        .cta-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:32px;text-align:center;margin:40px 0}
+        .cta-box h3{margin-bottom:8px}
+        .cta-box p{font-family:var(--font) !important;color:var(--muted);font-size:0.9rem;margin-bottom:16px}
+        .cta-link{display:inline-block;padding:12px 24px;background:var(--accent);color:white;text-decoration:none;border-radius:10px;font-weight:700;font-size:0.9rem}
+        .data-table{width:100%;border-collapse:collapse;margin:24px 0 32px}
+        .data-table th,.data-table td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--border)}
+        .data-table th{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+        .data-table td{font-family:var(--serif);font-size:0.95rem;color:#c8c4d0}
+        .data-table td strong{color:var(--text)}
+        .data-table tr:hover{background:var(--surface)}
+        .disclaimer{margin-top:48px;padding-top:32px;border-top:1px solid var(--border)}
+        .disclaimer p{font-size:0.85rem !important;color:var(--muted) !important;font-style:italic}
+        code{font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--surface);padding:2px 6px;border-radius:4px;color:var(--accent)}
+        @media(max-width:500px){.stat-grid{grid-template-columns:1fr}.stat-big{font-size:3rem}}
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="nav-logo">Sec<span>urva</span></a>
+        <a href="/" class="back">&larr; Back to scanner</a>
+    </nav>
+    <article>
+        <div class="tag">Research</div>
+        <h1>How Sterling Got Breached. And Why 60% of Nigerian Enterprises Are Next.</h1>
+        <div class="meta">April 2026 | 12 min read</div>
+
+        <p>On March 18, 2026, an attacker sent a specially-crafted HTTP request to an internet-facing testing server owned by Sterling Bank. The server was running an unpatched version of a component with a publicly-disclosed vulnerability (CVE-2025-55182), a maximum-severity remote-command-execution bug that had been in the public domain for three months. Within minutes, the attacker had shell access. Nine days later, they had extracted roughly 3 terabytes of data, pivoted laterally into Remita, the payment processor that handles Nigerian government salaries and a large share of public-sector transactions, and positioned the haul for ransom negotiations.</p>
+
+        <p>Sterling Bank said nothing to its customers. Remita said nothing to its customers. On April 1, the Nigeria Data Protection Commission served a Notice of Investigation. As of this writing, most of the roughly 900,000 Sterling Bank customers whose data is in the breach remain uninformed.</p>
+
+        <p>This is not a story about an advanced persistent threat. It is not a story about a zero-day. It is a story about <strong>six structural weaknesses</strong> that were already known, already documented, already fixable, and that are sitting in the majority of Nigerian enterprises right now.</p>
+
+        <div class="stat-grid">
+            <div class="stat-box">
+                <div class="stat-big">9</div>
+                <div class="stat-label">days the attacker stayed inside Sterling Bank</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-big">3 TB</div>
+                <div class="stat-label">of data exfiltrated, 800 GB of KYC documents</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-big">3 mo</div>
+                <div class="stat-label">the critical CVE sat unpatched before the breach</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-big">0</div>
+                <div class="stat-label">customers Sterling has formally notified</div>
+            </div>
+        </div>
+
+        <p>We ran a public-infrastructure scan across 20 major Nigerian organizations over the last 30 days. <strong>Sixty-four percent of their live hosts present at least three of the six weaknesses that put Sterling on the attack path.</strong> The sectors the NDPC enforcement cascade has not yet reached, telecom, healthcare, e-commerce, are the ones most exposed.</p>
+
+        <p>This post walks through what happened at Sterling Bank in plain language, extracts the six-factor pattern, maps it against the broader Nigerian infrastructure landscape using our own data, and gives every security lead and CTO a concrete checklist for where to look first in their own organization.</p>
+
+        <h2>Part 1. What actually happened at Sterling Bank</h2>
+
+        <p>The attack, as reconstructed from public reporting by the threat actor (who uses the handle ByteToBreach) and corroborated by journalists at Technext24, Guardian Nigeria, and others, followed four stages.</p>
+
+        <h3>Stage one: perimeter compromise</h3>
+
+        <p>Sterling Bank operated an internet-facing testing server. The server ran a component with CVE-2025-55182, a publicly-disclosed remote code execution vulnerability. The fix had been available for three months. The patch had not been applied. On March 18, the attacker sent one request and had shell access.</p>
+
+        <h3>Stage two: internal reconnaissance and persistence</h3>
+
+        <p>The attacker spent nine days inside Sterling's systems. During that window they located a code repository that stored production credentials for Remita, in plaintext, in files that should never have been in the repository.</p>
+
+        <h3>Stage three: lateral pivot to a third party</h3>
+
+        <p>Using the plaintext Remita credentials, the attacker moved into Remita's infrastructure without ever directly attacking it. Remita was not the target. It was collateral damage from a decision Sterling Bank made about how to store sensitive information.</p>
+
+        <h3>Stage four: cloud-storage exfiltration</h3>
+
+        <p>From inside the combined Sterling+Remita environment, the attacker located a misconfigured Amazon S3 bucket. They extracted 3 terabytes of data. More than 800 gigabytes of the exfiltration was Know Your Customer material: passports, driver's licenses, national ID cards, utility bills. The rest was databases, transaction logs, internal source code, API keys, and password hashes.</p>
+
+        <p>No one specific decision caused the breach. Every stage was enabled by a distinct operational gap. Remove any one stage and the next one stops. Every stage is a well-understood class of failure with standard mitigations that have been industry practice for years.</p>
+
+        <h2>Part 2. The six-factor vulnerability signature</h2>
+
+        <p>The same pattern shows up in every breach of this class. We have seen it in the Sterling/Remita case. We have seen it in the Corporate Affairs Commission breach (25 million documents exposed via sequential-ID enumeration, announced two weeks later in a single vague statement). We have seen it in the MTN Group breach of Q2 2025 (multi-market telecom, centralised backend, customer data accessed, notification minimal). We have seen it across our own disclosure pipeline, Flutterwave, Esusu, and half a dozen smaller Nigerian fintech operators whose production credentials we found in public GitHub repositories.</p>
+
+        <p>The pattern distils into six structural factors. Any Nigerian organization presenting three or more of these is operating at the same risk profile as Sterling Bank on March 17, 2026.</p>
+
+        <h3>Factor 1. A legacy infrastructure tier that nobody is patching</h3>
+
+        <p>Most Nigerian enterprises of any size run two generations of infrastructure in parallel. The customer-facing layer is modern, React frontends, Next.js server-side rendering, Node.js APIs. Behind it, the internal-facing layer is legacy, Windows Server with IIS, ASP.NET applications a decade old, PHP admin panels, jQuery-based dashboards.</p>
+
+        <p>The legacy tier is where the patches don't land. Nobody on the current team wrote it. The original developers have moved on. There is no CI pipeline automating updates. There is no test suite that would catch a regression from a security patch. The legacy tier becomes a fossil layer, and every publicly-disclosed CVE that touches it is a live fuse.</p>
+
+        <p>Sterling Bank's testing server was almost certainly on this tier. A testing server running unpatched for three months on an internet-facing IP is not a sign of an under-resourced institution. It is a sign of an institution that does not have anyone whose job includes "check which internal servers are internet-facing and whether their components are patched."</p>
+
+        <h3>Factor 2. Missing HTTP Strict Transport Security on customer-facing hosts</h3>
+
+        <p>HSTS is a security header that instructs browsers to only communicate with a site over encrypted HTTPS. It prevents an attacker on the same Wi-Fi network from silently downgrading a victim to unencrypted HTTP and intercepting their session.</p>
+
+        <p>HSTS has been an industry standard since 2012. Implementation is one line of web-server configuration.</p>
+
+        <p>Our Phase 1 infrastructure scan across 20 major Nigerian enterprises found 1,180 alive hosts. <strong>Four hundred and twenty-five of them (36 percent) had HSTS enabled. Seven hundred and fifty-five of them (64 percent) did not.</strong></p>
+
+        <p>Missing HSTS does not cause a Sterling-style breach directly. But it is a reliable marker of general security posture. Organizations that have not configured a 2012-era header on 64 percent of their hosts have not invested in the processes that would also catch unpatched legacy servers.</p>
+
+        <h3>Factor 3. Forgotten and shadow infrastructure</h3>
+
+        <p>Our scan found 57 hosts displaying default web server pages. These are "Welcome to nginx" and "IIS Windows Server" screens, the generic placeholder content that ships with a fresh installation.</p>
+
+        <p>Every one of these is a subdomain that was assigned DNS, pointed at a server, and then forgotten. The team moved on. Nobody took down the DNS record. Nobody decommissioned the host.</p>
+
+        <p>Default installations often ship with known vulnerabilities, debug features turned on, and administrative interfaces accessible. A forgotten subdomain is an attacker's dream surface because it gets all the defaults and none of the attention. Sterling's testing server was functionally identical to one of these.</p>
+
+        <h3>Factor 4. Concentrated ASN ownership with many edge hosts</h3>
+
+        <p>Infrastructure mapping at the autonomous-system-number (ASN) level reveals how much surface each institution owns. In our Phase 2 mapping of 1,438 unique Nigerian IPs:</p>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Institution</th>
+                    <th>Hosts on their ASN</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Zenith Bank</strong></td><td>132</td></tr>
+                <tr><td><strong>First Bank (FBN)</strong></td><td>132</td></tr>
+                <tr><td><strong>GTBank</strong></td><td>89</td></tr>
+                <tr><td><strong>MTN Nigeria</strong></td><td>67</td></tr>
+                <tr><td><strong>Access Bank</strong></td><td>6</td></tr>
+            </tbody>
+        </table>
+
+        <p>Each host is a potential entry point. A single unpatched edge host in a 132-host ASN is structurally equivalent to Sterling's testing server. The attack math is the same, the attacker only needs one. And the defender has 132 places to look.</p>
+
+        <h3>Factor 5. Developer repositories that leak production credentials</h3>
+
+        <p>Every Nigerian fintech operator we have disclosed to in the past 30 days, and every one we are currently drafting letters for, had the same failure mode: a developer or small team committed a <code>.env</code> file (often <code>.env.production</code>) to a public GitHub repository, with live production credentials inside. We have found keys for Paystack, Flutterwave, Monnify, Seerbit, Korapay, Quidax, Dojah, Stripe, Supabase service-role tokens, Upstash Redis tokens, and Sentry DSNs. We have found Ethereum private keys, BIP39 mnemonics, Alchemy keys. We have found them in repositories owned by solo founders, small teams, and, in the Sterling/Remita case, inside a major-bank internal repository where the Remita credentials were stored in plaintext and accessible to anyone who got shell on Sterling's testing server.</p>
+
+        <p>This is not a problem confined to solo developers. It is a class of failure that scales upward because the same pressures exist at every level: fast shipping, missing training, no pre-commit scanner, no secret-management platform, no review culture.</p>
+
+        <h3>Factor 6. No culture of breach notification</h3>
+
+        <p>The Nigeria Data Protection Act of 2023 mandates breach notification within 72 hours of awareness. In practice, for every breach we can verify from public sources over the past 12 months:</p>
+
+        <ul>
+            <li><strong>Sterling Bank</strong>: silent after NDPC served Notice of Investigation</li>
+            <li><strong>Remita</strong>: silent</li>
+            <li><strong>Corporate Affairs Commission</strong>: 14-plus day delay, vague statement, no formal notification</li>
+            <li><strong>MTN Nigeria</strong>: claimed unaffected by MTN Group's breach; credibility unclear</li>
+            <li><strong>Globacom 2023</strong>: minimal public acknowledgement</li>
+        </ul>
+
+        <p>The pattern is an institutional instinct to minimize publicly, negotiate privately, and notify customers only when the news breaks elsewhere. This is a compliance failure. It is also a trust failure. And it creates a secondary market gap, Nigerian consumers typically learn they were breached from the media, not from the entity that lost their data.</p>
+
+        <h2>Part 3. Who is most exposed right now</h2>
+
+        <p>The NDPC enforcement cascade has moved sector-by-sector through 2024 and 2025: banking, education, payments. Each sector got a wave of regulatory scrutiny, some high-profile enforcement actions, and a period of reactive cleanup. The cascade has not stopped moving. Based on the signal pattern, regulatory announcements, parallel-regulator moves like the NCC's February 13, 2026 telecom breach-notification directive, and the natural logic of "where do the worst structural weaknesses intersect with the largest exposed populations", the next three sectors are identifiable.</p>
+
+        <h3>Telecom</h3>
+
+        <p>Four major operators (MTN, Airtel, Globacom, 9mobile) plus smaller MVNOs. Tens of millions of subscriber records. Location data. Payment credentials tied to airtime purchases and mobile-money flows. The NCC has already tightened reporting rules to 48 hours. MTN Group's Q2 2025 breach is a precedent. The first telecom-class breach in Nigeria post-NCC rule is likely within the next six months.</p>
+
+        <h3>Healthcare</h3>
+
+        <p>The National Health Insurance Scheme (NHIS), private HMOs (Reliance HMO, AXA Mansard, Avon), digital-health fintechs (Helium Health, 54gene, Ankoma, Sevilla), private-hospital IT departments. Africa-wide healthcare is averaging 3,575 weekly attacks per 2025 data, a 38 percent year-over-year increase. Nigerian private healthcare is the most-targeted sector on the continent. M-Tiba in Kenya was breached in late 2025. The Nigerian analog is overdue.</p>
+
+        <h3>E-commerce</h3>
+
+        <p>Jumia, Konga, Jiji, plus newer vertical plays (Chowdeck, Sendme, Patricia, Rida). High PII volume. Weak pre-existing baseline. Most run on older LAMP or Magento stacks that check every box on the factor-1 legacy-tier profile. A CAC-style sequential-ID breach in this sector is a straightforward attack.</p>
+
+        <p>If your organization is in one of these three sectors and you score three or more on the six-factor signature, you are not wondering whether a Sterling-class incident will happen to you. You are waiting for the specific attacker who decides you are the easiest target this week.</p>
+
+        <h2>Part 4. What to do right now</h2>
+
+        <p>Concrete, non-vendor-specific, in the order that each control has the highest leverage per hour of effort.</p>
+
+        <h3>One. Inventory every subdomain</h3>
+
+        <p>Run a passive DNS enumeration across every domain your organization owns. The tools are free. The output is a list. You are specifically looking for subdomains that are live, fingerprinted to a legacy stack, and not in your current maintenance inventory. These are the Sterling testing servers. Take them offline or re-owner them to a team that has the authority to patch.</p>
+
+        <h3>Two. Add HSTS and basic headers on every customer-facing host</h3>
+
+        <p>One line of nginx config per host. One line of Cloudflare Transform Rule if you are on a CDN. Hours of work for one engineer. Nothing to lose, basic protection gained, a demonstrable compliance signal for NDPC.</p>
+
+        <h3>Three. Scan every public repository owned by employees and contractors</h3>
+
+        <p>Every major secret scanner (GitGuardian, TruffleHog, Gitleaks) is free or low-cost. Run it across every repository owned by anyone who has ever worked for you, and every repository where an <code>.env.production</code> file has shown up in any branch at any time. Rotate every credential that appears. Configure pre-commit hooks so new credentials can never land in source control again.</p>
+
+        <h3>Four. Audit your third-party vendor credentials and move them out of repositories</h3>
+
+        <p>Every API key, every service account, every OAuth client secret used to integrate with a third party, if any of it lives in a code repository (public or private) in plaintext, move it immediately. The canonical destinations are encrypted environment variable systems (Vercel, Netlify, Fly, Railway, Render for hosted apps), a secrets vault (HashiCorp Vault, Doppler, Infisical, AWS Secrets Manager), or at minimum encrypted-at-rest files outside the repo. The Sterling-to-Remita pivot happened because Remita credentials were in a Sterling repo in plaintext. That exact failure is the one most worth removing.</p>
+
+        <h3>Five. Build a breach-notification process before you need one</h3>
+
+        <p>Define who calls whom in the first 30 minutes. Draft the NDPC notification letter template. Draft the customer notification email. Decide in advance what gets said, by whom, and in what sequence. The 72-hour clock is not enough time to invent a process under stress. The Sterling silence was not malicious, it was an absence of a pre-built process.</p>
+
+        <h2>Part 5. Where Securva fits</h2>
+
+        <p>Securva is an independent security research project based in Calgary and Lagos. Our work is organized around three lines.</p>
+
+        <p><strong>External attack-surface mapping.</strong> We scan Nigerian enterprises the same way an attacker would. We do not exploit. We do not pivot. We produce a report that lists exactly what an outsider can see about your infrastructure. If you want one for your organization, or you want to see the public Phase 1 and Phase 2 samples we have already published, you can reach us at hello@securva.net.</p>
+
+        <p><strong>Coordinated credential-leak disclosure.</strong> Our scanner continuously watches GitHub for new commits of Nigerian-payment, Nigerian-telecom, Nigerian-fintech, Web3, and vendor-specific credentials. When we find leaked credentials, we notify the owner under coordinated disclosure, 14-day window, no publication, no media, no monetization of the finding itself. We have disclosed to Flutterwave, Esusu, three Supabase-using Web3 operators, trustbank.tech, and several smaller operators. Every one of these disclosures ended in rotation within hours of the letter landing.</p>
+
+        <p><strong>Public research and content.</strong> This post is one. The Phase 1 introductory post on our blog is another. We publish the pattern, never the target. The purpose is to shift the collective baseline of what "acceptable security posture" means in the Nigerian market. If the bar rises, the Sterling-class breach rate falls. We are not going to fix this sector by yelling at individual CTOs. We can possibly fix it by making the signature so public and so recognizable that skipping the basics stops being socially acceptable inside engineering leadership.</p>
+
+        <div class="cta-box">
+            <h3>Get the Securva Snapshot</h3>
+            <p>External attack-surface report for your organization. First three customers in telecom, healthcare, or e-commerce get the snapshot at a discounted rate in exchange for case-study permission. After that, standard pricing.</p>
+            <a href="mailto:hello@securva.net?subject=Securva Snapshot Inquiry" class="cta-link">Email hello@securva.net</a>
+        </div>
+
+        <h2>The bottom line</h2>
+
+        <p>Sterling Bank was not breached by a nation-state. It was breached by a single human being using a three-month-old CVE and a credentials-in-a-repo antipattern that every junior engineer on your team knows is wrong.</p>
+
+        <p>Remita was not breached at all in the technical sense. It was collateral from Sterling's operational hygiene.</p>
+
+        <p>CAC was not breached by clever exploitation. It was enumerated, because someone, at some point, decided sequential integer user IDs were good enough.</p>
+
+        <p>All three of these failures are structural, not technical. The controls are known. The tools are free. The only missing ingredient is the attention.</p>
+
+        <p>Every Nigerian CTO and security lead reading this has about six months. The NDPC has told you, indirectly, where the enforcement cascade is going next. The attacker community does not need a hint, the targets are obvious. The question is whether your organization is going to be the one that ran the scan and patched the gaps before the notice arrived, or the one that is written about in the next post like this one.</p>
+
+        <p>We hope it is the former. If we can help, the inbox is open.</p>
+
+        <div class="disclaimer">
+            <p>Methodology note: all data cited in this post comes from public sources (NDPC announcements, journalistic reporting by Technext24 / Guardian Nigeria / Punch / Businessday NG / The Record / SecurityWeek) or from Securva's own Phase 1 and Phase 2 infrastructure mapping research. No private data, no proprietary leaks, no credential values are referenced. Links to sources on request at hello@securva.net.</p>
+        </div>
+    </article>
+</body>
+</html>
