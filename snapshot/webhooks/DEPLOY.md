@@ -61,7 +61,7 @@ In Cloudflare dashboard → R2 → Manage R2 API Tokens → Create API Token
 
 ## Step 2 — Intake form (no manual setup needed)
 
-The customer intake form is a custom page at `securva.net/snapshot/intake`. It ships with this repo as `snapshot/intake.html` and auto-deploys via CF Pages when merged to main. When the Gumroad webhook fires, the Worker emails the customer a link like `https://securva.net/snapshot/intake?order_ref=ABC123`. The customer enters their URL, form POSTs directly to `https://shop.securva.net/api/intake`, Worker validates and queues the job.
+The customer intake form is a custom page at `securva.net/snapshot/intake`. It ships with this repo as `snapshot/intake.html` and auto-deploys via CF Pages when merged to main. When the Gumroad webhook fires, the Worker emails the customer a link like `https://securva.net/snapshot/intake?order_ref=ABC123`. The customer enters their URL, form POSTs directly to `https://snap.securva.net/api/intake`, Worker validates and queues the job.
 
 No Tally, no third-party dependency, no webhook signature to verify. Form is branded + matches securva.net aesthetic.
 
@@ -203,9 +203,16 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-Add DNS record in Cloudflare:
+Add 2 DNS records in Cloudflare:
+
+**scanner.internal** (for box API, already created):
 - Type: A, Name: `scanner.internal`, Value: `165.232.109.143` (box IP)
 - Proxy: DNS-only (gray cloud) — we want the Worker to hit the box directly, not through another CF layer
+
+**snap** (for Worker route, NEW):
+- Type: CNAME, Name: `snap`, Target: `securva.net`
+- Proxy: **Proxied (orange cloud)** — required for Worker route to intercept requests
+- Without this record, the Worker route in wrangler.toml cannot attach
 
 ### 4e. Smoke test
 ```bash
@@ -241,12 +248,12 @@ wrangler secret put PAYSTACK_SECRET_KEY
 ### 5c. Deploy
 ```bash
 wrangler deploy
-# Worker is now live at shop.securva.net/api/*
+# Worker is now live at snap.securva.net/api/*
 ```
 
 ### 5d. Verify
 ```bash
-curl https://shop.securva.net/api/health
+curl https://snap.securva.net/api/health
 # Expect: 200 OK with {"status":"ok","last_hour_by_status":[], ...}
 ```
 
@@ -267,7 +274,7 @@ curl https://shop.securva.net/api/health
 
 For each product:
 - Upload the sample PDF as the deliverable (customers get the actual PDF later via email; Gumroad's default download is the sample/teaser)
-- Settings → Advanced → Webhook: `https://shop.securva.net/api/gumroad-webhook` → save the signing secret as `GUMROAD_WEBHOOK_SECRET`
+- Settings → Advanced → Webhook: `https://snap.securva.net/api/gumroad-webhook` → save the signing secret as `GUMROAD_WEBHOOK_SECRET`
 - Use the description from `gumroad_launch_package_v1.md` Block 2/3 (updated to match the actual automated product)
 
 ---
