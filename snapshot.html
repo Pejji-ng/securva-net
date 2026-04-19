@@ -3,111 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Securva Snapshot | Automated Website Security + NDPA Audit for Nigerian Businesses</title>
-    <meta name="description" content="A self-serve website security audit delivered as a PDF within 24 hours. 42 security checks, NDPA 2023 compliance, NDPC fine exposure estimate. $29. No signup, no subscription, automated end-to-end.">
-    <meta property="og:title" content="Securva Snapshot | Automated Website Security + NDPA Audit">
-    <meta property="og:description" content="A self-serve website security audit delivered as a PDF within 24 hours. 42 security checks, NDPA 2023 compliance, NDPC fine exposure estimate. From $10.">
+    <title>Securva Snapshot | NDPA + Security Audit for Nigerian Businesses</title>
+    <meta name="description" content="A self-serve website security audit delivered as a PDF within 24 hours. 42 security checks, NDPA 2023 compliance, NDPC fine exposure. From $10. No signup, no subscription, fully automated.">
+    <meta property="og:title" content="Securva Snapshot | NDPA + Security Audit for Nigerian Businesses">
+    <meta property="og:description" content="Self-serve PDF audit. 42 checks + NDPA 2023. Delivered in 24 hours. From $10.">
     <meta property="og:type" content="product">
     <meta property="og:url" content="https://securva.net/snapshot">
     <meta property="og:image" content="https://securva.net/images/og-snapshot.png">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Securva Snapshot | NDPA + Security Audit for Nigerian Businesses">
-    <meta name="twitter:description" content="A self-serve PDF audit in 24 hours. $29.">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23030308'/><path d='M50 15L20 30V50C20 68 32 82 50 90C68 82 80 68 80 50V30L50 15Z' stroke='%237B68EE' stroke-width='3' fill='none'/><circle cx='50' cy='48' r='8' fill='%237B68EE' opacity='0.6'/></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root{--bg:#030308;--surface:#0A0A12;--card:#101020;--border:#1a1a30;--text:#F0EDF7;--muted:#6a6680;--accent:#7B68EE;--accent-dim:rgba(123,104,238,0.12);--green:#4ade80;--red:#f87171;--amber:#fbbf24;--font:'Cabinet Grotesk',system-ui,sans-serif;--mono:'IBM Plex Mono',monospace}
+        :root{--bg:#030308;--surface:#0A0A12;--card:#101020;--border:#1a1a30;--text:#F0EDF7;--muted:#6a6680;--accent:#7B68EE;--accent-dim:rgba(123,104,238,0.12);--font:'Cabinet Grotesk',system-ui,sans-serif;--mono:'IBM Plex Mono',monospace}
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-        .container{max-width:960px;margin:0 auto;padding:0 24px}
+        body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh}
+        .container{max-width:780px;margin:0 auto;padding:0 24px}
 
         /* Nav */
-        .nav{padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
-        .nav-logo{font-weight:900;font-size:1.3rem;color:var(--text);text-decoration:none;letter-spacing:-0.02em}
+        .nav{padding:18px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+        .nav-logo{font-weight:900;font-size:1.2rem;color:var(--text);text-decoration:none;letter-spacing:-0.02em}
         .nav-logo span{color:var(--accent)}
-        .nav-links{display:flex;gap:24px}
-        .nav-links a{color:var(--muted);text-decoration:none;font-size:0.85rem;font-weight:500;transition:color 0.3s}
+        .nav-links{display:flex;gap:20px}
+        .nav-links a{color:var(--muted);text-decoration:none;font-size:0.85rem;font-weight:500}
         .nav-links a:hover{color:var(--text)}
 
-        /* Hero */
-        .hero{text-align:center;padding:80px 24px 40px;position:relative}
-        .hero-eyebrow{font-family:var(--mono);font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:3px;color:var(--accent);margin-bottom:16px}
-        .hero h1{font-size:clamp(2.25rem,6vw,3.75rem);font-weight:900;letter-spacing:-0.04em;line-height:1.1;margin-bottom:20px;max-width:900px;margin-left:auto;margin-right:auto}
+        /* Hero - compact */
+        .hero{text-align:center;padding:56px 24px 32px}
+        .eyebrow{font-family:var(--mono);font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:var(--accent);margin-bottom:14px}
+        .hero h1{font-size:clamp(2rem,5.5vw,3.25rem);font-weight:900;letter-spacing:-0.03em;line-height:1.1;margin-bottom:16px;max-width:760px;margin-left:auto;margin-right:auto}
         .hero h1 span{color:var(--accent)}
-        .hero p.lead{color:var(--muted);font-size:1.15rem;max-width:640px;margin:0 auto 40px;line-height:1.6}
-        .cta-group{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:24px}
-        .btn-primary{padding:16px 32px;border-radius:12px;background:var(--accent);color:white;text-decoration:none;font-weight:700;font-size:1rem;transition:all 0.3s;display:inline-block}
-        .btn-primary:hover{opacity:0.9;transform:translateY(-1px)}
-        .btn-ghost{padding:16px 32px;border-radius:12px;background:transparent;color:var(--text);border:1px solid var(--border);text-decoration:none;font-weight:600;font-size:1rem;transition:all 0.3s;display:inline-block}
+        .hero p.lead{color:var(--muted);font-size:1rem;max-width:560px;margin:0 auto 28px;line-height:1.5}
+        .cta-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+        .btn-primary{padding:14px 28px;border-radius:10px;background:var(--accent);color:white;text-decoration:none;font-weight:700;font-size:0.95rem;transition:opacity 0.2s;display:inline-block}
+        .btn-primary:hover{opacity:0.88}
+        .btn-ghost{padding:14px 22px;border-radius:10px;background:transparent;color:var(--text);border:1px solid var(--border);text-decoration:none;font-weight:600;font-size:0.9rem;transition:border-color 0.2s;display:inline-block}
         .btn-ghost:hover{border-color:var(--accent)}
-        .price-strip{font-family:var(--mono);font-size:0.85rem;color:var(--muted);margin-top:12px}
-        .price-strip strong{color:var(--text)}
 
-        /* Sections */
-        section{padding:60px 0;border-top:1px solid var(--border)}
-        section h2{font-size:clamp(1.75rem,4vw,2.5rem);font-weight:900;letter-spacing:-0.02em;margin-bottom:12px;text-align:center}
-        section .subtitle{color:var(--muted);text-align:center;max-width:600px;margin:0 auto 40px;font-size:1rem;line-height:1.6}
+        /* Stat strip right after hero - horizontal, minimal */
+        .stats{display:flex;justify-content:center;flex-wrap:wrap;gap:40px;padding:28px 24px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--surface)}
+        .stat{text-align:center}
+        .stat-n{font-size:1.6rem;font-weight:900;color:var(--accent);letter-spacing:-0.02em;line-height:1}
+        .stat-l{font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:6px}
 
-        /* What's inside grid */
-        .inside-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:32px}
-        .inside-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px}
-        .inside-card .num{font-family:var(--mono);font-size:0.75rem;font-weight:700;color:var(--accent);margin-bottom:8px;letter-spacing:2px}
-        .inside-card h3{font-size:1.05rem;font-weight:700;margin-bottom:8px;line-height:1.3}
-        .inside-card p{color:var(--muted);font-size:0.85rem;line-height:1.6}
+        /* What's inside - compact 4-row list */
+        .what{padding:48px 24px}
+        .what h2{font-size:1.75rem;font-weight:900;letter-spacing:-0.02em;margin-bottom:8px;text-align:center}
+        .what .sub{text-align:center;color:var(--muted);margin-bottom:32px;font-size:0.95rem}
+        .what-list{max-width:640px;margin:0 auto}
+        .what-row{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+        .what-row:last-child{border-bottom:none}
+        .what-num{font-family:var(--mono);font-size:0.7rem;color:var(--accent);font-weight:700;letter-spacing:2px;padding-top:3px;min-width:36px}
+        .what-body h3{font-size:1rem;font-weight:700;margin-bottom:4px}
+        .what-body p{color:var(--muted);font-size:0.85rem;line-height:1.55}
 
-        /* Personas */
-        .persona-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
-        .persona-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px}
-        .persona-card .icon{font-family:var(--mono);font-size:0.7rem;color:var(--accent);margin-bottom:8px;letter-spacing:2px;font-weight:700}
-        .persona-card h4{font-size:1rem;font-weight:700;margin-bottom:6px}
-        .persona-card p{color:var(--muted);font-size:0.85rem;line-height:1.5}
+        /* Pricing - 4 compact tiers */
+        .pricing{padding:48px 24px;border-top:1px solid var(--border);background:var(--surface)}
+        .pricing h2{font-size:1.75rem;font-weight:900;letter-spacing:-0.02em;margin-bottom:8px;text-align:center}
+        .pricing .sub{text-align:center;color:var(--muted);margin-bottom:32px;font-size:0.95rem}
+        .tier-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;max-width:760px;margin:0 auto}
+        .tier{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;display:flex;flex-direction:column}
+        .tier.feat{border-color:var(--accent)}
+        .tier .pop{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--accent);color:white;font-size:0.65rem;font-weight:700;padding:3px 10px;border-radius:10px;letter-spacing:1px;white-space:nowrap}
+        .tier-name{font-family:var(--mono);font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;font-weight:700}
+        .tier-price{font-size:1.7rem;font-weight:900;letter-spacing:-0.02em;line-height:1}
+        .tier-ngn{font-family:var(--mono);font-size:0.72rem;color:var(--muted);margin-bottom:14px;margin-top:2px}
+        .tier-desc{font-size:0.78rem;color:var(--muted);line-height:1.45;margin-bottom:16px;flex:1}
+        .tier-buy{display:block;padding:10px;border-radius:8px;background:var(--accent);color:white;text-decoration:none;font-weight:700;font-size:0.85rem;text-align:center}
+        .tier-buy:hover{opacity:0.88}
 
-        /* Pricing */
-        .pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:32px}
-        .tier-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;position:relative}
-        .tier-card.featured{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
-        .tier-card .tier-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:white;font-size:0.7rem;font-weight:700;padding:4px 12px;border-radius:12px;letter-spacing:1px}
-        .tier-card h3{font-family:var(--mono);font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px}
-        .tier-card .price{font-size:2.25rem;font-weight:900;margin-bottom:2px;letter-spacing:-0.02em}
-        .tier-card .price-alt{font-family:var(--mono);font-size:0.8rem;color:var(--muted);margin-bottom:20px}
-        .tier-card ul{list-style:none;padding:0;margin:0 0 24px 0}
-        .tier-card li{font-size:0.85rem;color:var(--text);padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:8px}
-        .tier-card li:last-child{border-bottom:none}
-        .tier-card li::before{content:"+";color:var(--accent);font-weight:700;margin-right:4px}
-        .tier-card .buy-btn{display:block;width:100%;padding:12px;border-radius:10px;background:var(--accent);color:white;text-decoration:none;font-weight:700;font-size:0.9rem;text-align:center;transition:all 0.3s}
-        .tier-card .buy-btn:hover{opacity:0.9}
-        .tier-card.featured .buy-btn{background:var(--accent)}
-
-        /* FAQ */
-        .faq-list{max-width:720px;margin:0 auto}
-        .faq-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:10px;overflow:hidden}
-        .faq-item summary{padding:18px 22px;cursor:pointer;font-weight:600;font-size:0.95rem;list-style:none;display:flex;justify-content:space-between;align-items:center}
-        .faq-item summary::after{content:"+";color:var(--accent);font-size:1.3rem;font-weight:700;margin-left:12px}
+        /* FAQ - 5 questions only */
+        .faq{padding:48px 24px;border-top:1px solid var(--border)}
+        .faq h2{font-size:1.6rem;font-weight:900;letter-spacing:-0.02em;margin-bottom:24px;text-align:center}
+        .faq-list{max-width:620px;margin:0 auto}
+        .faq-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden}
+        .faq-item summary{padding:14px 18px;cursor:pointer;font-weight:600;font-size:0.9rem;list-style:none;display:flex;justify-content:space-between;align-items:center}
+        .faq-item summary::after{content:"+";color:var(--accent);font-size:1.1rem;font-weight:700;margin-left:10px}
         .faq-item[open] summary::after{content:"−"}
-        .faq-item div.answer{padding:0 22px 18px 22px;color:var(--muted);font-size:0.9rem;line-height:1.6}
         .faq-item summary::-webkit-details-marker{display:none}
+        .faq-item .a{padding:0 18px 14px 18px;color:var(--muted);font-size:0.85rem;line-height:1.55}
 
-        /* Stat strip */
-        .stat-strip{display:flex;justify-content:space-around;flex-wrap:wrap;gap:20px;margin:32px 0;padding:24px;background:var(--card);border:1px solid var(--border);border-radius:16px}
-        .stat-strip .stat{text-align:center}
-        .stat-strip .stat-num{font-size:2rem;font-weight:900;color:var(--accent);letter-spacing:-0.02em}
-        .stat-strip .stat-lbl{font-size:0.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
-
-        /* Sample CTA */
-        .sample-cta{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px;text-align:center;margin:40px auto;max-width:600px}
-        .sample-cta h3{margin-bottom:8px;font-size:1.2rem}
-        .sample-cta p{color:var(--muted);margin-bottom:16px;font-size:0.9rem}
-
-        /* Footer */
-        .footer{padding:40px 24px;border-top:1px solid var(--border);text-align:center}
-        .footer p{font-size:0.8rem;color:var(--muted);margin-bottom:10px}
+        /* Footer - minimal */
+        .footer{padding:32px 24px;border-top:1px solid var(--border);text-align:center}
+        .footer p{font-size:0.8rem;color:var(--muted);margin-bottom:8px;line-height:1.55}
         .footer a{color:var(--accent);text-decoration:none}
+        .footer .links{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:12px;font-size:0.8rem}
 
         @media(max-width:600px){
-            .cta-group{flex-direction:column;width:100%;padding:0 24px}
+            .cta-row{flex-direction:column;padding:0 24px}
             .btn-primary,.btn-ghost{width:100%;text-align:center}
+            .stats{gap:24px;padding:20px 16px}
+            .stat-n{font-size:1.35rem}
         }
     </style>
 </head>
@@ -117,263 +104,137 @@
         <div class="nav-links">
             <a href="/">Free Scan</a>
             <a href="/#blog">Blog</a>
-            <a href="#pricing">Pricing</a>
             <a href="mailto:hello@securva.net">Contact</a>
         </div>
     </nav>
 
     <header class="hero">
-        <div class="hero-eyebrow">Securva Snapshot</div>
+        <div class="eyebrow">Securva Snapshot</div>
         <h1>Your Nigerian business's security audit. <span>Delivered in 24 hours.</span></h1>
-        <p class="lead">A 12-20 page PDF report on your website's security posture, NDPA 2023 compliance, and NDPC fine exposure. Built on the same scanner we use to find breaches in the wild. Self-serve, automated, no human in the delivery loop.</p>
-        <div class="cta-group">
+        <p class="lead">A custom PDF report of your website's security posture, NDPA 2023 compliance, and NDPC fine exposure. Fully automated. No subscription. From $10.</p>
+        <div class="cta-row">
             <a href="#pricing" class="btn-primary">Get your Snapshot from $29</a>
-            <a href="https://github.com/Pejji-ng/securva-net/blob/main/snapshot/sample/snapshot-phase3-babakizo-com.pdf" class="btn-ghost" target="_blank" rel="noopener">See a sample PDF</a>
+            <a href="https://github.com/Pejji-ng/securva-net/blob/main/snapshot/sample/snapshot-phase3-babakizo-com.pdf" class="btn-ghost" target="_blank" rel="noopener">See sample PDF</a>
         </div>
-        <p class="price-strip"><strong>From $10 USD</strong> (₦15,000) · delivered in 24 hours · no subscription</p>
     </header>
 
-    <section>
-        <div class="container">
-            <h2>What's inside your Snapshot</h2>
-            <p class="subtitle">Eight sections, scored against 42 security checkpoints and 18 NDPA 2023 compliance requirements. Each issue has a severity grade and a specific fix.</p>
-            <div class="inside-grid">
-                <div class="inside-card">
-                    <div class="num">01</div>
-                    <h3>Executive summary</h3>
-                    <p>Overall grade (A to F), top 3 findings in plain English, and 3 recommended actions with cost estimates in naira.</p>
+    <div class="stats">
+        <div class="stat"><div class="stat-n">42</div><div class="stat-l">security checks</div></div>
+        <div class="stat"><div class="stat-n">18</div><div class="stat-l">NDPA requirements</div></div>
+        <div class="stat"><div class="stat-n">24h</div><div class="stat-l">delivery SLA</div></div>
+        <div class="stat"><div class="stat-n">0</div><div class="stat-l">human touch</div></div>
+    </div>
+
+    <section class="what">
+        <h2>What's inside your PDF</h2>
+        <p class="sub">Eight sections. Every finding scored by severity with a specific fix.</p>
+        <div class="what-list">
+            <div class="what-row">
+                <div class="what-num">01</div>
+                <div class="what-body">
+                    <h3>Executive summary + letter grade</h3>
+                    <p>A to F overall, top 3 findings in plain English, 3 recommended actions with naira cost estimates.</p>
                 </div>
-                <div class="inside-card">
-                    <div class="num">02</div>
-                    <h3>Security headers</h3>
-                    <p>HSTS, CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy and 4 more, scored pass / warn / fail.</p>
+            </div>
+            <div class="what-row">
+                <div class="what-num">02</div>
+                <div class="what-body">
+                    <h3>Security headers + SSL/TLS</h3>
+                    <p>10 headers scored pass/warn/fail, certificate expiry, TLS version audit, weak cipher detection.</p>
                 </div>
-                <div class="inside-card">
-                    <div class="num">03</div>
-                    <h3>SSL/TLS posture</h3>
-                    <p>Certificate expiry, issuer, TLS protocol versions allowed, weak cipher detection, HSTS preload eligibility.</p>
-                </div>
-                <div class="inside-card">
-                    <div class="num">04</div>
+            </div>
+            <div class="what-row">
+                <div class="what-num">03</div>
+                <div class="what-body">
                     <h3>NDPA 2023 compliance</h3>
-                    <p>Cookie consent, privacy policy presence + depth, data controller contact, cross-border transfer disclosure, NDPC fine exposure estimate.</p>
-                </div>
-                <div class="inside-card">
-                    <div class="num">05</div>
-                    <h3>Infrastructure footprint</h3>
-                    <p>Publicly discovered subdomains, hosting provider breakdown, unusual subdomain flags (admin, dev, staging), exposed git repositories.</p>
-                </div>
-                <div class="inside-card">
-                    <div class="num">06</div>
-                    <h3>Known CVEs</h3>
-                    <p>Tech stack fingerprint, matched CVEs against NVD data, severity tier, one-line remediation each.</p>
-                </div>
-                <div class="inside-card">
-                    <div class="num">07</div>
-                    <h3>Public code exposure</h3>
-                    <p>Your public GitHub organization scanned for 50+ categories of leaked credentials (Paystack, Flutterwave, Monnify, Supabase tokens, private keys).</p>
-                </div>
-                <div class="inside-card">
-                    <div class="num">08</div>
-                    <h3>Remediation roadmap</h3>
-                    <p>Every finding ordered by severity, mapped to Pejji remediation package tiers if you want outside help, or to free controls if you have an in-house developer.</p>
+                    <p>Cookie consent, privacy policy depth, data controller contact, cross-border disclosure, NDPC fine exposure estimate.</p>
                 </div>
             </div>
-            <div class="stat-strip">
-                <div class="stat">
-                    <div class="stat-num">2.2s</div>
-                    <div class="stat-lbl">scanner runtime</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-num">24h</div>
-                    <div class="stat-lbl">delivery SLA</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-num">42</div>
-                    <div class="stat-lbl">security checkpoints</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-num">18</div>
-                    <div class="stat-lbl">NDPA requirements</div>
+            <div class="what-row">
+                <div class="what-num">04</div>
+                <div class="what-body">
+                    <h3>Infrastructure + CVEs + code exposure</h3>
+                    <p>Subdomain footprint, tech-stack fingerprint with matched CVEs, your public GitHub scanned for 50+ credential patterns.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section>
-        <div class="container">
-            <h2>Who this is for</h2>
-            <p class="subtitle">If any of these describe you, the Snapshot is built for you.</p>
-            <div class="persona-grid">
-                <div class="persona-card">
-                    <div class="icon">01</div>
-                    <h4>Nigerian SME owners</h4>
-                    <p>You have a website. You heard about Sterling Bank and the NDPC cascade. You want to know if you are exposed before a regulator or an attacker finds out.</p>
-                </div>
-                <div class="persona-card">
-                    <div class="icon">02</div>
-                    <h4>Lagos startup founders</h4>
-                    <p>You are prepping for investor due-diligence. You need a credible third-party audit document you can hand to your legal team or your board.</p>
-                </div>
-                <div class="persona-card">
-                    <div class="icon">03</div>
-                    <h4>Nigerian agencies + consultants</h4>
-                    <p>You want to run competitive analysis for clients or vet a prospect's infrastructure before pitching them. White-label option available.</p>
-                </div>
-                <div class="persona-card">
-                    <div class="icon">04</div>
-                    <h4>Diaspora operators</h4>
-                    <p>You are helping a family member's Nigerian business get online. You want a clear professional audit you can forward with implementation recommendations.</p>
-                </div>
+    <section class="pricing" id="pricing">
+        <h2>Pricing</h2>
+        <p class="sub">One-time. Automated delivery. No subscriptions.</p>
+        <div class="tier-grid">
+
+            <div class="tier">
+                <div class="tier-name">Card</div>
+                <div class="tier-price">$10</div>
+                <div class="tier-ngn">&#8358;15,000</div>
+                <div class="tier-desc">PDF report only. Good for a quick self-audit.</div>
+                <a href="https://gumroad.com/l/securva-snapshot-card" class="tier-buy" target="_blank" rel="noopener">Buy Card</a>
             </div>
+
+            <div class="tier feat">
+                <div class="pop">MOST POPULAR</div>
+                <div class="tier-name">Starter</div>
+                <div class="tier-price">$29</div>
+                <div class="tier-ngn">&#8358;30,000</div>
+                <div class="tier-desc">Everything in Card + infrastructure deep-scan + GitHub credential scan + 30-min Q&amp;A.</div>
+                <a href="https://gumroad.com/l/securva-snapshot-starter" class="tier-buy" target="_blank" rel="noopener">Buy Starter</a>
+            </div>
+
+            <div class="tier">
+                <div class="tier-name">Pro</div>
+                <div class="tier-price">$49</div>
+                <div class="tier-ngn">&#8358;60,000</div>
+                <div class="tier-desc">Everything in Starter + NDPA add-on + 90-day re-scan + WhatsApp priority.</div>
+                <a href="https://gumroad.com/l/securva-snapshot-pro" class="tier-buy" target="_blank" rel="noopener">Buy Pro</a>
+            </div>
+
+            <div class="tier">
+                <div class="tier-name">Whitelabel</div>
+                <div class="tier-price">$99</div>
+                <div class="tier-ngn">&#8358;150,000</div>
+                <div class="tier-desc">Everything in Pro + your branding on the PDF. For agencies and consultants.</div>
+                <a href="https://gumroad.com/l/securva-snapshot-whitelabel" class="tier-buy" target="_blank" rel="noopener">Buy Whitelabel</a>
+            </div>
+
         </div>
+        <p style="text-align:center;color:var(--muted);font-size:0.78rem;margin-top:20px">Paystack (NGN) also available &mdash; email hello@securva.net</p>
     </section>
 
-    <section id="pricing">
-        <div class="container">
-            <h2>Pricing</h2>
-            <p class="subtitle">One-time purchase, one-time delivery. No subscriptions, no upsell gates. Higher tiers add features, not time.</p>
-            <div class="pricing-grid">
-
-                <div class="tier-card">
-                    <h3>Card</h3>
-                    <div class="price">$10</div>
-                    <div class="price-alt">or ₦15,000</div>
-                    <ul>
-                        <li>PDF report, 12-20 pages</li>
-                        <li>42 security checkpoints</li>
-                        <li>NDPA 2023 compliance check</li>
-                        <li>Delivered in 24 hours</li>
-                        <li>Email support</li>
-                    </ul>
-                    <a href="https://gumroad.com/l/securva-snapshot-card" class="buy-btn" target="_blank" rel="noopener">Buy Card</a>
-                </div>
-
-                <div class="tier-card featured">
-                    <div class="tier-badge">Most popular</div>
-                    <h3>Starter</h3>
-                    <div class="price">$29</div>
-                    <div class="price-alt">or ₦30,000</div>
-                    <ul>
-                        <li>Everything in Card</li>
-                        <li>Infrastructure footprint deep-scan</li>
-                        <li>Public GitHub credential scan</li>
-                        <li>30-min Q&amp;A call with team</li>
-                        <li>Priority email support</li>
-                    </ul>
-                    <a href="https://gumroad.com/l/securva-snapshot-starter" class="buy-btn" target="_blank" rel="noopener">Buy Starter</a>
-                </div>
-
-                <div class="tier-card">
-                    <h3>Pro</h3>
-                    <div class="price">$49</div>
-                    <div class="price-alt">or ₦60,000</div>
-                    <ul>
-                        <li>Everything in Starter</li>
-                        <li>NDPA add-on: DPIA + ROPA templates</li>
-                        <li>90-day re-scan included</li>
-                        <li>Pejji remediation referral</li>
-                        <li>WhatsApp priority line</li>
-                    </ul>
-                    <a href="https://gumroad.com/l/securva-snapshot-pro" class="buy-btn" target="_blank" rel="noopener">Buy Pro</a>
-                </div>
-
-                <div class="tier-card">
-                    <h3>Whitelabel</h3>
-                    <div class="price">$99</div>
-                    <div class="price-alt">or ₦150,000</div>
-                    <ul>
-                        <li>Everything in Pro</li>
-                        <li>Customer-branded report</li>
-                        <li>No Securva logo on PDF</li>
-                        <li>For agencies + consultants</li>
-                        <li>Resell at your own markup</li>
-                    </ul>
-                    <a href="https://gumroad.com/l/securva-snapshot-whitelabel" class="buy-btn" target="_blank" rel="noopener">Buy Whitelabel</a>
-                </div>
-
-            </div>
-            <p style="text-align:center;color:var(--muted);font-size:0.85rem;margin-top:24px">All prices are one-time. No subscriptions. Paystack payment option available for Nigerian customers &mdash; email hello@securva.net.</p>
-        </div>
-    </section>
-
-    <section>
-        <div class="container">
-            <h2>FAQ</h2>
-            <p class="subtitle">The ten questions we get most often.</p>
-            <div class="faq-list">
-
-                <details class="faq-item">
-                    <summary>What exactly is a Securva Snapshot?</summary>
-                    <div class="answer">A self-serve PDF report on your website's security posture and NDPA 2023 compliance. You submit a URL, our scanner runs 42 security checkpoints and 18 NDPA requirements against it, and we deliver a 12-20 page PDF with findings ordered by severity and mapped to fixes. Automated end-to-end, no human in the delivery loop.</div>
-                </details>
-
-                <details class="faq-item">
-                    <summary>How long does delivery take?</summary>
-                    <div class="answer">Our SLA is 24 hours. In practice most reports ship within 5 minutes of URL submission because the scanner runs in 2.2 seconds and the PDF renders in 2-3 seconds. The 24-hour buffer is for days when the scanner queue is backed up or a domain needs a human sanity check.</div>
-                </details>
-
-                <details class="faq-item">
-                    <summary>What happens if my site scores badly?</summary>
-                    <div class="answer">You get a list of every issue, ordered by severity, with a specific fix for each. Most fixes are one-line configuration changes. You can hand the report to your existing developer, or hire Pejji (our sister agency) to rebuild your site from the Card tier at ₦60,000. Or just sit with the report for a month and decide. No pressure.</div>
-                </details>
-
-                <details class="faq-item">
-                    <summary>Is this a penetration test?</summary>
-                    <div class="answer">No. A Snapshot is a passive external audit. We do not attempt to exploit anything, we do not authenticate against your site, we do not try to extract data. The scanner behaves like an anonymous visitor. A real penetration test is a different product class, we can refer you to partners who do that if you need it.</div>
-                </details>
-
-                <details class="faq-item">
-                    <summary>Can I share the PDF with my team?</summary>
-                    <div class="answer">Yes. You own the PDF once delivered. Share internally, send to your developer, file it with your DPIA documentation, whatever you need. The Pro tier adds a 90-day re-scan so you can track remediation progress across quarters.</div>
-                </details>
-
-                <details class="faq-item">
-                    <summary>Do you offer refunds?</summary>
-                    <div class="answer">Yes, unconditional within 7 days of delivery. Email hello@securva.net and we refund the Gumroad charge within 24 hours. If the scanner failed and you never got a PDF, the refund is automatic.</div>
-                </details>
-
-                <details class="faq-item">
-                    <summary>What languages do you support?</summary>
-                    <div class="answer">The PDF is in English with Nigerian context (naira pricing, NDPC regulatory references, local examples). For non-technical readers we also support pidgin explanations on request. Add a note when you submit your URL.</div>
-                </details>
-
-                <details class="faq-item">
-                    <summary>Is my domain data stored?</summary>
-                    <div class="answer">Your email + submitted URL are stored for 90 days then automatically deleted. The scan output (PDF + scan JSON) is stored behind a signed URL that expires in 14 days. We do not store any content fetched from your site beyond the audit itself. Full data handling details in our privacy policy.</div>
-                </details>
-
-                <details class="faq-item">
-                    <summary>How does this compare to an enterprise audit?</summary>
-                    <div class="answer">An enterprise audit is typically $5,000 to $15,000, takes 4-8 weeks, and produces 100+ pages. Suitable for listed companies or regulated fintechs facing formal audits. The Snapshot is intentionally simpler, cheaper, and faster: self-serve, $29, 24 hours, 12-20 pages, focused on the 80% of controls that matter most for Nigerian SMEs. Use the Snapshot first. If your findings warrant deeper work, escalate.</div>
-                </details>
-
-                <details class="faq-item">
-                    <summary>Can I use Paystack instead of Gumroad?</summary>
-                    <div class="answer">Yes, for Nigerian customers who prefer naira payments via Paystack, email hello@securva.net and we send a payment link with the same fulfillment flow. The Gumroad buttons above are the default for international (USD) customers.</div>
-                </details>
-
-            </div>
-        </div>
-    </section>
-
-    <section>
-        <div class="container">
-            <div class="sample-cta">
-                <h3>Want to see what a Snapshot looks like?</h3>
-                <p>We ran one against babakizo.com (our own team-lead's personal site, Grade A, zero findings) as a reference. Download the full PDF:</p>
-                <a href="https://github.com/Pejji-ng/securva-net/blob/main/snapshot/sample/snapshot-phase3-babakizo-com.pdf" class="btn-primary" target="_blank" rel="noopener">Download sample PDF (71KB)</a>
-            </div>
-
-            <div style="text-align:center;max-width:520px;margin:40px auto 0;">
-                <p style="color:var(--muted);font-size:0.9rem;line-height:1.6">Not ready for a paid report yet? Start with the <a href="/" style="color:var(--accent)"><strong>free scanner at securva.net</strong></a> &mdash; you get a grade and a checklist in 30 seconds. No signup. Then come back for the Snapshot when you want the full write-up.</p>
-            </div>
+    <section class="faq">
+        <h2>FAQ</h2>
+        <div class="faq-list">
+            <details class="faq-item">
+                <summary>How long does delivery take?</summary>
+                <div class="a">SLA is 24 hours. In practice most reports ship in under 10 minutes because the scanner runs in 2.2 seconds and the PDF renders in 2-3 seconds.</div>
+            </details>
+            <details class="faq-item">
+                <summary>Is this a penetration test?</summary>
+                <div class="a">No. Passive external audit only. We do not attempt to exploit anything, do not authenticate against your site, do not extract data. The scanner behaves like an anonymous visitor.</div>
+            </details>
+            <details class="faq-item">
+                <summary>What if I need help fixing what you find?</summary>
+                <div class="a">The PDF maps every finding to either a free control your developer can configure or a Pejji remediation package (from &#8358;60,000). No pressure, hand the report to anyone.</div>
+            </details>
+            <details class="faq-item">
+                <summary>Do you offer refunds?</summary>
+                <div class="a">Yes, unconditional within 7 days of delivery. Email hello@securva.net. If the scanner fails and you never got a PDF, refund is automatic.</div>
+            </details>
+            <details class="faq-item">
+                <summary>Is my domain data stored?</summary>
+                <div class="a">Your email + URL stored 90 days then auto-deleted. The PDF is on a signed URL that expires in 14 days. We do not store site content beyond the audit itself.</div>
+            </details>
         </div>
     </section>
 
     <footer class="footer">
-        <p>Securva Snapshot is built by the <a href="https://pejji.com" target="_blank" rel="noopener">Pejji Agency</a> team. We disclosed 28 critical credential leaks in Nigerian businesses this month alone. Receipts on request.</p>
-        <p><a href="/">Free scan</a> &middot; <a href="/#blog">Blog</a> &middot; <a href="mailto:hello@securva.net">hello@securva.net</a> &middot; <a href="https://pejji.com">Pejji</a></p>
+        <p>Built by the <a href="https://pejji.com" target="_blank" rel="noopener">Pejji Agency</a> team. We disclosed 28 critical credential leaks in Nigerian businesses this month alone.</p>
+        <div class="links">
+            <a href="/">Free scan</a>
+            <a href="/#blog">Blog</a>
+            <a href="mailto:hello@securva.net">hello@securva.net</a>
+        </div>
     </footer>
 
 </body>
