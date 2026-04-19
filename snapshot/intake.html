@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Your URL | Securva Snapshot</title>
+    <meta name="description" content="Submit your website URL to kick off your Securva Snapshot audit. PDF delivered to your email within 24 hours.">
+    <meta name="robots" content="noindex">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23030308'/><path d='M50 15L20 30V50C20 68 32 82 50 90C68 82 80 68 80 50V30L50 15Z' stroke='%237B68EE' stroke-width='3' fill='none'/><circle cx='50' cy='48' r='8' fill='%237B68EE' opacity='0.6'/></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#030308;--surface:#0A0A12;--card:#101020;--border:#1a1a30;--text:#F0EDF7;--muted:#6a6680;--accent:#7B68EE;--green:#4ade80;--red:#f87171;--font:'Cabinet Grotesk',system-ui,sans-serif;--mono:'IBM Plex Mono',monospace}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+        .nav{padding:18px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+        .nav-logo{font-weight:900;font-size:1.2rem;color:var(--text);text-decoration:none;letter-spacing:-0.02em}
+        .nav-logo span{color:var(--accent)}
+        .nav-links{display:flex;gap:20px}
+        .nav-links a{color:var(--muted);text-decoration:none;font-size:0.85rem;font-weight:500}
+
+        main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px}
+        .card{width:100%;max-width:540px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px}
+        .eyebrow{font-family:var(--mono);font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:var(--accent);margin-bottom:14px}
+        h1{font-size:1.8rem;font-weight:900;letter-spacing:-0.02em;line-height:1.2;margin-bottom:12px}
+        .lead{color:var(--muted);font-size:0.95rem;line-height:1.55;margin-bottom:28px}
+
+        form{display:flex;flex-direction:column;gap:16px}
+        label{font-family:var(--mono);font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:4px;display:block}
+        input[type="url"]{width:100%;padding:14px 16px;border-radius:10px;background:var(--card);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:0.95rem;outline:none;transition:border-color 0.2s}
+        input[type="url"]:focus{border-color:var(--accent)}
+        input[type="url"]::placeholder{color:var(--muted)}
+
+        button{padding:14px 28px;border-radius:10px;background:var(--accent);color:white;border:none;font-family:var(--font);font-weight:700;font-size:0.95rem;cursor:pointer;transition:opacity 0.2s;margin-top:8px}
+        button:hover{opacity:0.9}
+        button:disabled{opacity:0.5;cursor:not-allowed}
+
+        .order-ref-display{font-family:var(--mono);font-size:0.75rem;color:var(--muted);padding:10px 14px;background:var(--card);border:1px dashed var(--border);border-radius:8px;margin-bottom:4px;word-break:break-all}
+        .hint{font-size:0.8rem;color:var(--muted);line-height:1.5;margin-top:8px}
+
+        .state-msg{padding:14px 18px;border-radius:10px;font-size:0.9rem;margin-top:8px;display:none;line-height:1.5}
+        .state-msg.show{display:block}
+        .state-msg.error{background:rgba(248,113,113,0.1);border:1px solid var(--red);color:var(--red)}
+        .state-msg.success{background:rgba(74,222,128,0.1);border:1px solid var(--green);color:var(--green)}
+        .state-msg.loading{background:var(--card);border:1px solid var(--border);color:var(--muted)}
+
+        .footer{padding:24px;text-align:center;font-size:0.75rem;color:var(--muted);border-top:1px solid var(--border)}
+        .footer a{color:var(--accent);text-decoration:none}
+
+        .success-view{display:none;text-align:center}
+        .success-view.show{display:block}
+        .success-icon{font-size:2.2rem;margin-bottom:12px;color:var(--green)}
+        .success-view h2{font-size:1.5rem;font-weight:800;margin-bottom:10px}
+        .success-view p{color:var(--muted);font-size:0.9rem;line-height:1.6;margin-bottom:8px}
+
+        @media(max-width:600px){
+            .card{padding:28px 22px}
+            h1{font-size:1.5rem}
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="nav-logo">Sec<span>urva</span></a>
+        <div class="nav-links">
+            <a href="/snapshot">Snapshot</a>
+            <a href="mailto:hello@securva.net">Contact</a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="card" id="form-view">
+            <div class="eyebrow">Step 1 of 1</div>
+            <h1>Submit your website URL</h1>
+            <p class="lead">Enter the URL of the site you want audited. We scan 42 security checkpoints + 18 NDPA requirements, generate your PDF report, and email it to you within 24 hours.</p>
+
+            <form id="intake-form" novalidate>
+                <div>
+                    <label for="url-input">Website URL</label>
+                    <input
+                        type="url"
+                        id="url-input"
+                        name="url"
+                        placeholder="e.g. https://yourbusiness.ng"
+                        required
+                        autocomplete="off"
+                        autofocus
+                    >
+                </div>
+
+                <div id="order-ref-block" style="display:none;">
+                    <label>Your order reference</label>
+                    <div class="order-ref-display" id="order-ref-display"></div>
+                </div>
+
+                <button type="submit" id="submit-btn">Start my audit</button>
+
+                <div class="state-msg" id="state-msg"></div>
+
+                <p class="hint">Your URL is scanned passively (no authentication, no exploitation). PDF is delivered to the email you used at purchase.</p>
+            </form>
+        </div>
+
+        <div class="card success-view" id="success-view">
+            <div class="success-icon">✓</div>
+            <h2>Audit started</h2>
+            <p>Your scan is queued. We will email the PDF to the address you used at purchase within 24 hours.</p>
+            <p>Usually arrives in under 10 minutes. If nothing lands in your inbox after 24 hours, email <a href="mailto:hello@securva.net" style="color:var(--accent)">hello@securva.net</a>.</p>
+            <p style="margin-top:20px"><a href="/" style="color:var(--accent);font-weight:600">Back to securva.net</a></p>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>Built by <a href="https://pejji.com" target="_blank" rel="noopener">Pejji Agency</a>. Your data is never shared. <a href="https://securva.net/privacy">Privacy</a>.</p>
+    </footer>
+
+    <script>
+    (function() {
+        const form = document.getElementById('intake-form');
+        const urlInput = document.getElementById('url-input');
+        const submitBtn = document.getElementById('submit-btn');
+        const stateMsg = document.getElementById('state-msg');
+        const formView = document.getElementById('form-view');
+        const successView = document.getElementById('success-view');
+        const orderRefBlock = document.getElementById('order-ref-block');
+        const orderRefDisplay = document.getElementById('order-ref-display');
+
+        // Extract order_ref from URL query param
+        const params = new URLSearchParams(window.location.search);
+        const orderRef = params.get('order_ref');
+
+        if (!orderRef) {
+            // No order ref - this page was opened without the post-purchase link
+            showState(
+                'This page needs an order reference. Use the link we sent in your purchase confirmation email.',
+                'error'
+            );
+            submitBtn.disabled = true;
+        } else {
+            orderRefBlock.style.display = 'block';
+            orderRefDisplay.textContent = orderRef;
+        }
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const url = urlInput.value.trim();
+            if (!url) {
+                showState('Please enter a URL.', 'error');
+                return;
+            }
+
+            // Normalize - add https:// if missing
+            let cleanUrl = url;
+            if (!/^https?:\/\//i.test(cleanUrl)) {
+                cleanUrl = 'https://' + cleanUrl;
+            }
+
+            try {
+                new URL(cleanUrl);
+            } catch (err) {
+                showState('That does not look like a valid URL. Example: yourbusiness.ng', 'error');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            showState('Sending your URL to the scanner...', 'loading');
+
+            try {
+                const response = await fetch('https://shop.securva.net/api/intake', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        order_ref: orderRef,
+                        url: cleanUrl,
+                    }),
+                });
+
+                const data = await response.json().catch(() => ({}));
+
+                if (response.ok) {
+                    formView.classList.remove('show');
+                    formView.style.display = 'none';
+                    successView.classList.add('show');
+                } else if (response.status === 404) {
+                    showState(
+                        'We could not find an order matching that reference. If you just purchased, wait 2 minutes and refresh. Otherwise email hello@securva.net and we will help.',
+                        'error'
+                    );
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Start my audit';
+                } else if (response.status === 409) {
+                    showState(
+                        'This order already has a URL submitted. Check your email for the PDF, or refresh your inbox in a few minutes.',
+                        'error'
+                    );
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Start my audit';
+                } else {
+                    showState(
+                        'Something went wrong on our end. Please try again in a minute. If it persists, email hello@securva.net.',
+                        'error'
+                    );
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Start my audit';
+                }
+            } catch (err) {
+                showState(
+                    'Network error. Please check your connection and try again.',
+                    'error'
+                );
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Start my audit';
+            }
+        });
+
+        function showState(text, type) {
+            stateMsg.textContent = text;
+            stateMsg.className = 'state-msg show ' + type;
+        }
+    })();
+    </script>
+</body>
+</html>

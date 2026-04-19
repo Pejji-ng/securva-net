@@ -9,7 +9,7 @@ Step-by-step deployment of the Phase 4 payment + fulfillment pipeline. Ordered b
 - Python 3.10+ on the research box
 - SSH access to the box (babakinzo@securva-box)
 - Resend.com account (free tier OK to start)
-- Tally.so account (free tier)
+- (no Tally needed — custom intake form at securva.net/snapshot/intake auto-deploys via CF Pages)
 - Gumroad seller account
 
 ---
@@ -59,20 +59,17 @@ In Cloudflare dashboard → R2 → Manage R2 API Tokens → Create API Token
 
 ---
 
-## Step 2 — Tally form (Kingsley desk, 10 min)
+## Step 2 — Intake form (no manual setup needed)
 
-1. Go to tally.so → New Form → Blank
-2. Title: `Securva Snapshot — Submit Your Website URL`
-3. Add 2 fields:
-   - `What's the full URL of the site you want audited?` (URL input, required) — label key: `website_url`
-   - `Your order reference` (Short answer, required) — label key: `order_ref` (will be prefilled from URL param)
-4. Form settings → Webhook → add endpoint: `https://shop.securva.net/api/tally-webhook` — enable signing → copy the secret
-5. Hidden field settings → map `order_ref` to query param `order_ref` so the email link prefills it
-6. Publish → copy the form URL (e.g. `https://tally.so/r/ABCD`)
+The customer intake form is a custom page at `securva.net/snapshot/intake`. It ships with this repo as `snapshot/intake.html` and auto-deploys via CF Pages when merged to main. When the Gumroad webhook fires, the Worker emails the customer a link like `https://securva.net/snapshot/intake?order_ref=ABC123`. The customer enters their URL, form POSTs directly to `https://shop.securva.net/api/intake`, Worker validates and queues the job.
 
-Save for Step 4:
-- `TALLY_WEBHOOK_SECRET` (from webhook settings)
-- `TALLY_FORM_URL` (the published form URL)
+No Tally, no third-party dependency, no webhook signature to verify. Form is branded + matches securva.net aesthetic.
+
+Verify after merge to main:
+```bash
+curl -sI https://securva.net/snapshot/intake
+# Expect: HTTP 200 after CF Pages deploys (~60s)
+```
 
 ---
 
@@ -234,11 +231,9 @@ Replace `FILL_IN_AFTER_CREATE` placeholders with the IDs from Step 1.
 ```bash
 cd snapshot/webhooks
 wrangler secret put GUMROAD_WEBHOOK_SECRET
-wrangler secret put TALLY_WEBHOOK_SECRET
 wrangler secret put RESEND_API_KEY
 wrangler secret put BOX_SCANNER_ENDPOINT
 wrangler secret put BOX_API_TOKEN
-wrangler secret put TALLY_FORM_URL
 # Optional for Phase 4.1:
 wrangler secret put PAYSTACK_SECRET_KEY
 ```
@@ -282,8 +277,8 @@ For each product:
 ### 7a. Self-purchase on Gumroad
 - Use a test email you control
 - Buy the Starter tier ($29)
-- Immediately check: email received with Tally form link?
-- Submit `babakizo.com` in the Tally form
+- Immediately check: email received with intake form link (securva.net/snapshot/intake?order_ref=...)
+- Open the link, submit `babakizo.com` in the form
 - Wait 5–10 min
 - Second email arrives with PDF link?
 - Download PDF, verify it renders as expected
