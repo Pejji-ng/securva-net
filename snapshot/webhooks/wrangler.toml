@@ -5,12 +5,13 @@ compatibility_flags = ["nodejs_compat"]
 
 # ============================================================
 # Routing
-# Production custom domain: api.securva.net/snapshot/*
-# Alternative: shop.securva.net/api/*
+# Production: snap.securva.net/* (all paths handled by this Worker)
+# Kingsley must add DNS record: CNAME snap.securva.net -> securva.net (proxied/orange cloud)
+# before wrangler deploy can attach the route.
 # ============================================================
 
 [[routes]]
-pattern = "shop.securva.net/api/*"
+pattern = "snap.securva.net/*"
 zone_name = "securva.net"
 
 # ============================================================
