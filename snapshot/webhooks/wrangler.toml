@@ -1,0 +1,68 @@
+name = "securva-snapshot-worker"
+main = "worker.js"
+compatibility_date = "2026-04-19"
+compatibility_flags = ["nodejs_compat"]
+
+# ============================================================
+# Routing
+# Production custom domain: api.securva.net/snapshot/*
+# Alternative: shop.securva.net/api/*
+# ============================================================
+
+[[routes]]
+pattern = "shop.securva.net/api/*"
+zone_name = "securva.net"
+
+# ============================================================
+# D1 database binding
+# Create first: wrangler d1 create securva-snapshot
+# Then fill in the database_id below
+# ============================================================
+
+[[d1_databases]]
+binding = "DB"
+database_name = "securva-snapshot"
+database_id = "FILL_IN_AFTER_CREATE"  # from `wrangler d1 create` output
+
+# ============================================================
+# R2 bucket binding (stores generated PDFs)
+# Create first: wrangler r2 bucket create securva-snapshots
+# ============================================================
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "securva-snapshots"
+
+# ============================================================
+# KV namespace for idempotency locks + rate limiting
+# Create first: wrangler kv:namespace create snapshot-locks
+# ============================================================
+
+[[kv_namespaces]]
+binding = "LOCKS"
+id = "FILL_IN_AFTER_CREATE"
+
+# ============================================================
+# Cron trigger — pick up queued jobs every 5 minutes
+# ============================================================
+
+[triggers]
+crons = ["*/5 * * * *"]
+
+# ============================================================
+# Secrets (set via `wrangler secret put`):
+#   wrangler secret put GUMROAD_WEBHOOK_SECRET
+#   wrangler secret put PAYSTACK_SECRET_KEY
+#   wrangler secret put TALLY_WEBHOOK_SECRET
+#   wrangler secret put RESEND_API_KEY
+#   wrangler secret put BOX_SCANNER_ENDPOINT
+#   wrangler secret put BOX_API_TOKEN
+#   wrangler secret put TALLY_FORM_URL
+# ============================================================
+
+# Observability
+[observability]
+enabled = true
+
+[observability.logs]
+enabled = true
