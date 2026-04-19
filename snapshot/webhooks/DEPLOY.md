@@ -237,13 +237,15 @@ Replace `FILL_IN_AFTER_CREATE` placeholders with the IDs from Step 1.
 ### 5b. Set secrets
 ```bash
 cd snapshot/webhooks
-wrangler secret put GUMROAD_WEBHOOK_SECRET
+wrangler secret put GUMROAD_SELLER_ID
 wrangler secret put RESEND_API_KEY
 wrangler secret put BOX_SCANNER_ENDPOINT
 wrangler secret put BOX_API_TOKEN
 # Optional for Phase 4.1:
 wrangler secret put PAYSTACK_SECRET_KEY
 ```
+
+Note on Gumroad auth: classic Ping webhooks do NOT support HMAC signatures. Instead we verify the `seller_id` field embedded in every Ping payload matches our known account. Get your seller_id from Gumroad → Settings → Advanced (shown below the Ping endpoint field).
 
 ### 5c. Deploy
 ```bash
@@ -274,7 +276,7 @@ curl https://snap.securva.net/api/health
 
 For each product:
 - Upload the sample PDF as the deliverable (customers get the actual PDF later via email; Gumroad's default download is the sample/teaser)
-- Settings → Advanced → Webhook: `https://snap.securva.net/api/gumroad-webhook` → save the signing secret as `GUMROAD_WEBHOOK_SECRET`
+- Gumroad account-level Ping: Settings → Advanced → Ping endpoint: paste `https://snap.securva.net/api/gumroad-webhook` → save. Also copy the `seller_id` shown below the endpoint field - that's what we use for webhook authentication (classic Ping has no HMAC signature).
 - Use the description from `gumroad_launch_package_v1.md` Block 2/3 (updated to match the actual automated product)
 
 ---
@@ -319,7 +321,7 @@ Once Step 7 passes cleanly:
 
 | Symptom | Diagnosis | Fix |
 |---|---|---|
-| Gumroad webhook returns 401 | Wrong secret | Re-check `wrangler secret put GUMROAD_WEBHOOK_SECRET` vs Gumroad product settings |
+| Gumroad webhook returns 401 | Wrong seller_id | Re-check `wrangler secret put GUMROAD_SELLER_ID` matches the seller_id shown in Gumroad Settings → Advanced |
 | Tally webhook returns 401 | Wrong signing secret or wrong field key names | Match field keys to `website_url` + `order_ref` or update worker.js field lookup |
 | Box API returns 401 | Token mismatch | Check `/etc/securva/snapshot-api.env` matches `wrangler secret get BOX_API_TOKEN` |
 | Box API returns 403 from nginx | IP not allowlisted | Add your test IP to `/etc/nginx/conf.d/snapshot-api.conf` `geo` block |
