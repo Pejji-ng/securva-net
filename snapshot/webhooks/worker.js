@@ -87,14 +87,18 @@ export default {
 async function handleGumroadWebhook(request, env) {
   const body = await request.text();
 
-  // Gumroad signs the body with HMAC-SHA256 using your webhook secret
-  const signature = request.headers.get('X-Gumroad-Signature');
-  if (!signature || !(await verifyHmac(body, signature, env.GUMROAD_WEBHOOK_SECRET))) {
-    return jsonResponse({ error: 'invalid signature' }, 401);
-  }
-
   // Parse form-encoded payload (Gumroad uses x-www-form-urlencoded)
   const params = new URLSearchParams(body);
+
+  // Gumroad classic Ping does NOT include HMAC signature on payloads.
+  // Validate instead by matching seller_id (which Gumroad embeds in every Ping)
+  // against our known account's seller_id. This prevents someone else's
+  // Gumroad account from spoofing webhooks to our endpoint.
+  const sellerId = params.get('seller_id');
+  if (!sellerId || sellerId !== env.GUMROAD_SELLER_ID) {
+    return jsonResponse({ error: 'invalid seller' }, 401);
+  }
+
   const orderId = params.get('sale_id');
   const email = params.get('email');
   const productSlug = params.get('permalink');  // e.g. 'securva-snapshot-starter'
