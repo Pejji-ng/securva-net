@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sterling Bank Had A Known Vulnerability On A Test Server. They Didn't Fix It. | Securva</title>
+    <meta name="description" content="Sterling Bank got breached via a known vulnerability on an unpatched test server. 900,000 customers exposed. Here is what every Nigerian SME should check on their own website right now to avoid the same fate. Plain English. 10 minute action. Free.">
+    <meta property="og:title" content="Sterling Bank Had A Known Vulnerability On A Test Server. They Didn't Fix It. 900,000 Customers Are Paying The Price.">
+    <meta property="og:description" content="You are not Sterling Bank. But the way they got hacked is how your website is exposed too. Here is how to find out, in under 10 minutes and for free.">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Securva">
+    <meta property="og:image" content="https://securva.net/images/og-blog-default.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://securva.net/blog/sterling-bank-sme-lesson-2026-04">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sterling Bank Had A Known Vulnerability. They Didn't Fix It. 900,000 Customers Paying The Price.">
+    <meta name="twitter:description" content="You are not Sterling Bank. But the way they got hacked is how your website is exposed too. 10 minute check, free.">
+    <meta name="twitter:image" content="https://securva.net/images/og-blog-default.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,600&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#030308;--surface:#0A0A12;--card:#101020;--border:#1a1a30;--text:#F0EDF7;--muted:#6a6680;--accent:#7B68EE;--font:'Cabinet Grotesk',system-ui,sans-serif;--serif:'Newsreader',Georgia,serif}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:var(--font);background:var(--bg);color:var(--text)}
+        .nav{padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+        .nav-logo{font-weight:900;font-size:1.3rem;color:var(--text);text-decoration:none}.nav-logo span{color:var(--accent)}
+        .nav a.back{color:var(--muted);text-decoration:none;font-size:0.85rem}
+        article{max-width:680px;margin:0 auto;padding:60px 24px 80px}
+        .tag{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:16px}
+        h1{font-size:clamp(2rem,5vw,2.8rem);font-weight:900;letter-spacing:-0.03em;line-height:1.15;margin-bottom:16px}
+        .meta{font-size:0.85rem;color:var(--muted);margin-bottom:40px}
+        article p{font-family:var(--serif);font-size:1.05rem;line-height:1.8;color:#c8c4d0;margin-bottom:24px}
+        article h2{font-size:1.75rem;font-weight:800;margin:48px 0 16px;letter-spacing:-0.02em;border-left:3px solid var(--accent);padding-left:16px}
+        article h3{font-size:1.3rem;font-weight:700;margin:36px 0 12px;color:var(--accent)}
+        article strong{color:var(--text)}
+        article ul{margin:0 0 24px 20px;font-family:var(--serif);font-size:1rem;color:#c8c4d0;line-height:1.8}
+        article ol{margin:0 0 24px 20px;font-family:var(--serif);font-size:1rem;color:#c8c4d0;line-height:1.8}
+        .stat-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:32px;text-align:center;margin:32px 0}
+        .stat-big{font-size:4rem;font-weight:900;color:var(--accent)}
+        .stat-label{font-size:0.9rem;color:var(--muted);margin-top:4px}
+        .stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:32px 0}
+        .stat-grid .stat-box{margin:0}
+        .cta-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:32px;text-align:center;margin:40px 0}
+        .cta-box h3{margin-bottom:8px}
+        .cta-box p{font-family:var(--font) !important;color:var(--muted);font-size:0.9rem;margin-bottom:16px}
+        .cta-link{display:inline-block;padding:12px 24px;background:var(--accent);color:white;text-decoration:none;border-radius:10px;font-weight:700;font-size:0.9rem}
+        .data-table{width:100%;border-collapse:collapse;margin:24px 0 32px}
+        .data-table th,.data-table td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--border)}
+        .data-table th{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+        .data-table td{font-family:var(--serif);font-size:0.95rem;color:#c8c4d0}
+        .data-table td strong{color:var(--text)}
+        .data-table tr:hover{background:var(--surface)}
+        .disclaimer{margin-top:48px;padding-top:32px;border-top:1px solid var(--border)}
+        .disclaimer p{font-size:0.85rem !important;color:var(--muted) !important;font-style:italic}
+        code{font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--surface);padding:2px 6px;border-radius:4px;color:var(--accent)}
+        @media(max-width:500px){.stat-grid{grid-template-columns:1fr}.stat-big{font-size:3rem}}
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="nav-logo">Sec<span>urva</span></a>
+        <a href="/" class="back">&larr; Back to scanner</a>
+    </nav>
+    <article>
+        <div class="tag">Breach Analysis</div>
+        <h1>Sterling Bank Had A Known Vulnerability On A Test Server. They Didn't Fix It. 900,000 Customers Are Paying The Price.</h1>
+        <div class="meta">April 2026 | 8 min read | For non-technical founders</div>
+
+        <p><strong>Your website has the same kind of vulnerabilities right now. Here is how to find out, in under 10 minutes and for free.</strong></p>
+
+        <h2>The short version of what happened</h2>
+
+        <p>On March 18, 2026, someone sent one request to a Sterling Bank testing server. The server had a known security problem that had been public for three months. The patch existed. Nobody had installed it.</p>
+
+        <p>Nine days later, the attacker had access to three terabytes of Sterling Bank's data, including passport scans, driver's licenses, national ID cards, and utility bills belonging to roughly 900,000 customers. From there, they pivoted into Remita, the payment processor that handles Nigerian government salaries. The attack did not require Remita to have any flaw of its own; Sterling's own developers had stored Remita's passwords in a plaintext file inside an internal code repository.</p>
+
+        <p>On April 1, the Nigerian Data Protection Commission (NDPC) served Sterling Bank and Remita with a Notice of Investigation. As of this writing, most Sterling customers still do not know their data was stolen.</p>
+
+        <p>For the technical breakdown, the exact vulnerability, the six-factor pattern, the infrastructure math, we wrote that up last week: <a href="how-sterling-got-breached-2026-04.html" style="color:var(--accent);text-decoration:underline">How Sterling Bank Got Breached And Why 60% Of Nigerian Enterprises Are Next</a>. That one is for CTOs and security leads.</p>
+
+        <p>This one is for you. The person who runs a small business in Nigeria and is reading this on your phone and wondering if any of this matters for you.</p>
+
+        <p>It does. Here is why.</p>
+
+        <h2>You are not Sterling Bank. You are also not safe.</h2>
+
+        <p>The attack on Sterling Bank was not sophisticated. The word we keep seeing in the post-mortems is "known." Known vulnerability. Known class of misconfiguration. Known pattern of leaked credentials. None of it was novel. All of it was preventable.</p>
+
+        <p>That means every one of the same failures lives somewhere on smaller websites across Lagos, Abuja, Port Harcourt, and beyond. Not in the same volume, a shop that sells hair extensions has less to lose than a bank, but in the same structural pattern. If you are running a Nigerian business with any web presence, there is a near-certain chance that your site has at least one of the exact categories of problems that broke Sterling.</p>
+
+        <p>The good news: the ones you have are cheaper to fix than Sterling's because your footprint is smaller. The bad news: they are just as easy for an attacker to find, and they often sit there for months or years before anybody notices.</p>
+
+        <p>Here are the three most common patterns, explained in plain English.</p>
+
+        <h2>Pattern 1. The forgotten page</h2>
+
+        <p>Sterling's breach started on a testing server. Nobody on the current team owned it. Nobody remembered it was still connected to the internet. The original developer had moved on. The box sat there collecting dust and running outdated software, until one morning it didn't.</p>
+
+        <p>Your business has the small-business version of this. It might be an old WordPress site your previous developer set up in 2019 that nobody has logged into since. It might be a subdomain you stopped using when you rebranded, something like <code>old.yourshop.com</code> or <code>staging.yourshop.com</code>, that your DNS still points to a half-configured server. It might be a copy of your site you set up on Cloud A when you were thinking of switching from Cloud B, and then you switched back and forgot to delete.</p>
+
+        <p>Whichever version you have, the pattern is identical to Sterling's. The forgotten thing is still there. It is still reachable from the public internet. It is still running the software it had when you last touched it. If that software has a known problem, and the internet has a lot of known problems, somebody can find it and use it, and you will not know until the damage is done.</p>
+
+        <p><strong>How to check yours:</strong> the free scan at <a href="/" style="color:var(--accent);text-decoration:underline">securva.net</a> will flag subdomains that are assigned but don't host a real site, and pages that expose default installer screens or admin panels that should not be public.</p>
+
+        <h2>Pattern 2. The credential in a code folder</h2>
+
+        <p>This is the one that killed Remita. Sterling's own code repository, the folder where their developers store the instructions that run their bank, had a file in it. That file had Remita's production passwords written out in plain text. When the attacker broke into Sterling, they found that file, took the passwords, and walked straight into Remita.</p>
+
+        <p>For a small Nigerian business, the version of this is a <code>.env</code> file, or a <code>config.js</code> file, or a <code>Paystack_keys.txt</code> file sitting in the same GitHub repository as your website code. Sometimes it is your developer's personal GitHub account. Sometimes it is your own GitHub organization. We have found live Paystack keys, Flutterwave keys, Monnify keys, and Supabase service tokens in Nigerian business repositories in the last 30 days. The people who own those businesses have no idea.</p>
+
+        <p>If any of this sounds unfamiliar, the thing to understand is this: anything your developer commits to a public GitHub repository is visible to the entire internet, forever, including the old versions after they think they deleted it. If they committed your Paystack key on day one and only "removed" it on day ten, the version with the key in it is still there and can still be read.</p>
+
+        <p><strong>How to check yours:</strong> the Securva Snapshot, launching this week at securva.net/snapshot for $29 USD (or ₦30,000), includes a scan of your business's public GitHub footprint for 50+ categories of credential patterns. This is the same scanner we use to find Nigerian fintech leaks every week.</p>
+
+        <h2>Pattern 3. The missing lock on the front door</h2>
+
+        <p>Sterling's attack escalated through several stages, but the one every visitor to a Nigerian website sees every day is the simplest: HTTP Strict Transport Security (HSTS). This is a small configuration setting that tells your visitor's browser "always come in through the encrypted door." Without it, somebody sitting on the same Wi-Fi as your customer, at MTN Eko Hotels, at an airport, in a co-working space, can intercept the connection, downgrade it to unencrypted, and watch what your customer types.</p>
+
+        <div class="stat-box">
+            <div class="stat-big">64%</div>
+            <div class="stat-label">of the 1,180 live Nigerian business websites we scanned are missing HSTS</div>
+        </div>
+
+        <p>Missing HSTS does not, by itself, cause a Sterling-sized catastrophe. But it is the reliable sign of a site that has not been configured by someone who cared about security. And the sites that do not bother with HSTS are the same sites that forget to decommission subdomains and leave credentials in their code folder. One weak spot is a marker for the others.</p>
+
+        <p><strong>How to check yours:</strong> the free scan at <a href="/" style="color:var(--accent);text-decoration:underline">securva.net</a> grades your site against 42 security checkpoints in 30 seconds. HSTS is one of the first ones it looks at. You get a letter grade, A through F, with a specific list of which headers you have and which you do not.</p>
+
+        <h2>What happens if you find problems</h2>
+
+        <p>First: do not panic. Most Nigerian SMEs score F on the free scan, and the reason is that nobody has ever set this stuff up for them. The absence of security headers is not evidence of neglect. It is the default state of the internet for anyone who was not told about them.</p>
+
+        <p>Second: there are three levels of response and they correspond to three levels of budget.</p>
+
+        <p><strong>Free path.</strong> Take the scan results to your current developer. A competent web developer can fix HSTS, CSP, and the common header issues in about an hour of work. Sometimes it is one line of code or one change in a hosting dashboard. This costs you nothing if you already have a developer; it costs you about ₦15,000 if you need to hire a one-off freelancer for the hour.</p>
+
+        <p><strong>Cheap path.</strong> Buy the Securva Snapshot when it launches later this week ($29 or ₦30,000). You get the full 12 to 20 page PDF that walks through every issue, what it means, what it costs to fix, and which Pejji tier corresponds to the implementation work if you want us to handle it. Delivery is automated and the report lands in your email within 24 hours. This is the self-serve option.</p>
+
+        <p><strong>Done-for-you path.</strong> Hire Pejji at the Card tier (₦60,000). We rebuild your site from scratch on our secure stack, give you a clean handoff, and the NDPA compliance, the security headers, the encrypted transit, and the monitoring all come built in. That is ₦60,000 one-time, your site is live in 48 hours, and you never have to think about HSTS again.</p>
+
+        <p>All three paths are valid. The one that is not valid is doing nothing.</p>
+
+        <h2>The NDPC is not going to wait</h2>
+
+        <div class="stat-grid">
+            <div class="stat-box">
+                <div class="stat-big">246</div>
+                <div class="stat-label">NDPC investigations concluded since Jan 2026</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-big">&#8358;5.2B</div>
+                <div class="stat-label">in NDPC fines collected this year</div>
+            </div>
+        </div>
+
+        <p>The Nigerian Data Protection Commission served Sterling Bank in April. They served 649 Nigerian universities in February. They served 35 insurance companies and 392 insurance brokers in 2025. The cascade is moving through sectors at a visible, predictable pace: banking first, then education, then payments, then, based on signals from the NDPC's published priorities and the NCC's parallel 48-hour breach-notification directive for telecom, telecom, healthcare, and e-commerce are next.</p>
+
+        <p>If you run a Nigerian business in any of these sectors, your Notice of Investigation is not an <em>if</em>. It is a <em>when</em>. And the first thing NDPC will ask to see is your Data Protection Impact Assessment, your Records of Processing Activity, your privacy policy, and your technical security controls. If any of those are missing or weak, you are on the receiving end of the same fine schedule that has already hit banks and universities.</p>
+
+        <p>The point of the free Securva scan is not to sell you a product. It is to let you see, in 30 seconds, where you stand. Whatever grade you get, you now know. That is a better place to be than the one Sterling Bank's 900,000 customers are in right now.</p>
+
+        <h2>The 10-minute action</h2>
+
+        <ol>
+            <li>Go to <a href="/" style="color:var(--accent);text-decoration:underline"><strong>securva.net</strong></a> on your phone or desktop.</li>
+            <li>Paste your website URL.</li>
+            <li>Hit <strong>scan</strong>.</li>
+            <li>Read your grade.</li>
+            <li>If it is anything below B, copy the issue list.</li>
+            <li>Send it to your developer. If you do not have one, reply to <a href="mailto:hello@securva.net" style="color:var(--accent);text-decoration:underline">hello@securva.net</a> and we will tell you what the first three fixes cost to outsource.</li>
+        </ol>
+
+        <p>That is it. The scan is free. There is no signup. There is no newsletter trap. There is no upsell gate. There is a letter grade and a list and a path to get to a better one.</p>
+
+        <p>Sterling Bank had three months to install their patch. They did not. You have right now.</p>
+
+        <div class="cta-box">
+            <h3>Run the free scan</h3>
+            <p>30 seconds. No signup. Grade your site against 42 security checkpoints and NDPA 2023 compliance.</p>
+            <a href="/" class="cta-link">Scan your website free</a>
+        </div>
+
+        <p style="font-size:0.85rem;color:var(--muted);margin-top:48px;font-style:italic">This is part 2 of our Sterling Bank post-mortem series. <a href="how-sterling-got-breached-2026-04.html" style="color:var(--accent);text-decoration:underline">Part 1 (technical deep-dive for CTOs + security leads)</a> covers the six-factor pattern, the infrastructure math, and what every Nigerian enterprise should audit first. Part 3 (the sector cascade, targeting telecom, healthcare, and e-commerce) is in production and will publish early May.</p>
+
+        <div class="disclaimer">
+            <p>Built by the Securva team at Pejji Agency. We disclosed 28 critical credential leaks in Nigerian businesses this month alone. Receipts on request at hello@securva.net.</p>
+        </div>
+    </article>
+</body>
+</html>
