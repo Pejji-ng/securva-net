@@ -54,6 +54,12 @@ export default {
       if (pathname === '/api/tally-webhook' && request.method === 'POST') {
         return await handleTallyWebhook(request, env);
       }
+      if (pathname === '/api/intake' && request.method === 'POST') {
+        return await handleIntake(request, env);
+      }
+      if (pathname === '/api/intake' && request.method === 'OPTIONS') {
+        return corsResponse();
+      }
       if (pathname.startsWith('/api/job/') && pathname.endsWith('/status') && request.method === 'GET') {
         const jobId = pathname.split('/')[3];
         return await handleJobStatus(jobId, env);
@@ -219,6 +225,107 @@ async function handleTallyWebhook(request, env) {
 }
 
 // ============================================================
+// Custom intake endpoint — called from securva.net/snapshot/intake
+// Same purpose as Tally webhook but for our own form. No signature
+// verification needed since we control both sides. CORS restricted
+// to securva.net origin.
+// ============================================================
+
+const ALLOWED_ORIGINS = new Set([
+  'https://securva.net',
+  'https://www.securva.net',
+]);
+
+function corsHeaders(origin) {
+  const allowed = origin && ALLOWED_ORIGINS.has(origin) ? origin : 'https://securva.net';
+  return {
+    'Access-Control-Allow-Origin': allowed,
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Max-Age': '86400',
+  };
+}
+
+function corsResponse() {
+  return new Response(null, { status: 204, headers: corsHeaders() });
+}
+
+async function handleIntake(request, env) {
+  const origin = request.headers.get('Origin');
+  const cors = corsHeaders(origin);
+
+  if (origin && !ALLOWED_ORIGINS.has(origin)) {
+    return new Response(JSON.stringify({ error: 'forbidden origin' }), {
+      status: 403,
+      headers: { 'Content-Type': 'application/json', ...cors },
+    });
+  }
+
+  let payload;
+  try {
+    payload = await request.json();
+  } catch (e) {
+    return new Response(JSON.stringify({ error: 'invalid json' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json', ...cors },
+    });
+  }
+
+  const orderRef = payload.order_ref;
+  const submittedUrl = payload.url;
+
+  if (!orderRef || !submittedUrl) {
+    return new Response(JSON.stringify({ error: 'missing order_ref or url' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json', ...cors },
+    });
+  }
+
+  // Normalize URL
+  let cleanUrl = String(submittedUrl).trim();
+  if (!cleanUrl.match(/^https?:\/\//)) {
+    cleanUrl = 'https://' + cleanUrl;
+  }
+  try {
+    new URL(cleanUrl);
+  } catch (e) {
+    return new Response(JSON.stringify({ error: 'invalid url' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json', ...cors },
+    });
+  }
+
+  // Look up the job
+  const job = await env.DB.prepare(
+    `SELECT id, status FROM jobs WHERE order_id = ? LIMIT 1`
+  ).bind(orderRef).first();
+
+  if (!job) {
+    return new Response(JSON.stringify({ error: 'order not found' }), {
+      status: 404,
+      headers: { 'Content-Type': 'application/json', ...cors },
+    });
+  }
+
+  if (job.status !== 'awaiting_url') {
+    return new Response(JSON.stringify({ error: 'already submitted', status: job.status }), {
+      status: 409,
+      headers: { 'Content-Type': 'application/json', ...cors },
+    });
+  }
+
+  const now = Date.now();
+  await env.DB.prepare(
+    `UPDATE jobs SET url = ?, status = 'queued', updated_at = ? WHERE order_id = ? AND status = 'awaiting_url'`
+  ).bind(cleanUrl, now, orderRef).run();
+
+  return new Response(JSON.stringify({ status: 'ok' }), {
+    status: 200,
+    headers: { 'Content-Type': 'application/json', ...cors },
+  });
+}
+
+// ============================================================
 // Scheduled job pickup
 // Cron: every 5 minutes
 // ============================================================
@@ -343,12 +450,12 @@ async function handleHealth(env) {
 // ============================================================
 
 async function sendSubmitUrlEmail(env, { email, tier, price, orderId }) {
-  const tallyUrl = `${env.TALLY_FORM_URL}?order_ref=${encodeURIComponent(orderId)}`;
+  const intakeUrl = `https://securva.net/snapshot/intake?order_ref=${encodeURIComponent(orderId)}`;
   const html = `
 <p>Hi,</p>
 <p>Thanks for purchasing the Securva Snapshot (${tier} tier, ${price}).</p>
-<p>To kick off your audit, please submit your website URL via this form:</p>
-<p><a href="${tallyUrl}">${tallyUrl}</a></p>
+<p>To kick off your audit, please submit your website URL via this link:</p>
+<p><a href="${intakeUrl}">${intakeUrl}</a></p>
 <p>Within 24 hours of submitting, you will receive a second email with your PDF report attached.</p>
 <p>Questions? Reply to this email directly. A real human (not a bot) reads them.</p>
 <p>&mdash; Securva at Pejji Agency</p>
