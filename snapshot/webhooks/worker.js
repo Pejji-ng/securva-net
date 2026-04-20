@@ -263,11 +263,57 @@ function corsResponse() {
   return new Response(null, { status: 204, headers: corsHeaders() });
 }
 
+// SSRF guard: reject any hostname that resolves to a non-public space
+// (loopback, RFC1918, link-local, cloud metadata, reserved TLDs).
+// Hostname-level check — not a DNS resolve — because Workers can't
+// do raw DNS. This covers the attacker-supplied literal form.
+function isPublicScanTarget(hostname) {
+  if (!hostname) return false;
+  const h = hostname.toLowerCase();
+
+  // Bare IP literal — block common private ranges
+  if (/^(\d{1,3}\.){3}\d{1,3}$/.test(h)) {
+    const parts = h.split('.').map(Number);
+    if (parts[0] === 10) return false;
+    if (parts[0] === 127) return false;
+    if (parts[0] === 0) return false;
+    if (parts[0] === 169 && parts[1] === 254) return false; // link-local + AWS metadata
+    if (parts[0] === 172 && parts[1] >= 16 && parts[1] <= 31) return false;
+    if (parts[0] === 192 && parts[1] === 168) return false;
+    if (parts[0] === 100 && parts[1] >= 64 && parts[1] <= 127) return false; // CGNAT
+    if (parts[0] >= 224) return false; // multicast + reserved
+  }
+
+  // IPv6 literal — block loopback + unique-local + link-local
+  if (h.startsWith('[') || h.includes(':')) {
+    if (h === '::1' || h === '[::1]') return false;
+    if (h.startsWith('fc') || h.startsWith('fd')) return false; // ULA
+    if (h.startsWith('fe80')) return false; // link-local
+  }
+
+  // Reserved / internal TLDs
+  if (h === 'localhost' || h.endsWith('.localhost')) return false;
+  if (h.endsWith('.internal')) return false;
+  if (h.endsWith('.local')) return false;
+  if (h.endsWith('.lan')) return false;
+  if (h.endsWith('.home.arpa')) return false;
+  if (h.endsWith('.onion')) return false;
+
+  // Our own internal host — buyers shouldn't be able to loop us back
+  if (h === 'scanner.internal.securva.net' || h.endsWith('.internal.securva.net')) return false;
+
+  return true;
+}
+
 async function handleIntake(request, env) {
   const origin = request.headers.get('Origin');
   const cors = corsHeaders(origin);
 
-  if (origin && !ALLOWED_ORIGINS.has(origin)) {
+  // P1 hotfix (2026-04-20 audit): fail closed when Origin is missing.
+  // Previous logic only rejected when Origin was set AND non-allowlisted —
+  // curl/non-browser clients sent no Origin and slipped through, enabling
+  // a forged-Gumroad-webhook + intake-hijack chain to scan arbitrary URLs.
+  if (!origin || !ALLOWED_ORIGINS.has(origin)) {
     return new Response(JSON.stringify({ error: 'forbidden origin' }), {
       status: 403,
       headers: { 'Content-Type': 'application/json', ...cors },
@@ -299,10 +345,22 @@ async function handleIntake(request, env) {
   if (!cleanUrl.match(/^https?:\/\//)) {
     cleanUrl = 'https://' + cleanUrl;
   }
+  let parsedUrl;
   try {
-    new URL(cleanUrl);
+    parsedUrl = new URL(cleanUrl);
   } catch (e) {
     return new Response(JSON.stringify({ error: 'invalid url' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json', ...cors },
+    });
+  }
+
+  // P2 hotfix: block SSRF-style targets — private ranges, loopback,
+  // link-local, .internal / .local / .localhost, and bare IP literals
+  // in RFC1918. Even authenticated buyers shouldn't be able to point
+  // our scanner at internal infrastructure.
+  if (!isPublicScanTarget(parsedUrl.hostname)) {
+    return new Response(JSON.stringify({ error: 'target not allowed' }), {
       status: 400,
       headers: { 'Content-Type': 'application/json', ...cors },
     });
@@ -499,6 +557,8 @@ async function handlePdfDownload(token, env) {
       'Content-Disposition': `inline; filename="securva-snapshot-${hostname}.pdf"`,
       'Cache-Control': 'private, max-age=300',
       'X-Content-Type-Options': 'nosniff',
+      'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
+      'Referrer-Policy': 'strict-origin-when-cross-origin',
     },
   });
 }
@@ -624,6 +684,11 @@ async function verifyHmac(body, signature, secret, algorithm = 'SHA-256') {
 function jsonResponse(obj, status = 200) {
   return new Response(JSON.stringify(obj), {
     status,
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
+      'X-Content-Type-Options': 'nosniff',
+      'Referrer-Policy': 'strict-origin-when-cross-origin',
+    },
   });
 }
