@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>We Mapped 95 Nigerian Organizations' Infrastructure. 4 Sectors Are One Breach Away. | Securva</title>
+    <meta name="description" content="Over the last month we mapped 1,180 live hosts across 95 Nigerian organizations. Healthcare, government, banking, and legacy stacks reveal one consistent pattern: most still do not enforce the one security header that would have stopped the Sterling breach.">
+    <meta property="og:title" content="We Mapped 95 Nigerian Organizations' Infrastructure. 4 Sectors Are One Breach Away.">
+    <meta property="og:description" content="1,180 live hosts across 95 organizations. 65% of banking subdomains lack HSTS. Two major healthcare operators run 0% HSTS across their entire infrastructure. The data behind where Nigeria's attack surface actually is.">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Securva">
+    <meta property="og:image" content="https://securva.net/images/og-blog-default.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://securva.net/blog/nigerian-attack-surface-2026-04.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="We Mapped 95 Nigerian Organizations' Infrastructure. 4 Sectors Are One Breach Away.">
+    <meta name="twitter:description" content="1,180 live hosts. 65% of Nigerian banking subdomains lack HSTS. Healthcare and government regulators fail their own published guidance. Data-backed sector map.">
+    <meta name="twitter:image" content="https://securva.net/images/og-blog-default.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,600&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#030308;--surface:#0A0A12;--card:#101020;--border:#1a1a30;--text:#F0EDF7;--muted:#6a6680;--accent:#7B68EE;--font:'Cabinet Grotesk',system-ui,sans-serif;--serif:'Newsreader',Georgia,serif}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:var(--font);background:var(--bg);color:var(--text)}
+        .nav{padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+        .nav-logo{font-weight:900;font-size:1.3rem;color:var(--text);text-decoration:none}.nav-logo span{color:var(--accent)}
+        .nav a.back{color:var(--muted);text-decoration:none;font-size:0.85rem}
+        article{max-width:680px;margin:0 auto;padding:60px 24px 80px}
+        .tag{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:16px}
+        h1{font-size:clamp(2rem,5vw,2.8rem);font-weight:900;letter-spacing:-0.03em;line-height:1.15;margin-bottom:16px}
+        .meta{font-size:0.85rem;color:var(--muted);margin-bottom:40px}
+        article p{font-family:var(--serif);font-size:1.05rem;line-height:1.8;color:#c8c4d0;margin-bottom:24px}
+        article h2{font-size:1.75rem;font-weight:800;margin:48px 0 16px;letter-spacing:-0.02em;border-left:3px solid var(--accent);padding-left:16px}
+        article h3{font-size:1.3rem;font-weight:700;margin:36px 0 12px;color:var(--accent)}
+        article strong{color:var(--text)}
+        article ul{margin:0 0 24px 20px;font-family:var(--serif);font-size:1rem;color:#c8c4d0;line-height:1.8}
+        article ol{margin:0 0 24px 20px;font-family:var(--serif);font-size:1rem;color:#c8c4d0;line-height:1.8}
+        .stat-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:32px;text-align:center;margin:32px 0}
+        .stat-big{font-size:4rem;font-weight:900;color:var(--accent)}
+        .stat-label{font-size:0.9rem;color:var(--muted);margin-top:4px}
+        .stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:32px 0}
+        .stat-grid .stat-box{margin:0}
+        .cta-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:32px;text-align:center;margin:40px 0}
+        .cta-box h3{margin-bottom:8px}
+        .cta-box p{font-family:var(--font) !important;color:var(--muted);font-size:0.9rem;margin-bottom:16px}
+        .cta-link{display:inline-block;padding:12px 24px;background:var(--accent);color:white;text-decoration:none;border-radius:10px;font-weight:700;font-size:0.9rem}
+        .data-table{width:100%;border-collapse:collapse;margin:24px 0 32px;font-family:var(--font)}
+        .data-table th,.data-table td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--border);font-size:0.92rem}
+        .data-table th{color:var(--muted);font-weight:700;font-size:0.75rem;text-transform:uppercase;letter-spacing:1px}
+        .data-table td code{background:var(--surface);padding:2px 6px;border-radius:4px;font-family:monospace;font-size:0.85rem}
+        .data-table tr.bad td:last-child{color:#f87171;font-weight:700}
+        .data-table tr.ok td:last-child{color:#4ade80;font-weight:700}
+        @media(max-width:600px){.stat-grid{grid-template-columns:1fr}}
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="nav-logo">Sec<span>urva</span></a>
+        <a href="/blog" class="back">&larr; Blog</a>
+    </nav>
+
+    <article>
+        <div class="tag">Research &middot; Sector Map</div>
+        <h1>We Mapped 95 Nigerian Organizations' Infrastructure. 4 Sectors Are One Breach Away.</h1>
+        <div class="meta">April 20, 2026 &middot; 10 min read &middot; Securva Research</div>
+
+        <p>Over the last month we have been running a structured infrastructure-mapping exercise across Nigerian enterprises and government agencies. As of today, our dataset covers <strong>95 organizations across six active sectors</strong>: banking, fintech, telecom, healthcare, government, and e-commerce. <strong>1,180 live hosts</strong> enumerated. <strong>756 unique IPs</strong> mapped to ASN ownership.</p>
+
+        <p>The pattern is consistent enough to describe in one sentence: <strong>most Nigerian enterprises still do not turn on the security header that was invented in 2012 to stop exactly the attack that just hit Sterling Bank.</strong></p>
+
+        <p>This post is the public version of the finding. Free, specific, and honest. If you run infrastructure for a Nigerian SME, a bank, a fintech, or an HMO, the data below tells you where your peers stand and where the attacker's path of least resistance currently runs.</p>
+
+        <div class="stat-grid">
+            <div class="stat-box">
+                <div class="stat-big">1,180</div>
+                <div class="stat-label">Live Nigerian hosts mapped</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-big">65%</div>
+                <div class="stat-label">Of top-4 banks' subdomains lack HSTS</div>
+            </div>
+        </div>
+
+        <h2>The one header that matters, and what it does</h2>
+
+        <p><strong>HSTS</strong> (Strict-Transport-Security) is a tiny line a server returns on every response. It tells the user's browser: <em>from now on, always connect to me over HTTPS, never plain HTTP, for at least N seconds.</em></p>
+
+        <p>Without HSTS, every time a user types your URL, or clicks a link from Google, Twitter, or an email, <strong>the first hop is unencrypted HTTP</strong>. Any attacker on the same Wi-Fi can intercept that first hop and either serve a fake login page, silently redirect to a malicious clone domain, or inject scripts that exfiltrate session cookies on every subsequent page. This exact attack class, <em>SSL stripping</em>, is how attackers routinely pivot into banks, HMOs, and government accounts.</p>
+
+        <p>It is a 2009-era attack. The fix, HSTS, has been standard since 2012. Turning it on is <strong>one line of server config</strong>. No cost. No complexity.</p>
+
+        <p>And as of today, here is what 95 Nigerian organizations look like.</p>
+
+        <h2>Healthcare is the worst performer</h2>
+
+        <p>We mapped four Nigerian healthcare organizations. Two of them run <strong>zero HSTS across their entire infrastructure</strong>.</p>
+
+        <table class="data-table">
+            <thead><tr><th>Organization</th><th>Hosts mapped</th><th>HSTS coverage</th></tr></thead>
+            <tbody>
+                <tr class="bad"><td>Hygeia HMO</td><td>54</td><td>0%</td></tr>
+                <tr class="bad"><td>54gene</td><td>50</td><td>0%</td></tr>
+                <tr><td>Helium Health</td><td>6</td><td>16%</td></tr>
+                <tr><td>Reliance HMO</td><td>12</td><td>33%</td></tr>
+            </tbody>
+        </table>
+
+        <p>A patient looking up their health record on Hygeia HMO's portal over a hotel Wi-Fi today can have their entire session hijacked by the person two tables over. At <strong>54 subdomains with zero HSTS</strong>, this is not one-page oversight. It is infrastructure-wide policy absence.</p>
+
+        <p>Under the NDPA 2023, health data is classified as sensitive personal data. A breach via an SSL-stripping attack on a session-token-exposed portal triggers NDPC reporting obligations within 72 hours and statutory damages exposure. One line per host to fix. About 30 minutes of operator time across 54 hosts.</p>
+
+        <h2>Government: the two biggest regulators fail their own guidance</h2>
+
+        <table class="data-table">
+            <thead><tr><th>Agency</th><th>Hosts mapped</th><th>HSTS coverage</th></tr></thead>
+            <tbody>
+                <tr class="bad"><td>NCC (Nigerian Communications Commission)</td><td>103</td><td>5%</td></tr>
+                <tr class="bad"><td>NITDA (National IT Development Agency)</td><td>90</td><td>6%</td></tr>
+            </tbody>
+        </table>
+
+        <p>These are the bodies that publish cybersecurity guidance and regulate other organizations' compliance. Their own infrastructure, at 5 to 6 percent HSTS coverage, is more vulnerable than most Nigerian SMEs. Not a dig. Just the gap between published policy and deployed infrastructure, which is where attackers live.</p>
+
+        <h2>Banking: front-doors hardened, everything else exposed</h2>
+
+        <table class="data-table">
+            <thead><tr><th>Bank</th><th>Hosts mapped</th><th>HSTS coverage</th></tr></thead>
+            <tbody>
+                <tr><td>Access Bank</td><td>381</td><td>40%</td></tr>
+                <tr class="bad"><td>GTBank (primary + shadow)</td><td>170</td><td>38% / 0%</td></tr>
+                <tr class="bad"><td>Zenith Bank</td><td>191</td><td>10% / 0%</td></tr>
+                <tr class="bad"><td>First Bank</td><td>132</td><td>0%</td></tr>
+            </tbody>
+        </table>
+
+        <p>The top four Nigerian banks map to <strong>874 subdomains total, of which roughly 65 percent lack HSTS.</strong> Access Bank's front-door domain has the best coverage at 40 percent. The rest is a long tail of subdomains, internal tools, legacy portals, staging environments with leaked default paths, and vendor-integration endpoints, that run over raw HTTPS but do not enforce it.</p>
+
+        <p>Pattern: main front-doors are hardened. Everything behind them is not. That is where a determined attacker pivots. Not the bank's marketing site, but the forgotten <code>dev-api.bank.example.com.ng</code> or <code>vendor-portal.bank.example.com.ng</code>.</p>
+
+        <h2>Middle of the pack: e-commerce and fintech</h2>
+
+        <table class="data-table">
+            <thead><tr><th>Organization</th><th>Hosts</th><th>HSTS coverage</th></tr></thead>
+            <tbody>
+                <tr><td>Jumia</td><td>79</td><td>17%</td></tr>
+                <tr><td>Kuda</td><td>44</td><td>25%</td></tr>
+                <tr><td>9mobile</td><td>35</td><td>17%</td></tr>
+            </tbody>
+        </table>
+
+        <p>Fintech is a mixed story. The big rails, Paystack, Flutterwave, Monnify, are not in our top-15 by host count yet, but our prior research has surfaced live credential leaks across this sector and we continue to monitor. Kuda at 25 percent is neither top nor bottom. Typical.</p>
+
+        <h2>The second pattern: legacy stacks still serving production traffic</h2>
+
+        <p>Beyond HSTS, we flag the presence of <strong>legacy ASP.NET / IIS stacks</strong> on production hosts. Our scan found nine organizations running legacy-signature ASP.NET on public-facing infrastructure.</p>
+
+        <table class="data-table">
+            <thead><tr><th>Organization</th><th>Legacy IIS / ASP.NET hosts</th></tr></thead>
+            <tbody>
+                <tr class="bad"><td>Access Bank</td><td>19</td></tr>
+                <tr class="bad"><td>GTBank (shadow infra)</td><td>18</td></tr>
+                <tr class="bad"><td>Zenith Bank</td><td>18</td></tr>
+                <tr class="bad"><td>NCC</td><td>14</td></tr>
+                <tr><td>NITDA</td><td>2</td></tr>
+            </tbody>
+        </table>
+
+        <p>Legacy IIS is not inherently broken. But these are the exact signatures of infrastructure running IIS 6, 7, or 7.5 and ASP.NET Web Forms from 2010 to 2015. CVE backlogs on these versions run into the hundreds, many with published exploits. Running them on internet-exposed hosts in 2026 means CVEs from 5+ years ago are sitting unpatched.</p>
+
+        <p>This pairs with the HSTS gap. Many of those same legacy hosts also lack HSTS. Combined, an attacker on the same Wi-Fi as the user can downgrade the connection, exploit a 2012-era ASP.NET vulnerability, and harvest session tokens. Which is how Sterling Bank got breached. Per our <a href="./how-sterling-got-breached-2026-04.html" style="color:var(--accent)">prior breach analysis</a>, the attacker's entry was a test server running an unpatched IIS vulnerability accessible over plain HTTP. Sterling was not unique. Our data suggests they were median.</p>
+
+        <h2>Why we are publishing this</h2>
+
+        <p><strong>It is fixable.</strong> Unlike many security findings, HSTS is literally one line of server config per domain. A weekend of operator time would move all 95 organizations in our dataset above 80 percent HSTS coverage.</p>
+
+        <p><strong>The regulatory landscape changed.</strong> NDPC is now doing sector-by-sector enforcement audits. Banking was first, payments second. Education was third. Healthcare, telecom, and government are next in rotation. Organizations that fail basic header checks in a public audit will face material fines. This is not speculative. We track the enforcement cascade.</p>
+
+        <p><strong>Our paid Snapshot product needs credibility.</strong> We sell a $10 to $99 audit that runs this scan against a single organization and delivers a PDF report with specific remediation steps. For the product to work, we need to prove our data model is real. Publishing aggregate findings, honest and specific, is how we do that.</p>
+
+        <h2>What to do if you run infrastructure for any of these sectors</h2>
+
+        <ol>
+            <li><strong>Check your own HSTS coverage.</strong> Free: <code>curl -sI https://yourdomain.com | grep -i strict</code>. Should return <code>strict-transport-security: max-age=31536000; includeSubDomains</code>.</li>
+            <li><strong>If missing</strong>, add one line to your server config. For Cloudflare Pages or Vercel, use <code>_headers</code> or <code>vercel.json</code>. For nginx: <code>add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;</code> in every server block.</li>
+            <li><strong>Repeat across every subdomain.</strong> The attackers do not go through your main domain. They pivot through the unloved ones.</li>
+            <li><strong>If you want us to do it for you</strong>, our Snapshot product runs 42 security checks including HSTS coverage, NDPA 2023 gaps, GitHub credential scan, and shadow-subdomain enumeration. Delivered within 24 hours.</li>
+        </ol>
+
+        <div class="cta-box">
+            <h3>Securva Snapshot</h3>
+            <p>42-check security + NDPA 2023 audit. Starter tier $29 USD. Delivered within 24 hours. Refundable if not useful.</p>
+            <a href="/snapshot" class="cta-link">See the Snapshot</a>
+        </div>
+
+        <h2>The bottom line</h2>
+
+        <p>Nigerian enterprises are not being attacked by sophisticated nation-state actors. They are being attacked by routine opportunistic scripts that require a 2012-era protection gap to function. That gap exists across four sectors we have measured, and it is one weekend of operator time away from being closed.</p>
+
+        <p>If you run one of the 95 organizations in our sample and want the specific findings for your infrastructure, email <a href="mailto:hello@securva.net" style="color:var(--accent)">hello@securva.net</a>. Free to you. Faster than a formal audit. No public disclosure attached.</p>
+
+        <div class="cta-box">
+            <h3>Want your organization's data?</h3>
+            <p>Specific findings for any of the 95 orgs in our sample. Free for first-party requests, coordinated disclosure only.</p>
+            <a href="mailto:hello@securva.net?subject=Sector Map Findings Request" class="cta-link">Email hello@securva.net</a>
+        </div>
+
+    </article>
+
+</body>
+</html>
