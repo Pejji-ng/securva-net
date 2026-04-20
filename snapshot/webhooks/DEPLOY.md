@@ -50,12 +50,9 @@ wrangler kv:namespace create snapshot-locks
 # → copy the id into wrangler.toml [[kv_namespaces]] section
 ```
 
-### 1d. Generate R2 access credentials (for the box)
-In Cloudflare dashboard → R2 → Manage R2 API Tokens → Create API Token
-- Name: `securva-box-r2`
-- Permissions: Object Read & Write
-- Scope: `securva-snapshots` bucket only
-- Save the `accessKeyId` + `secretAccessKey` for Step 3
+### 1d. R2 access credentials — NOT NEEDED
+
+Phase 4.1 removed the S3-API code path. The Worker writes to R2 via its native `BUCKET` binding (configured in `wrangler.toml`). No R2 API tokens or S3 access keys need to be created or distributed.
 
 ---
 
@@ -111,11 +108,10 @@ pip install fastapi uvicorn jinja2 weasyprint boto3 pydantic
 ```bash
 sudo mkdir -p /etc/securva
 sudo tee /etc/securva/snapshot-api.env > /dev/null <<'EOF'
+# Phase 4.1: only BOX_API_TOKEN is needed on the box. R2 writes happen
+# in the Worker via the native BUCKET binding, so no R2/S3 credentials
+# ever live on the box.
 BOX_API_TOKEN=REPLACE_WITH_SECURE_RANDOM_64_CHARS
-R2_ACCOUNT_ID=YOUR_CF_ACCOUNT_ID
-R2_ACCESS_KEY_ID=FROM_STEP_1d
-R2_SECRET_ACCESS_KEY=FROM_STEP_1d
-R2_BUCKET=securva-snapshots
 EOF
 sudo chmod 600 /etc/securva/snapshot-api.env
 sudo chown root:root /etc/securva/snapshot-api.env
