@@ -22,7 +22,12 @@
  *   - RESEND_API_KEY
  *   - BOX_SCANNER_ENDPOINT (e.g. https://scanner.internal.securva.net/scan-and-render)
  *   - BOX_API_TOKEN
- *   - TALLY_FORM_URL (base URL of the intake Tally form)
+ *
+ * Phase 4.1: Box no longer uploads to R2. Box returns PDF bytes base64-encoded
+ * in the scan response; Worker writes to R2 via the native BUCKET binding and
+ * serves downloads through /api/pdf/:token. Eliminates the R2 S3-API
+ * dependency (and its TLS provisioning quirks) + removes R2 credentials from
+ * the box.
  */
 
 const PRICING = {
@@ -63,6 +68,10 @@ export default {
       if (pathname.startsWith('/api/job/') && pathname.endsWith('/status') && request.method === 'GET') {
         const jobId = pathname.split('/')[3];
         return await handleJobStatus(jobId, env);
+      }
+      if (pathname.startsWith('/api/pdf/') && request.method === 'GET') {
+        const token = pathname.slice('/api/pdf/'.length);
+        return await handlePdfDownload(token, env);
       }
       if (pathname === '/api/health' && request.method === 'GET') {
         return await handleHealth(env);
@@ -382,7 +391,25 @@ async function processJob(job, env) {
     }
 
     const scanData = await scanResponse.json();
-    const pdfUrl = scanData.pdf_url;
+
+    // Phase 4.1: box returns base64 PDF bytes; Worker writes to R2 via native
+    // binding (avoids the R2 S3-API TLS endpoint entirely and keeps R2
+    // credentials out of the box).
+    if (!scanData.pdf_base64) {
+      throw new Error('Box response missing pdf_base64');
+    }
+    const pdfBytes = Uint8Array.from(atob(scanData.pdf_base64), c => c.charCodeAt(0));
+    const r2Key = `snapshots/${job.id}.pdf`;
+    await env.BUCKET.put(r2Key, pdfBytes, {
+      httpMetadata: { contentType: 'application/pdf' },
+      customMetadata: { jobId: job.id, tier: job.tier, domain: new URL(job.url).hostname },
+    });
+
+    // Opaque download token. Stored alongside the R2 key so the public URL
+    // has no predictable relationship to job_id (can't enumerate).
+    const downloadToken = crypto.randomUUID().replace(/-/g, '') + crypto.randomUUID().replace(/-/g, '').slice(0, 16);
+    const pdfUrl = `https://snap.securva.net/api/pdf/${downloadToken}`;
+
     const grade = scanData.scan_json?.sections?.executive_summary?.grade || 'N/A';
     const topRecommendations = (scanData.scan_json?.sections?.remediation?.top_3 || [])
       .map(r => `- ${r}`).join('\n') || '- (see full report)';
@@ -390,9 +417,10 @@ async function processJob(job, env) {
     // Mark done
     await env.DB.prepare(
       `UPDATE jobs
-       SET status = 'done', pdf_url = ?, scan_json = ?, completed_at = ?, updated_at = ?
+       SET status = 'done', pdf_url = ?, pdf_r2_key = ?, download_token = ?,
+           scan_json = ?, completed_at = ?, updated_at = ?
        WHERE id = ?`
-    ).bind(pdfUrl, JSON.stringify(scanData.scan_json), Date.now(), Date.now(), job.id).run();
+    ).bind(pdfUrl, r2Key, downloadToken, JSON.stringify(scanData.scan_json), Date.now(), Date.now(), job.id).run();
 
     // Email customer
     await sendReportReadyEmail(env, {
@@ -429,6 +457,50 @@ async function handleJobStatus(orderId, env) {
 
   if (!result) return jsonResponse({ error: 'not found' }, 404);
   return jsonResponse(result, 200);
+}
+
+// ============================================================
+// PDF download (Worker-served, replaces R2 presigned URL pattern)
+// ============================================================
+
+const PDF_TTL_MS = 14 * 24 * 60 * 60 * 1000; // 14 days
+
+async function handlePdfDownload(token, env) {
+  if (!token || !/^[a-f0-9]{48}$/i.test(token)) {
+    return new Response('Not found', { status: 404 });
+  }
+
+  const job = await env.DB.prepare(
+    `SELECT pdf_r2_key, completed_at, url FROM jobs
+     WHERE download_token = ? AND status = 'done'`
+  ).bind(token).first();
+
+  if (!job || !job.pdf_r2_key) {
+    return new Response('Not found', { status: 404 });
+  }
+
+  if (Date.now() - job.completed_at > PDF_TTL_MS) {
+    return new Response('Link expired. Contact hello@securva.net.', { status: 410 });
+  }
+
+  const obj = await env.BUCKET.get(job.pdf_r2_key);
+  if (!obj) {
+    return new Response('Report not found', { status: 404 });
+  }
+
+  const hostname = (() => {
+    try { return new URL(job.url).hostname.replace(/[^a-z0-9.-]/gi, ''); }
+    catch { return 'report'; }
+  })();
+
+  return new Response(obj.body, {
+    headers: {
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `inline; filename="securva-snapshot-${hostname}.pdf"`,
+      'Cache-Control': 'private, max-age=300',
+      'X-Content-Type-Options': 'nosniff',
+    },
+  });
 }
 
 // ============================================================

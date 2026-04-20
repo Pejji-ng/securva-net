@@ -8,13 +8,11 @@
 #
 # Prerequisites (Kingsley does these first):
 #   - Phase B of desk checklist complete (D1, R2, KV created)
-#   - R2 API credentials issued (Phase B Step 6)
 #   - DNS A record scanner.internal.securva.net -> box IP, gray cloud
 #
-# What Kingsley needs to send Buddy via secure stdin:
-#   - R2_ACCOUNT_ID       (Cloudflare account ID)
-#   - R2_ACCESS_KEY_ID    (from R2 API token, Phase B Step 6)
-#   - R2_SECRET_ACCESS_KEY
+# Phase 4.1: Box no longer needs R2 credentials. The box returns the PDF
+# as base64 bytes in the scan response and the Worker writes to R2 via
+# its native BUCKET binding. Only BOX_API_TOKEN is required on the box.
 #
 # Buddy generates BOX_API_TOKEN locally, then sends it back to Kingsley
 # via secure paste so Kingsley can wrangler-secret-put it.
@@ -71,7 +69,6 @@ sudo -u "$SERVICE_USER" .venv/bin/pip install \
     "uvicorn[standard]"==0.31.0 \
     jinja2==3.1.4 \
     weasyprint==63.0 \
-    boto3==1.35.0 \
     pydantic==2.9.0 \
     httpx==0.27.0 \
     requests==2.32.0
@@ -93,13 +90,10 @@ mkdir -p /etc/securva
 
 if [ ! -f /etc/securva/snapshot-api.env ]; then
     cat > /etc/securva/snapshot-api.env <<'EOF'
-# Fill these in via secure-stdin paste from Kingsley.
 # DO NOT commit this file. Permissions are 600 root:root.
+# Phase 4.1: only BOX_API_TOKEN is required here. The Worker handles R2
+# writes via its native BUCKET binding, so no R2 credentials live on the box.
 BOX_API_TOKEN=
-R2_ACCOUNT_ID=
-R2_ACCESS_KEY_ID=
-R2_SECRET_ACCESS_KEY=
-R2_BUCKET=securva-snapshots
 EOF
     chmod 600 /etc/securva/snapshot-api.env
     chown root:root /etc/securva/snapshot-api.env
@@ -152,9 +146,8 @@ EOF
 systemctl daemon-reload
 systemctl enable securva-snapshot-api
 
-# Only start if env file has all required values filled
-if grep -q "^R2_ACCESS_KEY_ID=.\+" /etc/securva/snapshot-api.env && \
-   grep -q "^R2_SECRET_ACCESS_KEY=.\+" /etc/securva/snapshot-api.env; then
+# Only start if BOX_API_TOKEN is present
+if grep -q "^BOX_API_TOKEN=.\+" /etc/securva/snapshot-api.env; then
     systemctl restart securva-snapshot-api
     sleep 2
     if systemctl is-active --quiet securva-snapshot-api; then
@@ -163,7 +156,7 @@ if grep -q "^R2_ACCESS_KEY_ID=.\+" /etc/securva/snapshot-api.env && \
         echo "  -> Service failed to start. Check: journalctl -u securva-snapshot-api -n 30"
     fi
 else
-    echo "  -> Service NOT started because R2 credentials are empty. Fill /etc/securva/snapshot-api.env then: systemctl restart securva-snapshot-api"
+    echo "  -> Service NOT started because BOX_API_TOKEN is empty. Fill /etc/securva/snapshot-api.env then: systemctl restart securva-snapshot-api"
 fi
 
 # ---------- 8. nginx config ----------
@@ -233,25 +226,22 @@ echo "============================================================"
 echo ""
 echo "Next steps:"
 echo ""
-echo "1. Paste R2 credentials into /etc/securva/snapshot-api.env:"
-echo "     sudo nano /etc/securva/snapshot-api.env"
-echo "   Fill R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY"
-echo ""
-echo "2. Start (or restart) the service:"
+echo "1. Start (or restart) the service:"
 echo "     sudo systemctl restart securva-snapshot-api"
 echo "     sudo systemctl status securva-snapshot-api"
 echo ""
-echo "3. Enable HTTPS on scanner.internal.securva.net:"
+echo "2. Enable HTTPS on scanner.internal.securva.net:"
 echo "     sudo certbot --nginx -d scanner.internal.securva.net"
 echo ""
-echo "4. Smoke test with a real scan:"
+echo "3. Smoke test (expect a large base64 PDF blob in the response):"
 echo "     TOKEN=\$(grep '^BOX_API_TOKEN=' /etc/securva/snapshot-api.env | cut -d= -f2)"
-echo "     curl -X POST https://scanner.internal.securva.net/scan-and-render \\"
+echo "     curl -sS -X POST http://127.0.0.1:8089/scan-and-render \\"
 echo "       -H \"Authorization: Bearer \$TOKEN\" \\"
 echo "       -H \"Content-Type: application/json\" \\"
-echo "       -d '{\"domain\":\"babakizo.com\",\"tier\":\"Starter\",\"job_id\":\"smoke-001\"}'"
+echo "       -d '{\"domain\":\"babakizo.com\",\"tier\":\"Starter\",\"job_id\":\"smoke-001\"}' \\"
+echo "       | python3 -c 'import json,sys; d=json.load(sys.stdin); print({k:v if k!=\"pdf_base64\" else f\"<{len(v)} chars>\" for k,v in d.items()})'"
 echo ""
-echo "5. Send BOX_API_TOKEN + BOX_SCANNER_ENDPOINT to Kingsley so he can"
+echo "4. Send BOX_API_TOKEN + BOX_SCANNER_ENDPOINT to Kingsley so he can"
 echo "   wrangler-secret-put them into the Worker."
 echo ""
 echo "If anything failed, check:"

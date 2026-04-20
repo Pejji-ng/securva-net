@@ -32,8 +32,16 @@ CREATE TABLE IF NOT EXISTS jobs (
   --   failed       — scan errored, customer notified + refund pending
   status TEXT NOT NULL,
 
-  -- R2 signed URL of the generated PDF (populated on status=done)
+  -- Public URL of the generated PDF (served by the Worker via /api/pdf/:token,
+  -- not an R2 presigned URL) (populated on status=done)
   pdf_url TEXT,
+
+  -- R2 object key of the stored PDF (populated on status=done)
+  pdf_r2_key TEXT,
+
+  -- Opaque 48-char hex token gating public download via /api/pdf/:token
+  -- (populated on status=done)
+  download_token TEXT,
 
   -- Full orchestrator JSON output for audit/debug (populated on status=done)
   scan_json TEXT,
@@ -50,6 +58,7 @@ CREATE TABLE IF NOT EXISTS jobs (
 CREATE INDEX IF NOT EXISTS idx_jobs_status ON jobs(status);
 CREATE INDEX IF NOT EXISTS idx_jobs_email ON jobs(email);
 CREATE INDEX IF NOT EXISTS idx_jobs_order ON jobs(order_id);
+CREATE INDEX IF NOT EXISTS idx_jobs_download_token ON jobs(download_token);
 
 -- Metrics view for the health endpoint
 CREATE VIEW IF NOT EXISTS jobs_last_hour AS
