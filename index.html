@@ -70,6 +70,26 @@
         .cta-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:10px;background:#25D366;color:white;text-decoration:none;font-weight:700;font-size:0.9rem;transition:all 0.3s}
         .cta-btn:hover{opacity:0.9;transform:translateY(-1px)}
 
+        /* Snapshot promo */
+        .snapshot-promo{max-width:820px;margin:0 auto 60px;padding:0 24px}
+        .snapshot-card{background:linear-gradient(135deg,var(--card) 0%,#0d0d1c 100%);border:1px solid var(--border);border-radius:20px;padding:40px 32px;position:relative;overflow:hidden}
+        .snapshot-card::before{content:"";position:absolute;top:-40%;right:-20%;width:400px;height:400px;background:radial-gradient(circle,var(--accent-dim) 0%,transparent 60%);pointer-events:none}
+        .snapshot-card-inner{position:relative;z-index:1}
+        .snapshot-tag{display:inline-block;font-family:var(--mono);font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:2px;color:var(--accent);padding:4px 10px;background:var(--accent-dim);border-radius:6px;margin-bottom:16px}
+        .snapshot-card h3{font-size:1.6rem;font-weight:900;letter-spacing:-0.02em;margin-bottom:10px}
+        .snapshot-card h3 span{color:var(--accent)}
+        .snapshot-card p.lead{color:var(--muted);font-size:0.95rem;line-height:1.6;margin-bottom:24px;max-width:560px}
+        .snapshot-features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:28px}
+        .snapshot-feature{display:flex;align-items:flex-start;gap:10px;font-size:0.85rem;color:var(--text)}
+        .snapshot-feature-check{color:var(--accent);font-weight:900;flex-shrink:0;line-height:1.6}
+        .snapshot-pricing{display:flex;flex-wrap:wrap;gap:10px;font-family:var(--mono);font-size:0.75rem;color:var(--muted);margin-bottom:24px}
+        .snapshot-pricing span{padding:6px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px}
+        .snapshot-pricing span strong{color:var(--text);font-weight:700}
+        .snapshot-cta{display:inline-flex;align-items:center;gap:10px;padding:14px 28px;border-radius:10px;background:var(--accent);color:white;text-decoration:none;font-weight:700;font-size:0.95rem;transition:all 0.3s}
+        .snapshot-cta:hover{opacity:0.9;transform:translateY(-1px);box-shadow:0 8px 24px rgba(123,104,238,0.3)}
+        .snapshot-cta-arrow{transition:transform 0.3s}
+        .snapshot-cta:hover .snapshot-cta-arrow{transform:translateX(4px)}
+
         /* Blog */
         .blog-section{padding:60px 0;border-top:1px solid var(--border)}
         .blog-section h2{font-size:1.8rem;font-weight:900;margin-bottom:32px;text-align:center;letter-spacing:-0.02em}
@@ -97,6 +117,7 @@
         <a href="/" class="nav-logo">Sec<span>urva</span></a>
         <div class="nav-links">
             <a href="#scanner">Scan</a>
+            <a href="/snapshot">Snapshot</a>
             <a href="#blog">Blog</a>
             <a href="https://github.com/babakizo420/headerguard" target="_blank" rel="noopener">GitHub</a>
         </div>
@@ -136,6 +157,32 @@
             </a>
         </div>
     </div>
+
+    <section class="snapshot-promo">
+        <div class="snapshot-card">
+            <div class="snapshot-card-inner">
+                <div class="snapshot-tag">Paid Upgrade</div>
+                <h3>Want the <span>full audit?</span></h3>
+                <p class="lead">The free scanner checks security headers + NDPA basics. The Snapshot goes much deeper: public GitHub credential leaks, shadow subdomains, CVE-matched tech stack, DPIA + ROPA templates for NDPC filing, all delivered as a PDF within 24 hours.</p>
+                <div class="snapshot-features">
+                    <div class="snapshot-feature"><span class="snapshot-feature-check">+</span><span>50+ credential patterns scanned across public GitHub</span></div>
+                    <div class="snapshot-feature"><span class="snapshot-feature-check">+</span><span>Infrastructure deep-scan for forgotten pages + exposed repos</span></div>
+                    <div class="snapshot-feature"><span class="snapshot-feature-check">+</span><span>Tech stack matched to NIST CVE database</span></div>
+                    <div class="snapshot-feature"><span class="snapshot-feature-check">+</span><span>NDPA 2023 DPIA + ROPA templates included (Pro tier)</span></div>
+                </div>
+                <div class="snapshot-pricing">
+                    <span><strong>Card</strong> $10</span>
+                    <span><strong>Starter</strong> $29</span>
+                    <span><strong>Pro</strong> $49</span>
+                    <span><strong>Whitelabel</strong> $99</span>
+                </div>
+                <a href="/snapshot" class="snapshot-cta">
+                    See the Snapshot
+                    <span class="snapshot-cta-arrow">&rarr;</span>
+                </a>
+            </div>
+        </div>
+    </section>
 
     <div class="container">
         <section class="blog-section" id="blog">
