@@ -94,6 +94,14 @@ export default {
 // ============================================================
 
 async function handleGumroadWebhook(request, env) {
+  // Rate limit: 30 req/min per IP. Gumroad retries failed webhooks
+  // (up to 5 attempts per sale over ~24h) and multiple sales could
+  // land in the same minute, so the limit is generous. Still enough
+  // to shut down a forged-webhook burst attack.
+  if (await rateLimit(env, 'gumroad', request, 30, 60)) {
+    return jsonResponse({ error: 'rate limited' }, 429);
+  }
+
   const body = await request.text();
 
   // Parse form-encoded payload (Gumroad uses x-www-form-urlencoded)
@@ -263,6 +271,24 @@ function corsResponse() {
   return new Response(null, { status: 204, headers: corsHeaders() });
 }
 
+// Rate limiter backed by the LOCKS KV binding. Buckets per
+// CF-Connecting-IP with a fixed-window counter. Returns true when the
+// request should be rejected. Caller is expected to 429 when true.
+//
+// LOCKS KV already exists (used for idempotency locks on webhooks).
+// Rate-limit keys use the 'rl:' prefix to namespace away from
+// idempotency keys ('gumroad:*', 'paystack:*').
+async function rateLimit(env, keyPrefix, request, maxReq, windowSec) {
+  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  const key = `rl:${keyPrefix}:${ip}`;
+  const current = parseInt((await env.LOCKS.get(key)) || '0', 10);
+  if (current >= maxReq) return true;
+  // Window is set on first request in window; subsequent puts refresh
+  // the value but KV TTL is not reset here (by design: fixed-window).
+  await env.LOCKS.put(key, String(current + 1), { expirationTtl: windowSec });
+  return false;
+}
+
 // SSRF guard: reject any hostname that resolves to a non-public space
 // (loopback, RFC1918, link-local, cloud metadata, reserved TLDs).
 // Hostname-level check — not a DNS resolve — because Workers can't
@@ -308,6 +334,16 @@ function isPublicScanTarget(hostname) {
 async function handleIntake(request, env) {
   const origin = request.headers.get('Origin');
   const cors = corsHeaders(origin);
+
+  // Rate limit: 10 req/min per IP. Intake form submits are one-shot
+  // per customer, so 10/min is roomy for legit users and tight enough
+  // to kill scripted abuse.
+  if (await rateLimit(env, 'intake', request, 10, 60)) {
+    return new Response(JSON.stringify({ error: 'rate limited' }), {
+      status: 429,
+      headers: { 'Content-Type': 'application/json', 'Retry-After': '60', ...cors },
+    });
+  }
 
   // P1 hotfix (2026-04-20 audit): fail closed when Origin is missing.
   // Previous logic only rejected when Origin was set AND non-allowlisted —
