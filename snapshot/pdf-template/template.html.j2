@@ -359,6 +359,140 @@
 </section>
 
 <!-- ========================================================= -->
+<!-- SECTION 9 — SECTOR PEER BENCHMARKS (Web2 pattern-lab v1)  -->
+<!-- Sourced from pattern-lab-web2 scanner output.             -->
+<!-- Renders when `web2_findings` key is present in context.   -->
+<!-- No-op when key is absent → safe for reports that don't    -->
+<!-- ingest Web2 scan output.                                  -->
+<!-- ========================================================= -->
+{% if web2_findings %}
+<section class="section">
+  <div class="section-tag">Section 9</div>
+  <h2>Sector Peer Benchmarks</h2>
+
+  <p>Findings below come from Securva's Web2 pattern-lab scanner — a set of sector-specific security patterns we've observed across peers in your industry. Each finding is benchmarked against the Securva phase-intel dataset so you can see how your infrastructure compares to similarly-sized organizations in your sector.</p>
+
+  {% for finding in web2_findings %}
+  <div class="web2-finding">
+    <h3>
+      <span class="badge {{ finding.severity_prior }}">{{ finding.severity_prior | title }}</span>
+      <span class="finding-title">{{ finding.pattern | replace('-', ' ') | title }}</span>
+    </h3>
+
+    <table class="data-table">
+      <tbody>
+        <tr>
+          <th style="width: 22%;">Severity &middot; Confidence</th>
+          <td>
+            <span class="badge {{ finding.severity_prior }}">{{ finding.severity_prior | title }}</span>
+            /
+            <span class="badge {{ 'pass' if finding.confidence == 'high' else 'warn' if finding.confidence == 'medium' else 'info' }}">{{ finding.confidence | title }}</span>
+          </td>
+        </tr>
+        <tr>
+          <th>Sector &middot; Stack</th>
+          <td><code>{{ finding.sector }}</code> &middot; <code>{{ finding.stack_fingerprint | default('any') }}</code></td>
+        </tr>
+        <tr>
+          <th>Finding</th>
+          <td>{{ finding.evidence }}</td>
+        </tr>
+
+        {%- set peer = finding.peer_stats or {} -%}
+        {% if peer.peer_org_count and peer.peer_org_count >= 3 %}
+        <tr>
+          <th>Peer benchmark</th>
+          <td>
+            Scanned {{ peer.peer_org_count }} peer organizations in the <code>{{ finding.sector }}</code> sector.
+            {{ (peer.peer_hit_rate * 100) | round(0, 'floor') | int }}% show this pattern.
+            {% if peer.mean_hsts_pct is defined %}Mean HSTS coverage across peers: <strong>{{ peer.mean_hsts_pct }}%</strong>.{% endif %}
+          </td>
+        </tr>
+        <tr>
+          <th>Peer sample</th>
+          <td><code>{{ peer.sector_sample | join(', ') }}</code></td>
+        </tr>
+        {% else %}
+        <tr>
+          <th>Peer benchmark</th>
+          <td><em>{{ peer.note | default('Sector sample too small to benchmark — peer stats will populate as we scan more organizations.') }}</em></td>
+        </tr>
+        {% endif %}
+
+        {%- set extra = finding.extra or {} -%}
+        {% if extra.target_host_count is defined %}
+        <tr>
+          <th>Target coverage</th>
+          <td>
+            {{ extra.affected_hosts | length }} of {{ extra.target_host_count }} scanned hosts show this pattern
+            {%- if extra.target_hsts_pct is defined %} (target HSTS coverage: <strong>{{ extra.target_hsts_pct }}%</strong>){%- endif -%}.
+            {% if extra.outlier_flag %}
+            <br><strong class="fail">OUTLIER:</strong> your coverage is worse than the peer median. This is a pre-baked disclosure angle worth addressing this week.
+            {% endif %}
+          </td>
+        </tr>
+        {% endif %}
+
+        {% if extra.customer_facing_missing %}
+        <tr>
+          <th>Customer-facing hosts</th>
+          <td class="fail">
+            {{ extra.customer_facing_missing | length }} customer-facing subdomain(s) are missing this control (e.g. login/portal/retail/mobile). These are priority-1 fixes.
+          </td>
+        </tr>
+        {% endif %}
+
+        {% if extra.legacy_stack_co_occurrence %}
+        <tr>
+          <th>Co-occurring signals</th>
+          <td><em>Legacy-stack co-occurrence detected — same organization also shows IIS/ASP.NET legacy stack in Securva phase-intel. Combined signal elevates severity.</em></td>
+        </tr>
+        {% endif %}
+
+        {% if extra.affected_hosts %}
+        <tr>
+          <th>Affected hosts (sample)</th>
+          <td>
+            <ul class="affected-list">
+              {% for host in extra.affected_hosts[:8] %}
+              <li><code>{{ host }}</code></li>
+              {% endfor %}
+              {% if extra.affected_hosts | length > 8 %}
+              <li><em>… and {{ extra.affected_hosts | length - 8 }} more</em></li>
+              {% endif %}
+            </ul>
+          </td>
+        </tr>
+        {% endif %}
+
+        {% if extra.density is defined %}
+        <tr>
+          <th>Dork-runner density</th>
+          <td><code>density={{ extra.density }}</code>
+            {% if extra.providers %} &middot; providers: <code>{{ extra.providers | join(', ') }}</code>{% endif %}
+            {% if extra.osint_triage_liveness %} &middot; liveness: <strong>{{ extra.osint_triage_liveness }}</strong>{% endif %}
+          </td>
+        </tr>
+        {% endif %}
+
+        <tr>
+          <th>Reference</th>
+          <td><code>{{ finding.pattern }}.md</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  {% endfor %}
+
+  <div class="upsell">
+    <h3>Want ongoing peer-benchmarked monitoring?</h3>
+    <p>Securva Snapshot Pro ($49) includes a 30-day monitoring window that re-scans your infrastructure weekly and alerts you when your peer benchmark drifts or a new pattern surfaces for your sector. Useful if you&rsquo;re trying to close NDPA gaps ahead of a regulator audit.</p>
+    <a href="https://securva.net/snapshot?tier=pro" class="cta">Upgrade to Snapshot Pro</a>
+  </div>
+</section>
+{% endif %}
+
+<!-- ========================================================= -->
 <!-- BACK MATTER                                               -->
 <!-- ========================================================= -->
 <section class="section">
