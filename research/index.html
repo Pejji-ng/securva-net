@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Securva Research — The State of Nigerian Enterprise Infrastructure Security</title>
+    <meta name="description" content="Ongoing infrastructure-mapping research across 96 Nigerian organizations, 2,730 hosts, 6 sectors. Public aggregate data, methodology, and sector rollups. Updated weekly.">
+    <meta property="og:title" content="Securva Research — The State of Nigerian Enterprise Infrastructure Security">
+    <meta property="og:description" content="96 Nigerian organizations. 2,730 live hosts mapped. Sector-by-sector HSTS coverage, legacy stack flags, and infrastructure patterns. The dataset nobody else has.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Securva Research">
+    <meta property="og:image" content="https://securva.net/images/og-research.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://securva.net/research/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Securva Research — Nigerian Enterprise Infrastructure Security">
+    <meta name="twitter:description" content="96 orgs. 2,730 hosts. Sector-level HSTS + legacy-stack data. Updated weekly, free aggregate, gated per-org detail.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,600&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#030308;--surface:#0A0A12;--card:#101020;--border:#1a1a30;--text:#F0EDF7;--muted:#6a6680;--accent:#7B68EE;--green:#4ade80;--red:#f87171;--amber:#fbbf24;--font:'Cabinet Grotesk',system-ui,sans-serif;--serif:'Newsreader',Georgia,serif;--mono:'IBM Plex Mono',monospace}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:var(--font);background:var(--bg);color:var(--text)}
+
+        .nav{padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+        .nav-logo{font-weight:900;font-size:1.3rem;color:var(--text);text-decoration:none;letter-spacing:-0.02em}
+        .nav-logo span{color:var(--accent)}
+        .nav-links{display:flex;gap:24px}
+        .nav-links a{color:var(--muted);text-decoration:none;font-size:0.85rem;font-weight:500;transition:color 0.3s}
+        .nav-links a:hover{color:var(--text)}
+        .nav-links a.active{color:var(--accent)}
+
+        .container{max-width:880px;margin:0 auto;padding:60px 24px 80px}
+        .hero-label{font-family:var(--mono);font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:3px;color:var(--accent);margin-bottom:16px}
+        h1{font-size:clamp(2.2rem,5.5vw,3.2rem);font-weight:900;letter-spacing:-0.03em;line-height:1.1;margin-bottom:20px}
+        h1 span{color:var(--accent)}
+        .subtitle{font-family:var(--serif);font-size:1.15rem;line-height:1.7;color:#c8c4d0;margin-bottom:28px;max-width:640px}
+        .updated{font-family:var(--mono);font-size:0.75rem;color:var(--muted);margin-bottom:48px}
+
+        .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:56px}
+        .stat-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px 16px;text-align:center}
+        .stat-big{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:900;color:var(--accent);letter-spacing:-0.02em;line-height:1}
+        .stat-label{font-family:var(--mono);font-size:0.7rem;color:var(--muted);margin-top:8px;text-transform:uppercase;letter-spacing:1.5px}
+
+        h2{font-size:1.85rem;font-weight:800;margin:56px 0 20px;letter-spacing:-0.02em;border-left:3px solid var(--accent);padding-left:18px}
+        h3{font-size:1.2rem;font-weight:700;margin:36px 0 10px;color:var(--accent)}
+        p{font-family:var(--serif);font-size:1.05rem;line-height:1.75;color:#c8c4d0;margin-bottom:20px}
+        strong{color:var(--text)}
+
+        .sector-table{width:100%;border-collapse:collapse;margin:20px 0 40px;font-family:var(--font)}
+        .sector-table th,.sector-table td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--border);font-size:0.92rem}
+        .sector-table th{color:var(--muted);font-weight:700;font-size:0.72rem;text-transform:uppercase;letter-spacing:1px}
+        .sector-table td.num{font-family:var(--mono);text-align:right}
+        .sector-bar-wrap{display:flex;align-items:center;gap:10px;min-width:160px}
+        .sector-bar{flex:1;height:6px;background:var(--surface);border-radius:3px;overflow:hidden;position:relative}
+        .sector-bar-fill{height:100%;border-radius:3px;transition:width 0.6s ease}
+        .sector-bar-fill.low{background:var(--red)}
+        .sector-bar-fill.mid{background:var(--amber)}
+        .sector-bar-fill.high{background:var(--green)}
+        .sector-bar-label{font-family:var(--mono);font-size:0.75rem;color:var(--muted);min-width:40px;text-align:right}
+
+        .orgs-table{width:100%;border-collapse:collapse;margin:20px 0 40px;font-family:var(--font);font-size:0.88rem}
+        .orgs-table th,.orgs-table td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--border)}
+        .orgs-table th{color:var(--muted);font-weight:700;font-size:0.7rem;text-transform:uppercase;letter-spacing:1px}
+        .orgs-table td.num{font-family:var(--mono);text-align:right}
+        .orgs-table td.org-name{font-weight:700;color:var(--text)}
+        .orgs-table tr.bad td.num.hsts{color:var(--red);font-weight:700}
+        .orgs-table tr.mid td.num.hsts{color:var(--amber);font-weight:700}
+        .orgs-table tr.ok td.num.hsts{color:var(--green);font-weight:700}
+        .sector-pill{display:inline-block;padding:3px 10px;background:var(--accent-dim,rgba(123,104,238,0.12));color:var(--accent);border-radius:10px;font-family:var(--mono);font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;font-weight:600}
+        .sector-pill.banking{background:rgba(248,113,113,0.12);color:#f87171}
+        .sector-pill.fintech{background:rgba(74,222,128,0.12);color:#4ade80}
+        .sector-pill.healthcare{background:rgba(251,191,36,0.12);color:#fbbf24}
+        .sector-pill.telecom{background:rgba(96,165,250,0.12);color:#60a5fa}
+        .sector-pill.government{background:rgba(192,132,252,0.12);color:#c084fc}
+        .sector-pill.ecommerce-ng{background:rgba(244,114,182,0.12);color:#f472b6}
+
+        .methodology-note{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:10px;padding:22px 24px;margin:32px 0;font-size:0.95rem}
+        .methodology-note p{margin-bottom:12px;font-size:0.95rem}
+        .methodology-note p:last-child{margin-bottom:0}
+
+        .cta-box{background:linear-gradient(135deg,var(--card) 0%,#0d0d1c 100%);border:1px solid var(--border);border-radius:18px;padding:36px 28px;margin:48px 0;position:relative;overflow:hidden}
+        .cta-box::before{content:"";position:absolute;top:-40%;right:-20%;width:360px;height:360px;background:radial-gradient(circle,rgba(123,104,238,0.12) 0%,transparent 60%);pointer-events:none}
+        .cta-box-inner{position:relative;z-index:1}
+        .cta-box h3{color:var(--text);margin-top:0}
+        .cta-box p{font-family:var(--font);font-size:0.95rem;margin-bottom:20px}
+        .cta-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:var(--accent);color:white;text-decoration:none;font-weight:700;font-size:0.95rem;border-radius:10px;transition:all 0.3s}
+        .cta-btn:hover{opacity:0.9;transform:translateY(-1px);box-shadow:0 8px 24px rgba(123,104,238,0.3)}
+
+        .footer{padding:48px 24px;border-top:1px solid var(--border);text-align:center}
+        .footer p{font-family:var(--font);font-size:0.8rem;color:var(--muted);margin:0}
+        .footer a{color:var(--accent);text-decoration:none}
+
+        @media(max-width:600px){
+            .stat-grid{grid-template-columns:repeat(2,1fr)}
+            .nav-links{gap:14px}
+            .sector-table,.orgs-table{font-size:0.82rem}
+            .sector-table th,.sector-table td,.orgs-table th,.orgs-table td{padding:10px 8px}
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="nav-logo">Sec<span>urva</span></a>
+        <div class="nav-links">
+            <a href="/#scanner">Scan</a>
+            <a href="/snapshot">Snapshot</a>
+            <a href="/research/" class="active">Research</a>
+            <a href="/blog">Blog</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero-label">Ongoing infrastructure research</div>
+        <h1>The state of Nigerian enterprise <span>infrastructure security</span></h1>
+        <p class="subtitle">Measured, not assumed. We map live Nigerian infrastructure — banks, fintechs, healthcare, government, telecom, e-commerce — and publish the aggregate data so the country has an honest picture of where the attack surface actually is.</p>
+        <div class="updated">Updated 2026-04-21 &middot; Weekly refresh &middot; Free aggregate, paid per-org via <a href="/snapshot" style="color:var(--accent);text-decoration:none">Snapshot</a></div>
+
+        <div class="stat-grid">
+            <div class="stat-box">
+                <div class="stat-big">96</div>
+                <div class="stat-label">Organizations mapped</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-big">2,730</div>
+                <div class="stat-label">Hosts mapped</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-big">6</div>
+                <div class="stat-label">Sectors covered</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-big">31</div>
+                <div class="stat-label">Systemic findings</div>
+            </div>
+        </div>
+
+        <h2>Why this matters</h2>
+
+        <p>Most "Nigerian cybersecurity" coverage is either breach-chasing (what just happened to Sterling, Flutterwave, Patricia) or vendor-marketing (why you need our MSSP). Neither answers the foundational question: <strong>across the sectors that matter, what does Nigerian enterprise infrastructure actually look like?</strong></p>
+
+        <p>We built the dataset to answer it. DNS enumeration, live-host probing, HSTS coverage analysis, legacy-stack flagging, ASN mapping — applied consistently to 96 Nigerian organizations across banking, fintech, healthcare, telecom, government, and e-commerce. What follows is the aggregate. No exploitation. No speculation. Just what a non-privileged observer can see.</p>
+
+        <h2>Sector rollup</h2>
+
+        <table class="sector-table">
+            <thead>
+                <tr><th>Sector</th><th>Orgs</th><th>Hosts</th><th>Avg HSTS coverage</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="sector-pill banking">Banking</span></td>
+                    <td class="num">9</td>
+                    <td class="num">933</td>
+                    <td>
+                        <div class="sector-bar-wrap">
+                            <div class="sector-bar"><div class="sector-bar-fill low" style="width:36.5%"></div></div>
+                            <span class="sector-bar-label">36.5%</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="sector-pill telecom">Telecom</span></td>
+                    <td class="num">9</td>
+                    <td class="num">248</td>
+                    <td>
+                        <div class="sector-bar-wrap">
+                            <div class="sector-bar"><div class="sector-bar-fill low" style="width:31.7%"></div></div>
+                            <span class="sector-bar-label">31.7%</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="sector-pill government">Government</span></td>
+                    <td class="num">4</td>
+                    <td class="num">239</td>
+                    <td>
+                        <div class="sector-bar-wrap">
+                            <div class="sector-bar"><div class="sector-bar-fill low" style="width:30%"></div></div>
+                            <span class="sector-bar-label">30.0%</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="sector-pill healthcare">Healthcare</span></td>
+                    <td class="num">4</td>
+                    <td class="num">122</td>
+                    <td>
+                        <div class="sector-bar-wrap">
+                            <div class="sector-bar"><div class="sector-bar-fill low" style="width:12.3%"></div></div>
+                            <span class="sector-bar-label">12.3%</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="sector-pill fintech">Fintech</span></td>
+                    <td class="num">4</td>
+                    <td class="num">117</td>
+                    <td>
+                        <div class="sector-bar-wrap">
+                            <div class="sector-bar"><div class="sector-bar-fill mid" style="width:51.3%"></div></div>
+                            <span class="sector-bar-label">51.3%</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="sector-pill ecommerce-ng">E-commerce</span></td>
+                    <td class="num">2</td>
+                    <td class="num">104</td>
+                    <td>
+                        <div class="sector-bar-wrap">
+                            <div class="sector-bar"><div class="sector-bar-fill low" style="width:34.5%"></div></div>
+                            <span class="sector-bar-label">34.5%</span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p><strong>The punchline</strong>: healthcare is an outlier on the bad side (12.3% avg HSTS across 122 hosts — the sector of patient data is the sector with the worst baseline). Fintech is the outlier on the good side (51.3% — regulatory pressure from CBN appears to have moved the needle). Banking, telecom, government, e-commerce are all in the 30-37% range — comfortably below what "reasonable security hygiene" looks like in 2026.</p>
+
+        <h2>Lowest HSTS coverage — orgs with material footprint</h2>
+
+        <p>The orgs below have 6+ live hosts AND measurable HSTS coverage. Sorted worst-first. This is the list that matters operationally — small orgs fly under any attacker's radar, but anyone with 10+ subdomains IS on the radar and low HSTS is where attackers pivot.</p>
+
+        <table class="orgs-table">
+            <thead>
+                <tr><th>Organization</th><th>Sector</th><th>Hosts</th><th>HSTS</th><th>Legacy IIS</th></tr>
+            </thead>
+            <tbody>
+                <tr class="bad"><td class="org-name">Hygeia HMO</td><td><span class="sector-pill healthcare">Healthcare</span></td><td class="num">54</td><td class="num hsts">0%</td><td class="num">0</td></tr>
+                <tr class="bad"><td class="org-name">54gene</td><td><span class="sector-pill healthcare">Healthcare</span></td><td class="num">50</td><td class="num hsts">0%</td><td class="num">0</td></tr>
+                <tr class="bad"><td class="org-name">NCC</td><td><span class="sector-pill government">Government</span></td><td class="num">103</td><td class="num hsts">5%</td><td class="num">14</td></tr>
+                <tr class="bad"><td class="org-name">NITDA</td><td><span class="sector-pill government">Government</span></td><td class="num">90</td><td class="num hsts">6%</td><td class="num">2</td></tr>
+                <tr class="bad"><td class="org-name">Zenith Bank</td><td><span class="sector-pill banking">Banking</span></td><td class="num">59</td><td class="num hsts">10%</td><td class="num">18</td></tr>
+                <tr class="bad"><td class="org-name">Helium Health</td><td><span class="sector-pill healthcare">Healthcare</span></td><td class="num">6</td><td class="num hsts">16%</td><td class="num">0</td></tr>
+                <tr class="bad"><td class="org-name">9mobile</td><td><span class="sector-pill telecom">Telecom</span></td><td class="num">35</td><td class="num hsts">17%</td><td class="num">0</td></tr>
+                <tr class="bad"><td class="org-name">Jumia</td><td><span class="sector-pill ecommerce-ng">E-commerce</span></td><td class="num">79</td><td class="num hsts">17%</td><td class="num">0</td></tr>
+                <tr class="mid"><td class="org-name">Kuda</td><td><span class="sector-pill fintech">Fintech</span></td><td class="num">44</td><td class="num hsts">25%</td><td class="num">3</td></tr>
+                <tr class="mid"><td class="org-name">Reliance HMO</td><td><span class="sector-pill healthcare">Healthcare</span></td><td class="num">12</td><td class="num hsts">33%</td><td class="num">0</td></tr>
+                <tr class="mid"><td class="org-name">GTBank</td><td><span class="sector-pill banking">Banking</span></td><td class="num">81</td><td class="num hsts">38%</td><td class="num">18</td></tr>
+                <tr class="mid"><td class="org-name">Access Bank</td><td><span class="sector-pill banking">Banking</span></td><td class="num">381</td><td class="num hsts">40%</td><td class="num">19</td></tr>
+                <tr class="mid"><td class="org-name">Konga</td><td><span class="sector-pill ecommerce-ng">E-commerce</span></td><td class="num">25</td><td class="num hsts">52%</td><td class="num">0</td></tr>
+                <tr class="mid"><td class="org-name">First Bank</td><td><span class="sector-pill banking">Banking</span></td><td class="num">51</td><td class="num hsts">58%</td><td class="num">14</td></tr>
+                <tr class="mid"><td class="org-name">CBN</td><td><span class="sector-pill government">Government</span></td><td class="num">42</td><td class="num hsts">59%</td><td class="num">8</td></tr>
+                <tr class="ok"><td class="org-name">MTN</td><td><span class="sector-pill telecom">Telecom</span></td><td class="num">56</td><td class="num hsts">69%</td><td class="num">1</td></tr>
+                <tr class="ok"><td class="org-name">Flutterwave</td><td><span class="sector-pill fintech">Fintech</span></td><td class="num">37</td><td class="num hsts">89%</td><td class="num">1</td></tr>
+                <tr class="ok"><td class="org-name">Paystack</td><td><span class="sector-pill fintech">Fintech</span></td><td class="num">35</td><td class="num hsts">91%</td><td class="num">0</td></tr>
+            </tbody>
+        </table>
+
+        <p><strong>What this table tells you</strong>: two healthcare orgs (Hygeia HMO + 54gene) have exactly zero HSTS coverage across 100+ hosts combined. Two government regulators (NCC + NITDA) are effectively unhardened at 5-6% coverage. The biggest Nigerian bank by host count (Access Bank at 381 live hosts) sits at 40% — better than peers, still not good. The fintech gap between Kuda (25%) and Flutterwave/Paystack (89-91%) shows what regulatory + institutional maturity does to a sector.</p>
+
+        <h2>Methodology</h2>
+
+        <div class="methodology-note">
+            <p><strong>What we do:</strong> DNS enumeration (Amass + DNSX + crt.sh), live-host probing (httpx), HSTS + security-header coverage analysis (per-host), legacy-stack fingerprinting (ASP.NET / IIS version detection from response signatures), ASN ownership mapping, sector classification.</p>
+            <p><strong>What we don't do:</strong> exploitation, authenticated scanning, internal-network probing, data extraction, or any form of active intrusion. Everything on this page is observable from a non-privileged outside position — the same position a potential attacker has on day one.</p>
+            <p><strong>Cadence:</strong> portal refreshes weekly. Methodology details in the <a href="/blog/nigerian-attack-surface-2026-04.html" style="color:var(--accent)">companion blog post</a>. Quarterly deep-dive PDF reports start Q2 2026.</p>
+        </div>
+
+        <h2>What the data means for you</h2>
+
+        <h3>If you run infrastructure for one of the 96 orgs above</h3>
+        <p>Your organization is on the list. The aggregate is public; the per-org detail is not. If you want the full 42-checkpoint scan for your organization — HSTS coverage per host, legacy-stack list, exposed-subdomain map, NDPA 2023 compliance gaps, remediation roadmap — that's our <a href="/snapshot" style="color:var(--accent)">Securva Snapshot</a> product. Starts at $10 USD.</p>
+
+        <h3>If you're a journalist, researcher, or regulator</h3>
+        <p>The data is free to cite. Email <a href="mailto:hello@securva.net" style="color:var(--accent)">hello@securva.net</a> with the specific sector / time window you need and we'll send the backing data. We're also drafting a quarterly "State of Nigerian Infrastructure Security" PDF report — first edition lands Q2 2026. Email to be on the notification list.</p>
+
+        <h3>If you're one of the orgs above and want to understand what you actually look like</h3>
+        <p>Same email. We do coordinated first-party disclosure for free on request — no public shaming, no media, no monetization of the finding. Rotation window standard 14 days.</p>
+
+        <div class="cta-box">
+            <div class="cta-box-inner">
+                <h3>Securva Snapshot</h3>
+                <p>42-check security + NDPA 2023 audit for any Nigerian organization. PDF report delivered within 24 hours. Starts at $10 USD. Refundable if not useful.</p>
+                <a href="/snapshot" class="cta-btn">See the Snapshot &rarr;</a>
+            </div>
+        </div>
+
+        <h2>Data growth</h2>
+
+        <p>This is a living dataset. It grows as we scan. Current coverage spans 6 sectors; Phase 4 (fintech deep-scan) is in progress and will add roughly 15-20 more organizations. Phase 5 (insurance) is next. Phase 6 (edtech) after that. Target: 200+ orgs by end of Q2 2026, 500+ by year-end. Every Phase-N run expands the public portal you're reading now.</p>
+
+        <p>If there's a specific organization or sector you think should be on the list, email <a href="mailto:hello@securva.net" style="color:var(--accent)">hello@securva.net</a>. Additions driven by user requests + our own breach-response rotation.</p>
+
+    </div>
+
+    <footer class="footer">
+        <p>Securva Research &middot; Built by <a href="/">Securva</a> at <a href="https://pejji.com">Pejji Agency</a> &middot; <a href="mailto:hello@securva.net">hello@securva.net</a></p>
+    </footer>
+</body>
+</html>
