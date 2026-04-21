@@ -32,6 +32,8 @@ Endpoint:
 
 import base64
 import os
+import shutil
+import subprocess
 import sys
 import tempfile
 import time
@@ -49,12 +51,70 @@ from orchestrator import orchestrate  # noqa: E402
 from render import prepare_template_context, render_html, render_pdf  # noqa: E402
 
 
-def render_pdf_from_json(scan_json: dict, output_path: str, tier: str = "Starter") -> None:
-    """Convenience wrapper: report JSON -> HTML -> PDF."""
-    ctx = prepare_template_context(scan_json)
+def render_pdf_from_json(
+    scan_json: dict,
+    output_path: str,
+    tier: str = "Starter",
+    web2_jsonl: Optional[str] = None,
+) -> None:
+    """Convenience wrapper: report JSON -> HTML -> PDF.
+
+    v1.0 (2026-04-21): optional `web2_jsonl` forwards a pattern-lab-web2 scanner
+    output path into prepare_template_context so Section 9 (Sector Peer
+    Benchmarks) renders when findings are present.
+    """
+    ctx = prepare_template_context(scan_json, web2_jsonl=web2_jsonl)
     ctx["tier"] = tier
     html = render_html(ctx)
     render_pdf(html, output_path)
+
+
+# Path to pattern-lab-web2 scanner. Overridable via env for non-default deploys.
+WEB2_SCANNER_PATH = os.environ.get(
+    "WEB2_SCANNER_PATH",
+    "/home/babakinzo/bounty/pattern-lab-web2/scanner-web2.py",
+)
+WEB2_SCANNER_TIMEOUT_SEC = 60
+
+
+def _invoke_web2_scanner(domain: str) -> tuple[Optional[str], Optional[str]]:
+    """Run scanner-web2.py for this domain and return (jsonl_path, tmpdir).
+
+    Returns (None, None) on any failure — the render path's `{% if web2_findings %}`
+    guard in the template means absent JSONL is safe (report renders without Section 9).
+
+    Caller is responsible for cleaning up `tmpdir` once render is complete.
+    """
+    scanner_path = Path(WEB2_SCANNER_PATH)
+    if not scanner_path.exists():
+        print(f"WARN: web2 scanner not found at {scanner_path}", file=sys.stderr)
+        return None, None
+    try:
+        tmpdir = tempfile.mkdtemp(prefix="web2-scan-")
+        result = subprocess.run(
+            ["python3", str(scanner_path), "--target", domain, "--out-dir", tmpdir],
+            capture_output=True,
+            text=True,
+            timeout=WEB2_SCANNER_TIMEOUT_SEC,
+        )
+        # Exit codes 0 and 1 are both legitimate (1 = high-conf finding present).
+        # Only orchestrator failures (exit 2) or timeouts are degrade-to-None.
+        if result.returncode == 2:
+            print(f"WARN: web2 scanner orchestrator error: {result.stderr[:200]}", file=sys.stderr)
+            shutil.rmtree(tmpdir, ignore_errors=True)
+            return None, None
+        jsonls = list(Path(tmpdir).glob("scan-results-*.jsonl"))
+        if not jsonls:
+            print(f"WARN: web2 scanner produced no JSONL output", file=sys.stderr)
+            shutil.rmtree(tmpdir, ignore_errors=True)
+            return None, None
+        return str(jsonls[0]), tmpdir
+    except subprocess.TimeoutExpired:
+        print(f"WARN: web2 scanner exceeded {WEB2_SCANNER_TIMEOUT_SEC}s timeout", file=sys.stderr)
+        return None, None
+    except Exception as e:
+        print(f"WARN: web2 scanner invocation failed: {type(e).__name__}: {e}", file=sys.stderr)
+        return None, None
 
 
 # Reject absurdly large PDFs (our template produces ~1-5 MB; anything over
@@ -120,11 +180,22 @@ async def scan_and_render(
     except Exception as e:
         raise HTTPException(500, f"Scan failed: {e}")
 
+    # v1.0 (2026-04-21): fire the pattern-lab-web2 scanner in-line. The JSONL
+    # gets passed into render so Section 9 (Sector Peer Benchmarks) renders when
+    # findings exist. Scanner failure degrades gracefully — report renders
+    # without Section 9 rather than failing the whole /scan-and-render call.
+    web2_jsonl, web2_tmpdir = _invoke_web2_scanner(req.domain)
+
     pdf_path = None
     try:
         with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp:
             pdf_path = tmp.name
-        render_pdf_from_json(scan_json, output_path=pdf_path, tier=req.tier)
+        render_pdf_from_json(
+            scan_json,
+            output_path=pdf_path,
+            tier=req.tier,
+            web2_jsonl=web2_jsonl,
+        )
 
         with open(pdf_path, "rb") as f:
             pdf_bytes = f.read()
@@ -147,6 +218,8 @@ async def scan_and_render(
                 os.unlink(pdf_path)
             except OSError:
                 pass
+        if web2_tmpdir:
+            shutil.rmtree(web2_tmpdir, ignore_errors=True)
 
     runtime_ms = int((time.monotonic() - start) * 1000)
 
@@ -156,4 +229,5 @@ async def scan_and_render(
         "pdf_bytes": len(pdf_bytes),
         "scan_json": scan_json,
         "runtime_ms": runtime_ms,
+        "web2_findings_included": bool(web2_jsonl),
     }
