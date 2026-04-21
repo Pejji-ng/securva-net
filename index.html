@@ -105,10 +105,23 @@
         .footer p{font-size:0.75rem;color:var(--muted)}
         .footer a{color:var(--accent);text-decoration:none}
 
+        @media(max-width:780px){
+            .nav{padding:16px 18px;gap:12px}
+            .nav-logo{font-size:1.05rem}
+            .nav-links{gap:14px;flex-wrap:wrap;justify-content:flex-end}
+            .nav-links a{font-size:0.78rem}
+            .nav-links a.hide-mobile{display:none}
+        }
         @media(max-width:600px){
             .scan-input{flex-direction:column}
             .scan-btn{width:100%}
-            .nav-links{gap:16px}
+            .nav{padding:14px 14px;gap:10px}
+            .nav-logo{font-size:0.98rem}
+            .nav-links{gap:12px}
+            .nav-links a{font-size:0.74rem}
+        }
+        @media(max-width:380px){
+            .nav-links a.hide-xs{display:none}
         }
     </style>
 </head>
@@ -119,8 +132,8 @@
             <a href="#scanner">Scan</a>
             <a href="/snapshot">Snapshot</a>
             <a href="/research/">Research</a>
-            <a href="#blog">Blog</a>
-            <a href="https://github.com/babakizo420/headerguard" target="_blank" rel="noopener">GitHub</a>
+            <a href="#blog" class="hide-xs">Blog</a>
+            <a href="https://github.com/babakizo420/headerguard" target="_blank" rel="noopener" class="hide-mobile">GitHub</a>
         </div>
     </nav>
 
