@@ -41,11 +41,44 @@ def load_orchestrator_output(domain: str | None, json_path: str | None) -> dict:
     raise ValueError("Must provide either --domain or --json")
 
 
-def prepare_template_context(report: dict) -> dict:
+def _load_web2_findings(web2_jsonl: str | None) -> list[dict]:
+    """Optional Web2 pattern-lab scanner output loader.
+
+    If `web2_jsonl` is provided AND the file exists, parse the JSONL and return
+    a list of finding dicts. Template's Section 9 renders only when this list
+    is non-empty. Missing file or empty list → Section 9 renders as no-op.
+    """
+    if not web2_jsonl:
+        return []
+    try:
+        path = Path(web2_jsonl)
+        if not path.exists():
+            return []
+        findings = []
+        with open(path) as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    findings.append(json.loads(line))
+                except json.JSONDecodeError:
+                    continue
+        return findings
+    except Exception:
+        return []
+
+
+def prepare_template_context(report: dict, web2_jsonl: str | None = None) -> dict:
     """
     Transform the orchestrator output into the context dict Jinja2 expects.
     Adds convenience fields (scan_date formatted, report_id, etc) that the
     template uses directly.
+
+    v1.0 (2026-04-21): optional `web2_jsonl` argument attaches pattern-lab-web2
+    scanner output under the `web2_findings` key, which drives Section 9 of
+    the template (Sector Peer Benchmarks). When absent or empty, Section 9
+    renders as no-op via `{% if web2_findings %}` guard.
     """
     generated = report.get("generated_at_utc", "")
     try:
@@ -59,6 +92,7 @@ def prepare_template_context(report: dict) -> dict:
         "scan_date": scan_date,
         "sections": report.get("sections", {}),
         "tier": report.get("tier", "Starter (NGN 30,000)"),
+        "web2_findings": _load_web2_findings(web2_jsonl),
     }
 
 
@@ -101,13 +135,18 @@ def main():
     src.add_argument("--json", help="Pre-computed orchestrator JSON file")
     parser.add_argument("--output", help="Output PDF path")
     parser.add_argument("--html-only", help="Render HTML only to this path, skip PDF generation")
+    parser.add_argument("--web2-jsonl", dest="web2_jsonl",
+                        help="Optional: pattern-lab-web2 scanner output JSONL. "
+                             "When provided, Section 9 (Sector Peer Benchmarks) renders.")
     args = parser.parse_args()
 
     print("[+] loading orchestrator output...", file=sys.stderr)
     report = load_orchestrator_output(args.domain, args.json)
 
     print("[+] preparing template context...", file=sys.stderr)
-    context = prepare_template_context(report)
+    context = prepare_template_context(report, web2_jsonl=args.web2_jsonl)
+    if context.get("web2_findings"):
+        print(f"[+] web2_findings attached: {len(context['web2_findings'])}", file=sys.stderr)
 
     print(f"[+] rendering HTML for {context['domain']} ({context['report_id']})...", file=sys.stderr)
     html = render_html(context)
