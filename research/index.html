@@ -101,29 +101,50 @@
         }
 
         /* Phase 2: filter UI */
-        .filter-bar{display:none;flex-direction:column;gap:12px;margin:16px 0 20px;padding:16px;background:var(--card);border:1px solid var(--border);border-radius:12px}
+        .filter-bar{display:none;flex-direction:column;gap:14px;margin:20px 0 24px;padding:18px 20px;background:var(--card);border:1px solid var(--border);border-radius:14px}
         .filter-bar.js-enabled{display:flex}
         .filter-search-wrap{position:relative}
-        .filter-search{width:100%;padding:10px 14px 10px 38px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--font);font-size:0.9rem;outline:none;transition:border-color 0.2s}
+        .filter-search{width:100%;padding:11px 14px 11px 40px;background:var(--surface);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:var(--font);font-size:0.92rem;outline:none;transition:border-color 0.2s}
         .filter-search:focus{border-color:var(--accent)}
         .filter-search::placeholder{color:var(--muted)}
-        .filter-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:0.9rem;pointer-events:none}
-        .filter-search-kbd{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:0.7rem;color:var(--muted);background:var(--bg);padding:2px 6px;border:1px solid var(--border);border-radius:4px;pointer-events:none}
-        .filter-pills{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-        .filter-pills-label{font-family:var(--mono);font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-right:4px}
-        .filter-pill{padding:5px 11px;background:var(--surface);border:1px solid var(--border);border-radius:14px;color:var(--muted);font-family:var(--font);font-size:0.78rem;font-weight:600;cursor:pointer;transition:all 0.2s;user-select:none}
+        .filter-search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:0.9rem;pointer-events:none}
+        .filter-search-kbd{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:0.7rem;color:var(--muted);background:var(--bg);padding:2px 7px;border:1px solid var(--border);border-radius:4px;pointer-events:none;transition:opacity 0.15s}
+        .filter-search:focus ~ .filter-search-kbd{opacity:0}
+        .filter-search:not(:placeholder-shown) ~ .filter-search-kbd{opacity:0}
+        .filter-pills{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+        .filter-pills-label{font-family:var(--mono);font-size:0.7rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-right:6px;white-space:nowrap}
+        .filter-pill{padding:5px 12px;background:var(--surface);border:1px solid var(--border);border-radius:16px;color:var(--muted);font-family:var(--font);font-size:0.78rem;font-weight:600;cursor:pointer;transition:all 0.15s;user-select:none;white-space:nowrap}
         .filter-pill:hover{border-color:var(--accent);color:var(--text)}
-        .filter-pill.active{background:rgba(123,104,238,0.15);border-color:var(--accent);color:var(--accent)}
-        .filter-result-count{font-family:var(--mono);font-size:0.75rem;color:var(--muted);margin-left:auto}
-        .orgs-table th.sortable{cursor:pointer;user-select:none;position:relative;padding-right:18px}
+        .filter-pill.active{background:rgba(123,104,238,0.15);border-color:var(--accent);color:var(--accent);box-shadow:0 0 0 1px rgba(123,104,238,0.25)}
+        .filter-result-count{font-family:var(--mono);font-size:0.72rem;color:var(--muted);margin-left:auto;white-space:nowrap}
+
+        .orgs-table-wrap{overflow-x:auto;margin:0 -2px;padding:0 2px;-webkit-overflow-scrolling:touch}
+        .orgs-table{min-width:560px}
+        .orgs-table th.sortable{cursor:pointer;user-select:none;position:relative;padding-right:20px;transition:color 0.15s}
         .orgs-table th.sortable:hover{color:var(--text)}
-        .orgs-table th.sortable::after{content:"↕";position:absolute;right:4px;opacity:0.35;font-size:0.85rem}
+        .orgs-table th.sortable::after{content:"↕";position:absolute;right:4px;top:50%;transform:translateY(-50%);opacity:0.32;font-size:0.78rem}
         .orgs-table th.sortable.sort-asc::after{content:"▲";opacity:1;color:var(--accent)}
         .orgs-table th.sortable.sort-desc::after{content:"▼";opacity:1;color:var(--accent)}
+        .orgs-table tbody tr{transition:background 0.15s}
+        .orgs-table tbody tr:hover:not(.no-results-row){background:rgba(123,104,238,0.05)}
         .orgs-table tr.filtered-out{display:none}
         .no-results-row{display:none}
         .no-results-row.visible{display:table-row}
-        .no-results-row td{padding:32px 16px;text-align:center;color:var(--muted);font-style:italic}
+        .no-results-row td{padding:36px 16px;text-align:center;color:var(--muted);font-style:italic;background:transparent}
+        .no-results-row:hover{background:transparent !important}
+
+        @media(max-width:600px){
+            .filter-bar{padding:14px;gap:11px;margin:14px 0 18px;border-radius:12px}
+            .filter-search{padding:10px 12px 10px 36px;font-size:16px}
+            .filter-search-kbd{display:none}
+            .filter-search-icon{left:12px}
+            .filter-pills{gap:6px}
+            .filter-pills-label{display:none}
+            .filter-pill{padding:4px 10px;font-size:0.72rem}
+            .filter-result-count{width:100%;text-align:right;margin-left:0;order:99;font-size:0.68rem;margin-top:2px}
+            .orgs-table th.sortable{padding-right:16px}
+            .orgs-table th.sortable::after{right:2px;font-size:0.7rem}
+        }
     </style>
 </head>
 <body>
@@ -269,6 +290,7 @@
             </div>
         </div>
 
+        <div class="orgs-table-wrap">
         <table class="orgs-table" id="orgsTable">
             <thead>
                 <tr>
@@ -301,6 +323,7 @@
                 <tr class="no-results-row" id="noResultsRow"><td colspan="5">No organizations match your filters. <a href="#" id="clearFiltersLink" style="color:var(--accent)">Clear all filters</a></td></tr>
             </tbody>
         </table>
+        </div>
 
         <p><strong>What this table tells you</strong>: two healthcare orgs (Hygeia HMO + 54gene) have exactly zero HSTS coverage across 100+ hosts combined. Two government regulators (NCC + NITDA) are effectively unhardened at 5-6% coverage. The biggest Nigerian bank by host count (Access Bank at 381 live hosts) sits at 40% — better than peers, still not good. The fintech gap between Kuda (25%) and Flutterwave/Paystack (89-91%) shows what regulatory + institutional maturity does to a sector.</p>
 
