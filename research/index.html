@@ -99,6 +99,52 @@
             .sector-table,.orgs-table{font-size:0.82rem}
             .sector-table th,.sector-table td,.orgs-table th,.orgs-table td{padding:10px 8px}
         }
+
+        /* Phase 2: filter UI */
+        .filter-bar{display:none;flex-direction:column;gap:14px;margin:20px 0 24px;padding:18px 20px;background:var(--card);border:1px solid var(--border);border-radius:14px}
+        .filter-bar.js-enabled{display:flex}
+        .filter-search-wrap{position:relative}
+        .filter-search{width:100%;padding:11px 14px 11px 40px;background:var(--surface);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:var(--font);font-size:0.92rem;outline:none;transition:border-color 0.2s}
+        .filter-search:focus{border-color:var(--accent)}
+        .filter-search::placeholder{color:var(--muted)}
+        .filter-search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:0.9rem;pointer-events:none}
+        .filter-search-kbd{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:0.7rem;color:var(--muted);background:var(--bg);padding:2px 7px;border:1px solid var(--border);border-radius:4px;pointer-events:none;transition:opacity 0.15s}
+        .filter-search:focus ~ .filter-search-kbd{opacity:0}
+        .filter-search:not(:placeholder-shown) ~ .filter-search-kbd{opacity:0}
+        .filter-pills{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+        .filter-pills-label{font-family:var(--mono);font-size:0.7rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-right:6px;white-space:nowrap}
+        .filter-pill{padding:5px 12px;background:var(--surface);border:1px solid var(--border);border-radius:16px;color:var(--muted);font-family:var(--font);font-size:0.78rem;font-weight:600;cursor:pointer;transition:all 0.15s;user-select:none;white-space:nowrap}
+        .filter-pill:hover{border-color:var(--accent);color:var(--text)}
+        .filter-pill.active{background:rgba(123,104,238,0.15);border-color:var(--accent);color:var(--accent);box-shadow:0 0 0 1px rgba(123,104,238,0.25)}
+        .filter-result-count{font-family:var(--mono);font-size:0.72rem;color:var(--muted);margin-left:auto;white-space:nowrap}
+
+        .orgs-table-wrap{overflow-x:auto;margin:0 -2px;padding:0 2px;-webkit-overflow-scrolling:touch}
+        .orgs-table{min-width:560px}
+        .orgs-table th.sortable{cursor:pointer;user-select:none;position:relative;padding-right:20px;transition:color 0.15s}
+        .orgs-table th.sortable:hover{color:var(--text)}
+        .orgs-table th.sortable::after{content:"↕";position:absolute;right:4px;top:50%;transform:translateY(-50%);opacity:0.32;font-size:0.78rem}
+        .orgs-table th.sortable.sort-asc::after{content:"▲";opacity:1;color:var(--accent)}
+        .orgs-table th.sortable.sort-desc::after{content:"▼";opacity:1;color:var(--accent)}
+        .orgs-table tbody tr{transition:background 0.15s}
+        .orgs-table tbody tr:hover:not(.no-results-row){background:rgba(123,104,238,0.05)}
+        .orgs-table tr.filtered-out{display:none}
+        .no-results-row{display:none}
+        .no-results-row.visible{display:table-row}
+        .no-results-row td{padding:36px 16px;text-align:center;color:var(--muted);font-style:italic;background:transparent}
+        .no-results-row:hover{background:transparent !important}
+
+        @media(max-width:600px){
+            .filter-bar{padding:14px;gap:11px;margin:14px 0 18px;border-radius:12px}
+            .filter-search{padding:10px 12px 10px 36px;font-size:16px}
+            .filter-search-kbd{display:none}
+            .filter-search-icon{left:12px}
+            .filter-pills{gap:6px}
+            .filter-pills-label{display:none}
+            .filter-pill{padding:4px 10px;font-size:0.72rem}
+            .filter-result-count{width:100%;text-align:right;margin-left:0;order:99;font-size:0.68rem;margin-top:2px}
+            .orgs-table th.sortable{padding-right:16px}
+            .orgs-table th.sortable::after{right:2px;font-size:0.7rem}
+        }
     </style>
 </head>
 <body>
@@ -225,31 +271,59 @@
 
         <p>The orgs below have 6+ live hosts AND measurable HSTS coverage. Sorted worst-first. This is the list that matters operationally — small orgs fly under any attacker's radar, but anyone with 10+ subdomains IS on the radar and low HSTS is where attackers pivot.</p>
 
-        <table class="orgs-table">
+        <div class="filter-bar" id="filterBar">
+            <div class="filter-search-wrap">
+                <span class="filter-search-icon">🔍</span>
+                <input type="text" class="filter-search" id="orgSearch" placeholder="Search orgs by name or sector..." autocomplete="off" spellcheck="false">
+                <span class="filter-search-kbd">/</span>
+            </div>
+            <div class="filter-pills" id="sectorPills">
+                <span class="filter-pills-label">Sector:</span>
+                <span class="filter-pill active" data-sector="all">All</span>
+                <span class="filter-pill" data-sector="banking">Banking</span>
+                <span class="filter-pill" data-sector="fintech">Fintech</span>
+                <span class="filter-pill" data-sector="healthcare">Healthcare</span>
+                <span class="filter-pill" data-sector="telecom">Telecom</span>
+                <span class="filter-pill" data-sector="government">Government</span>
+                <span class="filter-pill" data-sector="ecommerce-ng">E-commerce</span>
+                <span class="filter-result-count" id="resultCount">18 orgs shown</span>
+            </div>
+        </div>
+
+        <div class="orgs-table-wrap">
+        <table class="orgs-table" id="orgsTable">
             <thead>
-                <tr><th>Organization</th><th>Sector</th><th>Hosts</th><th>HSTS</th><th>Legacy IIS</th></tr>
+                <tr>
+                    <th class="sortable" data-sort="name" data-sort-type="text">Organization</th>
+                    <th class="sortable" data-sort="sector" data-sort-type="text">Sector</th>
+                    <th class="sortable" data-sort="hosts" data-sort-type="num">Hosts</th>
+                    <th class="sortable sort-asc" data-sort="hsts" data-sort-type="num">HSTS</th>
+                    <th class="sortable" data-sort="legacy" data-sort-type="num">Legacy IIS</th>
+                </tr>
             </thead>
-            <tbody>
-                <tr class="bad"><td class="org-name">Hygeia HMO</td><td><span class="sector-pill healthcare">Healthcare</span></td><td class="num">54</td><td class="num hsts">0%</td><td class="num">0</td></tr>
-                <tr class="bad"><td class="org-name">54gene</td><td><span class="sector-pill healthcare">Healthcare</span></td><td class="num">50</td><td class="num hsts">0%</td><td class="num">0</td></tr>
-                <tr class="bad"><td class="org-name">NCC</td><td><span class="sector-pill government">Government</span></td><td class="num">103</td><td class="num hsts">5%</td><td class="num">14</td></tr>
-                <tr class="bad"><td class="org-name">NITDA</td><td><span class="sector-pill government">Government</span></td><td class="num">90</td><td class="num hsts">6%</td><td class="num">2</td></tr>
-                <tr class="bad"><td class="org-name">Zenith Bank</td><td><span class="sector-pill banking">Banking</span></td><td class="num">59</td><td class="num hsts">10%</td><td class="num">18</td></tr>
-                <tr class="bad"><td class="org-name">Helium Health</td><td><span class="sector-pill healthcare">Healthcare</span></td><td class="num">6</td><td class="num hsts">16%</td><td class="num">0</td></tr>
-                <tr class="bad"><td class="org-name">9mobile</td><td><span class="sector-pill telecom">Telecom</span></td><td class="num">35</td><td class="num hsts">17%</td><td class="num">0</td></tr>
-                <tr class="bad"><td class="org-name">Jumia</td><td><span class="sector-pill ecommerce-ng">E-commerce</span></td><td class="num">79</td><td class="num hsts">17%</td><td class="num">0</td></tr>
-                <tr class="mid"><td class="org-name">Kuda</td><td><span class="sector-pill fintech">Fintech</span></td><td class="num">44</td><td class="num hsts">25%</td><td class="num">3</td></tr>
-                <tr class="mid"><td class="org-name">Reliance HMO</td><td><span class="sector-pill healthcare">Healthcare</span></td><td class="num">12</td><td class="num hsts">33%</td><td class="num">0</td></tr>
-                <tr class="mid"><td class="org-name">GTBank</td><td><span class="sector-pill banking">Banking</span></td><td class="num">81</td><td class="num hsts">38%</td><td class="num">18</td></tr>
-                <tr class="mid"><td class="org-name">Access Bank</td><td><span class="sector-pill banking">Banking</span></td><td class="num">381</td><td class="num hsts">40%</td><td class="num">19</td></tr>
-                <tr class="mid"><td class="org-name">Konga</td><td><span class="sector-pill ecommerce-ng">E-commerce</span></td><td class="num">25</td><td class="num hsts">52%</td><td class="num">0</td></tr>
-                <tr class="mid"><td class="org-name">First Bank</td><td><span class="sector-pill banking">Banking</span></td><td class="num">51</td><td class="num hsts">58%</td><td class="num">14</td></tr>
-                <tr class="mid"><td class="org-name">CBN</td><td><span class="sector-pill government">Government</span></td><td class="num">42</td><td class="num hsts">59%</td><td class="num">8</td></tr>
-                <tr class="ok"><td class="org-name">MTN</td><td><span class="sector-pill telecom">Telecom</span></td><td class="num">56</td><td class="num hsts">69%</td><td class="num">1</td></tr>
-                <tr class="ok"><td class="org-name">Flutterwave</td><td><span class="sector-pill fintech">Fintech</span></td><td class="num">37</td><td class="num hsts">89%</td><td class="num">1</td></tr>
-                <tr class="ok"><td class="org-name">Paystack</td><td><span class="sector-pill fintech">Fintech</span></td><td class="num">35</td><td class="num hsts">91%</td><td class="num">0</td></tr>
+            <tbody id="orgsTbody">
+                <tr class="bad" data-name="hygeia hmo" data-sector="healthcare" data-hosts="54" data-hsts="0" data-legacy="0"><td class="org-name">Hygeia HMO</td><td><span class="sector-pill healthcare">Healthcare</span></td><td class="num">54</td><td class="num hsts">0%</td><td class="num">0</td></tr>
+                <tr class="bad" data-name="54gene" data-sector="healthcare" data-hosts="50" data-hsts="0" data-legacy="0"><td class="org-name">54gene</td><td><span class="sector-pill healthcare">Healthcare</span></td><td class="num">50</td><td class="num hsts">0%</td><td class="num">0</td></tr>
+                <tr class="bad" data-name="ncc" data-sector="government" data-hosts="103" data-hsts="5" data-legacy="14"><td class="org-name">NCC</td><td><span class="sector-pill government">Government</span></td><td class="num">103</td><td class="num hsts">5%</td><td class="num">14</td></tr>
+                <tr class="bad" data-name="nitda" data-sector="government" data-hosts="90" data-hsts="6" data-legacy="2"><td class="org-name">NITDA</td><td><span class="sector-pill government">Government</span></td><td class="num">90</td><td class="num hsts">6%</td><td class="num">2</td></tr>
+                <tr class="bad" data-name="zenith bank" data-sector="banking" data-hosts="59" data-hsts="10" data-legacy="18"><td class="org-name">Zenith Bank</td><td><span class="sector-pill banking">Banking</span></td><td class="num">59</td><td class="num hsts">10%</td><td class="num">18</td></tr>
+                <tr class="bad" data-name="helium health" data-sector="healthcare" data-hosts="6" data-hsts="16" data-legacy="0"><td class="org-name">Helium Health</td><td><span class="sector-pill healthcare">Healthcare</span></td><td class="num">6</td><td class="num hsts">16%</td><td class="num">0</td></tr>
+                <tr class="bad" data-name="9mobile" data-sector="telecom" data-hosts="35" data-hsts="17" data-legacy="0"><td class="org-name">9mobile</td><td><span class="sector-pill telecom">Telecom</span></td><td class="num">35</td><td class="num hsts">17%</td><td class="num">0</td></tr>
+                <tr class="bad" data-name="jumia" data-sector="ecommerce-ng" data-hosts="79" data-hsts="17" data-legacy="0"><td class="org-name">Jumia</td><td><span class="sector-pill ecommerce-ng">E-commerce</span></td><td class="num">79</td><td class="num hsts">17%</td><td class="num">0</td></tr>
+                <tr class="mid" data-name="kuda" data-sector="fintech" data-hosts="44" data-hsts="25" data-legacy="3"><td class="org-name">Kuda</td><td><span class="sector-pill fintech">Fintech</span></td><td class="num">44</td><td class="num hsts">25%</td><td class="num">3</td></tr>
+                <tr class="mid" data-name="reliance hmo" data-sector="healthcare" data-hosts="12" data-hsts="33" data-legacy="0"><td class="org-name">Reliance HMO</td><td><span class="sector-pill healthcare">Healthcare</span></td><td class="num">12</td><td class="num hsts">33%</td><td class="num">0</td></tr>
+                <tr class="mid" data-name="gtbank" data-sector="banking" data-hosts="81" data-hsts="38" data-legacy="18"><td class="org-name">GTBank</td><td><span class="sector-pill banking">Banking</span></td><td class="num">81</td><td class="num hsts">38%</td><td class="num">18</td></tr>
+                <tr class="mid" data-name="access bank" data-sector="banking" data-hosts="381" data-hsts="40" data-legacy="19"><td class="org-name">Access Bank</td><td><span class="sector-pill banking">Banking</span></td><td class="num">381</td><td class="num hsts">40%</td><td class="num">19</td></tr>
+                <tr class="mid" data-name="konga" data-sector="ecommerce-ng" data-hosts="25" data-hsts="52" data-legacy="0"><td class="org-name">Konga</td><td><span class="sector-pill ecommerce-ng">E-commerce</span></td><td class="num">25</td><td class="num hsts">52%</td><td class="num">0</td></tr>
+                <tr class="mid" data-name="first bank" data-sector="banking" data-hosts="51" data-hsts="58" data-legacy="14"><td class="org-name">First Bank</td><td><span class="sector-pill banking">Banking</span></td><td class="num">51</td><td class="num hsts">58%</td><td class="num">14</td></tr>
+                <tr class="mid" data-name="cbn" data-sector="government" data-hosts="42" data-hsts="59" data-legacy="8"><td class="org-name">CBN</td><td><span class="sector-pill government">Government</span></td><td class="num">42</td><td class="num hsts">59%</td><td class="num">8</td></tr>
+                <tr class="ok" data-name="mtn" data-sector="telecom" data-hosts="56" data-hsts="69" data-legacy="1"><td class="org-name">MTN</td><td><span class="sector-pill telecom">Telecom</span></td><td class="num">56</td><td class="num hsts">69%</td><td class="num">1</td></tr>
+                <tr class="ok" data-name="flutterwave" data-sector="fintech" data-hosts="37" data-hsts="89" data-legacy="1"><td class="org-name">Flutterwave</td><td><span class="sector-pill fintech">Fintech</span></td><td class="num">37</td><td class="num hsts">89%</td><td class="num">1</td></tr>
+                <tr class="ok" data-name="paystack" data-sector="fintech" data-hosts="35" data-hsts="91" data-legacy="0"><td class="org-name">Paystack</td><td><span class="sector-pill fintech">Fintech</span></td><td class="num">35</td><td class="num hsts">91%</td><td class="num">0</td></tr>
+                <tr class="no-results-row" id="noResultsRow"><td colspan="5">No organizations match your filters. <a href="#" id="clearFiltersLink" style="color:var(--accent)">Clear all filters</a></td></tr>
             </tbody>
         </table>
+        </div>
 
         <p><strong>What this table tells you</strong>: two healthcare orgs (Hygeia HMO + 54gene) have exactly zero HSTS coverage across 100+ hosts combined. Two government regulators (NCC + NITDA) are effectively unhardened at 5-6% coverage. The biggest Nigerian bank by host count (Access Bank at 381 live hosts) sits at 40% — better than peers, still not good. The fintech gap between Kuda (25%) and Flutterwave/Paystack (89-91%) shows what regulatory + institutional maturity does to a sector.</p>
 
@@ -291,5 +365,146 @@
     <footer class="footer">
         <p>Securva Research &middot; Built by <a href="/">Securva</a> at <a href="https://pejji.com">Pejji Agency</a> &middot; <a href="mailto:hello@securva.net">hello@securva.net</a></p>
     </footer>
+
+    <script>
+    (function(){
+        var bar = document.getElementById('filterBar');
+        var search = document.getElementById('orgSearch');
+        var pills = document.getElementById('sectorPills');
+        var tbody = document.getElementById('orgsTbody');
+        var table = document.getElementById('orgsTable');
+        var count = document.getElementById('resultCount');
+        var noResults = document.getElementById('noResultsRow');
+        var clearLink = document.getElementById('clearFiltersLink');
+        if(!bar||!search||!pills||!tbody||!table){return;}
+
+        bar.classList.add('js-enabled');
+
+        var state = {query:'', sector:'all', sortKey:'hsts', sortDir:'asc'};
+
+        function rows(){
+            return Array.prototype.slice.call(tbody.querySelectorAll('tr[data-name]'));
+        }
+
+        function apply(){
+            var q = state.query.toLowerCase().trim();
+            var shown = 0;
+            rows().forEach(function(r){
+                var name = r.getAttribute('data-name');
+                var sec = r.getAttribute('data-sector');
+                var matchSector = state.sector==='all' || sec===state.sector;
+                var matchText = !q || name.indexOf(q)>=0 || sec.indexOf(q)>=0;
+                if(matchSector && matchText){
+                    r.classList.remove('filtered-out');
+                    shown++;
+                } else {
+                    r.classList.add('filtered-out');
+                }
+            });
+            count.textContent = shown+' org'+(shown===1?'':'s')+' shown';
+            if(noResults){noResults.classList.toggle('visible', shown===0);}
+            syncUrl();
+        }
+
+        function sortRows(){
+            var visible = rows();
+            visible.sort(function(a,b){
+                var av = a.getAttribute('data-'+state.sortKey);
+                var bv = b.getAttribute('data-'+state.sortKey);
+                var numSort = ['hosts','hsts','legacy'].indexOf(state.sortKey)>=0;
+                if(numSort){av=parseFloat(av)||0;bv=parseFloat(bv)||0;}
+                var cmp = av<bv ? -1 : (av>bv ? 1 : 0);
+                return state.sortDir==='asc' ? cmp : -cmp;
+            });
+            visible.forEach(function(r){tbody.insertBefore(r, noResults);});
+            document.querySelectorAll('th.sortable').forEach(function(th){
+                th.classList.remove('sort-asc','sort-desc');
+                if(th.getAttribute('data-sort')===state.sortKey){
+                    th.classList.add(state.sortDir==='asc' ? 'sort-asc' : 'sort-desc');
+                }
+            });
+        }
+
+        function syncUrl(){
+            var params = new URLSearchParams();
+            if(state.sector!=='all'){params.set('sector', state.sector);}
+            if(state.query){params.set('q', state.query);}
+            if(!(state.sortKey==='hsts' && state.sortDir==='asc')){
+                params.set('sort', state.sortKey);
+                params.set('dir', state.sortDir);
+            }
+            var qs = params.toString();
+            var url = window.location.pathname + (qs ? '?'+qs : '');
+            history.replaceState(null, '', url);
+        }
+
+        function loadUrl(){
+            var params = new URLSearchParams(window.location.search);
+            if(params.get('sector')){state.sector = params.get('sector');}
+            if(params.get('q')){state.query = params.get('q'); search.value = state.query;}
+            if(params.get('sort')){state.sortKey = params.get('sort');}
+            if(params.get('dir')){state.sortDir = params.get('dir');}
+            document.querySelectorAll('.filter-pill').forEach(function(p){
+                p.classList.toggle('active', p.getAttribute('data-sector')===state.sector);
+            });
+        }
+
+        search.addEventListener('input', function(){
+            state.query = search.value;
+            apply();
+        });
+
+        pills.addEventListener('click', function(e){
+            var p = e.target.closest('.filter-pill');
+            if(!p) return;
+            document.querySelectorAll('.filter-pill').forEach(function(x){x.classList.remove('active');});
+            p.classList.add('active');
+            state.sector = p.getAttribute('data-sector');
+            apply();
+        });
+
+        document.querySelectorAll('th.sortable').forEach(function(th){
+            th.addEventListener('click', function(){
+                var key = th.getAttribute('data-sort');
+                if(state.sortKey===key){
+                    state.sortDir = state.sortDir==='asc' ? 'desc' : 'asc';
+                } else {
+                    state.sortKey = key;
+                    state.sortDir = th.getAttribute('data-sort-type')==='num' ? 'desc' : 'asc';
+                }
+                sortRows();
+                apply();
+            });
+        });
+
+        if(clearLink){
+            clearLink.addEventListener('click', function(e){
+                e.preventDefault();
+                state.query = ''; state.sector = 'all';
+                search.value = '';
+                document.querySelectorAll('.filter-pill').forEach(function(x){x.classList.remove('active');});
+                document.querySelector('.filter-pill[data-sector="all"]').classList.add('active');
+                apply();
+            });
+        }
+
+        document.addEventListener('keydown', function(e){
+            if(e.key==='/' && document.activeElement!==search){
+                e.preventDefault();
+                search.focus();
+            }
+            if(e.key==='Escape' && document.activeElement===search){
+                search.value = '';
+                state.query = '';
+                search.blur();
+                apply();
+            }
+        });
+
+        loadUrl();
+        sortRows();
+        apply();
+    })();
+    </script>
 </body>
 </html>
