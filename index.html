@@ -70,6 +70,17 @@
         .cta-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:10px;background:#25D366;color:white;text-decoration:none;font-weight:700;font-size:0.9rem;transition:all 0.3s}
         .cta-btn:hover{opacity:0.9;transform:translateY(-1px)}
 
+        /* Vendor Sweep promo - compact secondary */
+        .vendor-promo{max-width:820px;margin:0 auto 60px;padding:0 24px}
+        .vendor-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:26px 28px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+        .vendor-card-body{flex:1;min-width:240px}
+        .vendor-tag{display:inline-block;font-family:var(--mono);font-size:0.62rem;font-weight:600;text-transform:uppercase;letter-spacing:2px;color:var(--accent);padding:3px 9px;background:var(--accent-dim);border-radius:6px;margin-bottom:10px}
+        .vendor-card h3{font-size:1.15rem;font-weight:800;letter-spacing:-0.01em;margin-bottom:6px}
+        .vendor-card h3 span{color:var(--accent)}
+        .vendor-card p{color:var(--muted);font-size:0.85rem;line-height:1.5}
+        .vendor-cta{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:9px;background:transparent;color:var(--text);text-decoration:none;font-weight:700;font-size:0.85rem;border:1px solid var(--border);transition:all 0.25s;white-space:nowrap}
+        .vendor-cta:hover{border-color:var(--accent);color:var(--accent)}
+
         /* Snapshot promo */
         .snapshot-promo{max-width:820px;margin:0 auto 60px;padding:0 24px}
         .snapshot-card{background:linear-gradient(135deg,var(--card) 0%,#0d0d1c 100%);border:1px solid var(--border);border-radius:20px;padding:40px 32px;position:relative;overflow:hidden}
@@ -131,6 +142,7 @@
         <div class="nav-links">
             <a href="#scanner">Scan</a>
             <a href="/snapshot">Snapshot</a>
+            <a href="/vendor-check" class="hide-xs">Vendors</a>
             <a href="/research/">Research</a>
             <a href="#blog" class="hide-xs">Blog</a>
             <a href="https://github.com/babakizo420/headerguard" target="_blank" rel="noopener" class="hide-mobile">GitHub</a>
@@ -195,6 +207,20 @@
                     <span class="snapshot-cta-arrow">&rarr;</span>
                 </a>
             </div>
+        </div>
+    </section>
+
+    <section class="vendor-promo">
+        <div class="vendor-card">
+            <div class="vendor-card-body">
+                <div class="vendor-tag">New &middot; NTAA 2026 &sect;45</div>
+                <h3>Pay vendors in Nigeria? Check every <span>TIN</span> before your next run.</h3>
+                <p>NTAA 2026 &sect;45 imposes a &#8358;5M penalty per vendor engaged without a valid NRS-registered TIN. Our Vendor Sweep verifies your whole list in under a minute.</p>
+            </div>
+            <a href="/vendor-check" class="vendor-cta">
+                Run a Vendor Sweep
+                <span>&rarr;</span>
+            </a>
         </div>
     </section>
 
