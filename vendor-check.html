@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Securva Vendor Sweep | NRS TIN Verification for Nigerian Businesses</title>
+    <meta name="description" content="Verify every vendor on your payables list against the National Revenue Service register. Pre-flight compliance check before your next payment run. From ₦99,000.">
+    <meta property="og:title" content="Securva Vendor Sweep | NRS TIN Verification">
+    <meta property="og:description" content="Verify your vendor list against the NRS register. Clean compliance report you can show your auditor. From ₦99,000.">
+    <meta property="og:type" content="product">
+    <meta property="og:url" content="https://securva.net/vendor-check">
+    <meta property="og:image" content="https://securva.net/images/og-snapshot.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23030308'/><path d='M50 15L20 30V50C20 68 32 82 50 90C68 82 80 68 80 50V30L50 15Z' stroke='%237B68EE' stroke-width='3' fill='none'/><circle cx='50' cy='48' r='8' fill='%237B68EE' opacity='0.6'/></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#030308;--surface:#0A0A12;--card:#101020;--border:#1a1a30;--text:#F0EDF7;--muted:#6a6680;--accent:#7B68EE;--accent-dim:rgba(123,104,238,0.12);--green:#5EE0A8;--red:#FF6B8A;--amber:#FFB454;--font:'Cabinet Grotesk',system-ui,sans-serif;--mono:'IBM Plex Mono',monospace}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh}
+        .container{max-width:780px;margin:0 auto;padding:0 24px}
+
+        .nav{padding:18px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+        .nav-logo{font-weight:900;font-size:1.2rem;color:var(--text);text-decoration:none;letter-spacing:-0.02em}
+        .nav-logo span{color:var(--accent)}
+        .nav-links{display:flex;gap:20px}
+        .nav-links a{color:var(--muted);text-decoration:none;font-size:0.85rem;font-weight:500}
+        .nav-links a:hover{color:var(--text)}
+
+        .hero{text-align:center;padding:56px 24px 32px}
+        .eyebrow{font-family:var(--mono);font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:var(--accent);margin-bottom:14px}
+        .hero h1{font-size:clamp(2rem,5.5vw,3.25rem);font-weight:900;letter-spacing:-0.03em;line-height:1.1;margin-bottom:16px;max-width:760px;margin-left:auto;margin-right:auto}
+        .hero h1 span{color:var(--accent)}
+        .hero p.lead{color:var(--muted);font-size:1rem;max-width:580px;margin:0 auto 28px;line-height:1.5}
+        .cta-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+        .btn-primary{padding:14px 28px;border-radius:10px;background:var(--accent);color:white;text-decoration:none;font-weight:700;font-size:0.95rem;transition:opacity 0.2s;display:inline-block}
+        .btn-primary:hover{opacity:0.88}
+        .btn-ghost{padding:14px 22px;border-radius:10px;background:transparent;color:var(--text);border:1px solid var(--border);text-decoration:none;font-weight:600;font-size:0.9rem;transition:border-color 0.2s;display:inline-block}
+        .btn-ghost:hover{border-color:var(--accent)}
+
+        .stats{display:flex;justify-content:center;flex-wrap:wrap;gap:40px;padding:28px 24px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--surface)}
+        .stat{text-align:center}
+        .stat-n{font-size:1.6rem;font-weight:900;color:var(--accent);letter-spacing:-0.02em;line-height:1}
+        .stat-l{font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:6px}
+
+        .what{padding:48px 24px}
+        .what h2{font-size:1.75rem;font-weight:900;letter-spacing:-0.02em;margin-bottom:8px;text-align:center}
+        .what .sub{text-align:center;color:var(--muted);margin-bottom:32px;font-size:0.95rem}
+        .what-list{max-width:640px;margin:0 auto}
+        .what-row{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+        .what-row:last-child{border-bottom:none}
+        .what-num{font-family:var(--mono);font-size:0.7rem;color:var(--accent);font-weight:700;letter-spacing:2px;padding-top:3px;min-width:36px}
+        .what-body h3{font-size:1rem;font-weight:700;margin-bottom:4px}
+        .what-body p{color:var(--muted);font-size:0.85rem;line-height:1.55}
+
+        .how{padding:48px 24px;border-top:1px solid var(--border);background:var(--surface)}
+        .how h2{font-size:1.75rem;font-weight:900;letter-spacing:-0.02em;margin-bottom:8px;text-align:center}
+        .how .sub{text-align:center;color:var(--muted);margin-bottom:32px;font-size:0.95rem}
+        .how-grid{max-width:720px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:12px}
+        .how-step{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px 20px;display:flex;gap:16px;align-items:flex-start}
+        .how-step .n{font-family:var(--mono);font-size:1.3rem;font-weight:900;color:var(--accent);line-height:1;min-width:28px}
+        .how-step .body h3{font-size:0.95rem;font-weight:700;margin-bottom:4px}
+        .how-step .body p{font-size:0.82rem;color:var(--muted);line-height:1.5}
+
+        .pricing{padding:48px 24px;border-top:1px solid var(--border)}
+        .pricing h2{font-size:1.75rem;font-weight:900;letter-spacing:-0.02em;margin-bottom:8px;text-align:center}
+        .pricing .sub{text-align:center;color:var(--muted);margin-bottom:32px;font-size:0.95rem}
+        .tier-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;max-width:760px;margin:0 auto}
+        .tier{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px;position:relative;display:flex;flex-direction:column}
+        .tier.feat{border-color:var(--accent)}
+        .tier .pop{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--accent);color:white;font-size:0.65rem;font-weight:700;padding:3px 10px;border-radius:10px;letter-spacing:1px;white-space:nowrap}
+        .tier-name{font-family:var(--mono);font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;font-weight:700}
+        .tier-price{font-size:1.7rem;font-weight:900;letter-spacing:-0.02em;line-height:1}
+        .tier-sub{font-family:var(--mono);font-size:0.72rem;color:var(--muted);margin-bottom:14px;margin-top:2px}
+        .tier-desc{font-size:0.82rem;color:var(--muted);line-height:1.5;margin-bottom:16px;flex:1}
+        .tier-feats{list-style:none;padding:0;margin:0 0 16px 0}
+        .tier-feats li{font-size:0.78rem;color:var(--text);line-height:1.4;padding:4px 0;display:flex;gap:6px}
+        .tier-feats li::before{content:"✓";color:var(--accent);font-weight:700}
+        .tier-buy{display:block;padding:10px;border-radius:8px;background:var(--accent);color:white;text-decoration:none;font-weight:700;font-size:0.85rem;text-align:center}
+        .tier-buy:hover{opacity:0.88}
+        .tier-buy.ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
+        .tier-buy.ghost:hover{border-color:var(--accent)}
+
+        .why{padding:48px 24px;border-top:1px solid var(--border);background:var(--surface)}
+        .why h2{font-size:1.6rem;font-weight:900;letter-spacing:-0.02em;margin-bottom:20px;text-align:center}
+        .why-grid{max-width:720px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+        .why-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px}
+        .why-card h3{font-size:0.95rem;font-weight:700;margin-bottom:6px;color:var(--accent)}
+        .why-card p{font-size:0.82rem;color:var(--muted);line-height:1.5}
+
+        .faq{padding:48px 24px;border-top:1px solid var(--border)}
+        .faq h2{font-size:1.6rem;font-weight:900;letter-spacing:-0.02em;margin-bottom:24px;text-align:center}
+        .faq-list{max-width:620px;margin:0 auto}
+        .faq-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden}
+        .faq-item summary{padding:14px 18px;cursor:pointer;font-weight:600;font-size:0.9rem;list-style:none;display:flex;justify-content:space-between;align-items:center}
+        .faq-item summary::after{content:"+";color:var(--accent);font-size:1.1rem;font-weight:700;margin-left:10px}
+        .faq-item[open] summary::after{content:"−"}
+        .faq-item summary::-webkit-details-marker{display:none}
+        .faq-item .a{padding:0 18px 14px 18px;color:var(--muted);font-size:0.85rem;line-height:1.55}
+
+        .footer{padding:32px 24px;border-top:1px solid var(--border);text-align:center}
+        .footer p{font-size:0.8rem;color:var(--muted);margin-bottom:8px;line-height:1.55}
+        .footer a{color:var(--accent);text-decoration:none}
+        .footer .links{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:12px;font-size:0.8rem}
+
+        @media(max-width:600px){
+            .cta-row{flex-direction:column;padding:0 24px}
+            .btn-primary,.btn-ghost{width:100%;text-align:center}
+            .stats{gap:24px;padding:20px 16px}
+            .stat-n{font-size:1.35rem}
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="nav-logo">Sec<span>urva</span></a>
+        <div class="nav-links">
+            <a href="/snapshot">Snapshot</a>
+            <a href="/vendor-check">Vendor Sweep</a>
+            <a href="mailto:hello@securva.net">Contact</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="eyebrow">Securva Vendor Sweep</div>
+        <h1>Verify every vendor on your payables list <span>before your next payment run.</span></h1>
+        <p class="lead">We check each vendor's TIN against the National Revenue Service register and send you a signed compliance report. Takes under a minute. Export-ready for your auditor.</p>
+        <div class="cta-row">
+            <a href="#pricing" class="btn-primary">Start a sweep from ₦99,000</a>
+            <a href="mailto:hello@securva.net?subject=Vendor%20Sweep%20sample%20report" class="btn-ghost">Request a sample report</a>
+        </div>
+    </header>
+
+    <div class="stats">
+        <div class="stat"><div class="stat-n">NRS</div><div class="stat-l">register checked</div></div>
+        <div class="stat"><div class="stat-n">25+</div><div class="stat-l">vendors per sweep</div></div>
+        <div class="stat"><div class="stat-n">30s</div><div class="stat-l">typical run time</div></div>
+        <div class="stat"><div class="stat-n">0</div><div class="stat-l">TINs stored</div></div>
+    </div>
+
+    <section class="what">
+        <h2>What you get back</h2>
+        <p class="sub">A clean, signed report your finance team and your auditor can both read.</p>
+        <div class="what-list">
+            <div class="what-row">
+                <div class="what-num">01</div>
+                <div class="what-body">
+                    <h3>Per-vendor verification status</h3>
+                    <p>Every vendor on your list gets one of three verdicts: green (active on NRS register), red (not registered), or amber (needs more data to verify). Colour-coded table, one page, scan-and-act format.</p>
+                </div>
+            </div>
+            <div class="what-row">
+                <div class="what-num">02</div>
+                <div class="what-body">
+                    <h3>Exposure math</h3>
+                    <p>Section 45 of the Nigerian Tax Administration Act 2026 attaches a ₦5,000,000 penalty per unregistered vendor engaged. We add it up for you so you know exactly what a missed check is worth.</p>
+                </div>
+            </div>
+            <div class="what-row">
+                <div class="what-num">03</div>
+                <div class="what-body">
+                    <h3>Remediation guidance</h3>
+                    <p>For every red vendor we tell you exactly what to do next: request a TIN, substitute the vendor, or halt payment until verified. Amber vendors get a clear re-run path.</p>
+                </div>
+            </div>
+            <div class="what-row">
+                <div class="what-num">04</div>
+                <div class="what-body">
+                    <h3>Timestamped audit trail</h3>
+                    <p>Every record carries a <code>checked_at</code> timestamp. Keep the report on file: it's your evidence of a good-faith compliance check at a specific point in time.</p>
+                </div>
+            </div>
+            <div class="what-row">
+                <div class="what-num">05</div>
+                <div class="what-body">
+                    <h3>Name-mismatch flags</h3>
+                    <p>When the name on your books differs from the name on the NRS register (common when vendors use trading names), we flag it. Fixes invoice-compliance issues before your next audit.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how">
+        <h2>How it works</h2>
+        <p class="sub">Three steps. No account. No subscription unless you want one.</p>
+        <div class="how-grid">
+            <div class="how-step">
+                <div class="n">1</div>
+                <div class="body">
+                    <h3>Send us your vendor list</h3>
+                    <p>Email a CSV of your vendors with any of: business name, RC number, TIN, phone. We accept up to 200 vendors per standalone sweep. Columns optional except business name.</p>
+                </div>
+            </div>
+            <div class="how-step">
+                <div class="n">2</div>
+                <div class="body">
+                    <h3>We verify each against the NRS register</h3>
+                    <p>Every vendor is checked against the National Revenue Service public TIN verification endpoint. Green / amber / red verdict with evidence. Never shared with third parties.</p>
+                </div>
+            </div>
+            <div class="how-step">
+                <div class="n">3</div>
+                <div class="body">
+                    <h3>You get a PDF you can file</h3>
+                    <p>Compliance report, export-ready, timestamped, signed. Share with your auditor or keep on file. Also available as the Section 10 block of a full <a href="/snapshot" style="color:var(--accent)">Snapshot Pro</a> audit.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <h2>Pricing</h2>
+        <p class="sub">Start once, upgrade when you need ongoing coverage.</p>
+        <div class="tier-grid">
+            <div class="tier">
+                <div class="tier-name">Add-on</div>
+                <div class="tier-price">$49</div>
+                <div class="tier-sub">bundled with Snapshot Pro</div>
+                <p class="tier-desc">Ships as Section 10 of your Snapshot Pro PDF. Covers up to 25 vendors. Best value if you're already buying a full audit.</p>
+                <ul class="tier-feats">
+                    <li>Up to 25 vendors</li>
+                    <li>Inside your Snapshot Pro</li>
+                    <li>One-time sweep</li>
+                </ul>
+                <a href="/snapshot?tier=pro" class="tier-buy ghost">Buy Snapshot Pro</a>
+            </div>
+            <div class="tier feat">
+                <div class="pop">POPULAR</div>
+                <div class="tier-name">Standalone</div>
+                <div class="tier-price">₦99,000</div>
+                <div class="tier-sub">one-time sweep</div>
+                <p class="tier-desc">Stand-alone compliance sweep. Covers up to 200 vendors. Best for businesses that don't need a full Snapshot and just want the vendor report.</p>
+                <ul class="tier-feats">
+                    <li>Up to 200 vendors</li>
+                    <li>Full PDF + CSV export</li>
+                    <li>One-time run</li>
+                    <li>Delivered in 24 hours</li>
+                </ul>
+                <a href="mailto:hello@securva.net?subject=Vendor%20Sweep%20-%20Standalone%20(%E2%82%A699,000)" class="tier-buy">Request a sweep</a>
+            </div>
+            <div class="tier">
+                <div class="tier-name">Enterprise</div>
+                <div class="tier-price">₦499,000</div>
+                <div class="tier-sub">per year, quarterly re-sweeps</div>
+                <p class="tier-desc">Quarterly re-verification, unlimited vendor list, API access for your finance system, Slack alerts on status changes. For teams running >100 vendors or >1 payment run per month.</p>
+                <ul class="tier-feats">
+                    <li>Unlimited vendors</li>
+                    <li>Quarterly auto-sweep</li>
+                    <li>API + Slack alerts</li>
+                    <li>Priority support</li>
+                </ul>
+                <a href="mailto:hello@securva.net?subject=Vendor%20Sweep%20-%20Enterprise%20(%E2%82%A6499,000/yr)" class="tier-buy ghost">Talk to us</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="why">
+        <h2>Why this matters now</h2>
+        <div class="why-grid">
+            <div class="why-card">
+                <h3>The law just tightened</h3>
+                <p>NTAA 2026 Section 45 attaches a ₦5,000,000 penalty per vendor engaged without a valid NRS-issued TIN. Most Nigerian SMEs haven't adjusted their vendor onboarding yet.</p>
+            </div>
+            <div class="why-card">
+                <h3>Your accountant already checks this</h3>
+                <p>But they do it manually, and only for the vendors they're asked about. One missed row is ₦5M. We check the whole list in 30 seconds, every time.</p>
+            </div>
+            <div class="why-card">
+                <h3>NRS records change</h3>
+                <p>A vendor you verified last year may be delisted today. The only compliance that survives an audit is a recent, timestamped check. Quarterly re-sweeps keep you current.</p>
+            </div>
+            <div class="why-card">
+                <h3>We never store the TINs</h3>
+                <p>Our cache stores verdicts only. Your raw TIN values are processed in memory, verified against the NRS register, and dropped. A compromised cache leaks no sensitive identifiers.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq">
+        <h2>Questions</h2>
+        <div class="faq-list">
+            <details class="faq-item">
+                <summary>What is NTAA 2026 Section 45 and why does it matter?</summary>
+                <div class="a">The Nigerian Tax Administration Act 2026, Section 45, imposes a ₦5,000,000 penalty on any business that engages a vendor without a valid National Revenue Service TIN. It's in force. Most SMEs are unaware their vendor list is now a compliance surface. Our sweep tells you where you stand in about a minute.</div>
+            </details>
+            <details class="faq-item">
+                <summary>We verified our vendors last year, do we need to do it again?</summary>
+                <div class="a">Yes. NRS records change - vendors get delisted, trading names change, dormant accounts lose active status. The only compliance position that survives a NRS audit is a recent, timestamped check. We recommend quarterly for any recurring vendor relationship.</div>
+            </details>
+            <details class="faq-item">
+                <summary>What about vendors we only have a name for, no TIN or RC number?</summary>
+                <div class="a">Those come back as amber ("insufficient data to verify") with a remediation hint to request an RC or TIN before your next payment. Name-only records cannot be verified against the NRS register - that's not a limitation of our tool, it's how the register works.</div>
+            </details>
+            <details class="faq-item">
+                <summary>What data do you actually store?</summary>
+                <div class="a">Verdicts only. Our cache stores the pass/fail/error status of each verification, a SHA-256 key, and a remediation hint. We never persist raw TINs, phone numbers, or email addresses. Your input CSV is deleted inside the sweep run. Full privacy model is in our engineering README, available on request.</div>
+            </details>
+            <details class="faq-item">
+                <summary>How fast is delivery?</summary>
+                <div class="a">Standalone sweeps (≤200 vendors) ship within 24 hours of receiving your list, typically same-business-day. Enterprise quarterly sweeps run automatically on your schedule. Add-on sweeps (as Section 10 of Snapshot Pro) come with the parent audit in the usual 24-hour SLA.</div>
+            </details>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>Securva is a Nigerian-first security and compliance lab. We build lightweight products that help small businesses stay compliant without a consultant retainer.</p>
+        <p>Questions or a custom scope? <a href="mailto:hello@securva.net">hello@securva.net</a> &middot; WhatsApp <a href="https://wa.me/2349044526924">+234 904 452 6924</a></p>
+        <div class="links">
+            <a href="/">Home</a>
+            <a href="/snapshot">Snapshot</a>
+            <a href="/vendor-check">Vendor Sweep</a>
+            <a href="/research">Research</a>
+        </div>
+    </footer>
+</body>
+</html>
