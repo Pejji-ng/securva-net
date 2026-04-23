@@ -41,35 +41,55 @@ def load_orchestrator_output(domain: str | None, json_path: str | None) -> dict:
     raise ValueError("Must provide either --domain or --json")
 
 
-def _load_web2_findings(web2_jsonl: str | None) -> list[dict]:
-    """Optional Web2 pattern-lab scanner output loader.
+def _load_jsonl(path_str: str | None) -> list[dict]:
+    """Load a JSONL file and return a list of parsed records.
 
-    If `web2_jsonl` is provided AND the file exists, parse the JSONL and return
-    a list of finding dicts. Template's Section 9 renders only when this list
-    is non-empty. Missing file or empty list → Section 9 renders as no-op.
+    Returns [] if path_str is falsy, the file is missing, or an I/O error
+    occurs. Malformed lines are skipped, not fatal. Template guards (`{% if X %}`)
+    handle an empty list gracefully.
     """
-    if not web2_jsonl:
+    if not path_str:
         return []
     try:
-        path = Path(web2_jsonl)
+        path = Path(path_str)
         if not path.exists():
             return []
-        findings = []
+        records = []
         with open(path) as f:
             for line in f:
                 line = line.strip()
                 if not line:
                     continue
                 try:
-                    findings.append(json.loads(line))
+                    records.append(json.loads(line))
                 except json.JSONDecodeError:
                     continue
-        return findings
+        return records
     except Exception:
         return []
 
 
-def prepare_template_context(report: dict, web2_jsonl: str | None = None) -> dict:
+def _load_web2_findings(web2_jsonl: str | None) -> list[dict]:
+    """Section 9 finding loader. Delegates to `_load_jsonl`."""
+    return _load_jsonl(web2_jsonl)
+
+
+def _load_vendor_findings(vendor_jsonl: str | None) -> list[dict]:
+    """Section 10 finding loader.
+
+    Parses TIN-verify JSONL (Securva Vendor Compliance Sweep v0). Each record
+    carries `vendor`, `risk_level` (green/amber/red), `tin_status`, and
+    `remediation_hint` at minimum. Schema is documented at
+    `~/bounty/tools/tin-verify/README.md` on the research box.
+    """
+    return _load_jsonl(vendor_jsonl)
+
+
+def prepare_template_context(
+    report: dict,
+    web2_jsonl: str | None = None,
+    vendor_jsonl: str | None = None,
+) -> dict:
     """
     Transform the orchestrator output into the context dict Jinja2 expects.
     Adds convenience fields (scan_date formatted, report_id, etc) that the
@@ -79,6 +99,11 @@ def prepare_template_context(report: dict, web2_jsonl: str | None = None) -> dic
     scanner output under the `web2_findings` key, which drives Section 9 of
     the template (Sector Peer Benchmarks). When absent or empty, Section 9
     renders as no-op via `{% if web2_findings %}` guard.
+
+    v1.1 (2026-04-23): optional `vendor_jsonl` argument attaches TIN-verify
+    output under the `vendor_findings` key, which drives Section 10 (Vendor
+    Compliance / NTAA 2026 §45). Absence behaves the same way - Section 10
+    renders as no-op via `{% if vendor_findings %}` guard.
     """
     generated = report.get("generated_at_utc", "")
     try:
@@ -93,6 +118,7 @@ def prepare_template_context(report: dict, web2_jsonl: str | None = None) -> dic
         "sections": report.get("sections", {}),
         "tier": report.get("tier", "Starter (NGN 30,000)"),
         "web2_findings": _load_web2_findings(web2_jsonl),
+        "vendor_findings": _load_vendor_findings(vendor_jsonl),
     }
 
 
@@ -138,15 +164,24 @@ def main():
     parser.add_argument("--web2-jsonl", dest="web2_jsonl",
                         help="Optional: pattern-lab-web2 scanner output JSONL. "
                              "When provided, Section 9 (Sector Peer Benchmarks) renders.")
+    parser.add_argument("--vendor-jsonl", dest="vendor_jsonl",
+                        help="Optional: TIN-verify scanner output JSONL. "
+                             "When provided, Section 10 (Vendor Compliance / NTAA 2026 §45) renders.")
     args = parser.parse_args()
 
     print("[+] loading orchestrator output...", file=sys.stderr)
     report = load_orchestrator_output(args.domain, args.json)
 
     print("[+] preparing template context...", file=sys.stderr)
-    context = prepare_template_context(report, web2_jsonl=args.web2_jsonl)
+    context = prepare_template_context(
+        report,
+        web2_jsonl=args.web2_jsonl,
+        vendor_jsonl=args.vendor_jsonl,
+    )
     if context.get("web2_findings"):
         print(f"[+] web2_findings attached: {len(context['web2_findings'])}", file=sys.stderr)
+    if context.get("vendor_findings"):
+        print(f"[+] vendor_findings attached: {len(context['vendor_findings'])}", file=sys.stderr)
 
     print(f"[+] rendering HTML for {context['domain']} ({context['report_id']})...", file=sys.stderr)
     html = render_html(context)

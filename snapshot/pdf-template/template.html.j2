@@ -493,6 +493,146 @@
 {% endif %}
 
 <!-- ========================================================= -->
+<!-- SECTION 10 — VENDOR COMPLIANCE (NRS/NTAA 2026 §45)        -->
+<!-- Sourced from Securva TIN-verify module (Buddy v0).        -->
+<!-- Renders when `vendor_findings` key is present in context. -->
+<!-- No-op when key is absent → safe for reports that don't    -->
+<!-- include a vendor list (web-only Snapshot flow).           -->
+<!-- ========================================================= -->
+{% if vendor_findings %}
+<section class="section">
+  <div class="section-tag">Section 10</div>
+  <h2>Vendor Compliance &middot; NTAA 2026 &sect;45 Exposure</h2>
+
+  <p>Nigeria&rsquo;s Tax Administration Act 2026 (&sect;45, in force) imposes a <strong>&#8358;5,000,000 penalty per vendor</strong> on any business that engages a vendor without a valid TIN on the National Revenue Service (NRS) register. This section maps the vendors you supplied against the NRS register and flags any exposure before your next payment run.</p>
+
+  {%- set vf = vendor_findings -%}
+  {%- set red = vf | selectattr('risk_level', 'equalto', 'red') | list -%}
+  {%- set amber = vf | selectattr('risk_level', 'equalto', 'amber') | list -%}
+  {%- set green = vf | selectattr('risk_level', 'equalto', 'green') | list -%}
+
+  <table class="data-table">
+    <tbody>
+      <tr>
+        <th style="width: 30%;">Vendors checked</th>
+        <td><strong>{{ vf | length }}</strong> vendor(s) verified against NRS register</td>
+      </tr>
+      <tr>
+        <th>Risk distribution</th>
+        <td>
+          <span class="badge {{ 'fail' if red else 'pass' }}">{{ red | length }} red</span> &middot;
+          <span class="badge {{ 'warn' if amber else 'pass' }}">{{ amber | length }} amber</span> &middot;
+          <span class="badge pass">{{ green | length }} green</span>
+        </td>
+      </tr>
+      <tr>
+        <th>Estimated exposure (red only)</th>
+        <td>
+          {% if red %}
+          <strong class="fail">Up to &#8358;{{ '{:,}'.format(red | length * 5000000) }}</strong> in NTAA 2026 &sect;45 penalty exposure ({{ red | length }} vendor(s) &times; &#8358;5,000,000)
+          {% else %}
+          <strong class="pass">&#8358;0</strong> &mdash; no unregistered vendors in the supplied list
+          {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <th>Data source</th>
+        <td>apps.firs.gov.ng/tinverification (NRS TIN Verification System)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  {% if red %}
+  <h3 style="margin-top: 1.25em;"><span class="badge fail">Action required</span> Red-risk vendors</h3>
+  <p>The following vendors could <strong>not</strong> be verified against the NRS register. Each one is a &#8358;5,000,000 penalty exposure under NTAA 2026 &sect;45. Request a valid TIN before your next payment run, or substitute the vendor.</p>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width: 32%;">Vendor (as supplied)</th>
+        <th style="width: 18%;">Criteria used</th>
+        <th>Remediation</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for v in red %}
+      <tr>
+        <td><code>{{ v.vendor }}</code></td>
+        <td><code>{{ v.criteria_used | default('-') }}</code></td>
+        <td>{{ v.remediation_hint | default('Request a valid NRS TIN from the vendor before next payment run. If unobtainable, substitute the vendor.') }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
+  {% if amber %}
+  <h3 style="margin-top: 1.25em;"><span class="badge warn">Incomplete</span> Amber-risk vendors</h3>
+  <p>The following vendors could not be verified because the supplied data was insufficient or an upstream error occurred. Re-run with complete data (RC number or TIN) to resolve.</p>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width: 32%;">Vendor (as supplied)</th>
+        <th style="width: 18%;">tin_status</th>
+        <th>Remediation</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for v in amber %}
+      <tr>
+        <td><code>{{ v.vendor }}</code></td>
+        <td><code>{{ v.tin_status | default('unknown') }}</code></td>
+        <td>{{ v.remediation_hint | default('Supply an RC number or TIN and re-run. If the NRS portal is unreachable, retry in 24 hours.') }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
+  {% if green %}
+  <h3 style="margin-top: 1.25em;"><span class="badge pass">Verified</span> Green-risk vendors</h3>
+  <p>{{ green | length }} vendor(s) verified active on the NRS register. No &sect;45 exposure for these.</p>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width: 40%;">Vendor (as supplied)</th>
+        <th>NRS registered name</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for v in green %}
+      <tr>
+        <td><code>{{ v.vendor }}</code></td>
+        <td>{{ (v.evidence or {}).registered_name | default(v.vendor) }}{% if (v.evidence or {}).registered_name and (v.evidence or {}).registered_name != v.vendor %} <em class="warn">(name mismatch)</em>{% endif %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
+  <h3>Recommended next steps</h3>
+  <ul>
+    <li><strong>Red vendors:</strong> Halt any pending payment until TIN is supplied and re-verified, or substitute a verified alternative.</li>
+    <li><strong>Amber vendors:</strong> Request RC number or TIN from the vendor. Re-run this sweep in 24 hours if the upstream endpoint errored.</li>
+    <li><strong>Recurring vendors:</strong> Add a TIN field to your vendor onboarding form. New vendors should not progress past onboarding without one.</li>
+    <li><strong>Audit trail:</strong> Save this report. The <code>checked_at</code> timestamp in each record is your evidence of a good-faith compliance check at a specific point in time.</li>
+  </ul>
+
+  <div class="disclaimer" style="margin-top: 1.25em;">
+    <p><strong>Scope note:</strong> The NRS TIN register is authoritative for NTAA 2026 &sect;45 compliance. A &ldquo;green&rdquo; result means the TIN is active in the NRS register at the time of check; it does not guarantee vendor solvency, name-on-invoice alignment, or unrelated compliance requirements. For recurring vendor relationships, re-verify at least quarterly.</p>
+  </div>
+
+  <div class="upsell">
+    <h3>Want continuous vendor compliance monitoring?</h3>
+    <p>The <strong>Securva Vendor Sweep</strong> re-verifies your vendor list against the NRS register quarterly and alerts you when any vendor&rsquo;s TIN status changes (delisted, flagged, or newly registered). Priced per-list: &#8358;99,000 standalone one-time / &#8358;499,000/year enterprise recurring.</p>
+    <a href="https://securva.net/vendor-check" class="cta">Learn more</a>
+  </div>
+</section>
+{% endif %}
+
+<!-- ========================================================= -->
 <!-- BACK MATTER                                               -->
 <!-- ========================================================= -->
 <section class="section">
