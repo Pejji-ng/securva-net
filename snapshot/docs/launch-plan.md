@@ -1,11 +1,11 @@
-# Securva Snapshot — 7-Phase Launch Plan
+# Securva Snapshot - 7-Phase Launch Plan
 
 **Date:** 2026-04-15 Day 6
 **Goal:** Zero to first paying customer in 10 calendar days from greenlight
 
 ---
 
-## Phase 0 — Scaffold (today, 1 hour)
+## Phase 0 - Scaffold (today, 1 hour)
 
 **Status:** in progress
 
@@ -21,7 +21,7 @@
 
 ---
 
-## Phase 1 — Sample PDF for babakizo.com (Day 1-2, 6 hours)
+## Phase 1 - Sample PDF for babakizo.com (Day 1-2, 6 hours)
 
 **Status:** pending Phase 0 merge
 
@@ -42,7 +42,7 @@
 
 ---
 
-## Phase 2 — Scanner orchestrator (Day 3-4, 8 hours)
+## Phase 2 - Scanner orchestrator (Day 3-4, 8 hours)
 
 **Status:** pending Phase 1 merge
 
@@ -50,13 +50,13 @@
 
 **Work:**
 - Write `orchestrator.py` as the main entry point
-- Write `checks/headers.py` — reuses existing securva-api endpoint
-- Write `checks/ssl_tls.py` — wraps openssl s_client
-- Write `checks/ndpa.py` — NDPA compliance scraper (ports Pejji contact form pattern)
-- Write `checks/subdomains.py` — wraps subfinder + dnsx on box
-- Write `checks/cves.py` — wraps nuclei with template matching
-- Write `checks/dorks.py` — reuses GitHub dork pipeline for the specific customer's GitHub org
-- Write `checks/remediation.py` — maps findings to Pejji upsell quotes
+- Write `checks/headers.py` - reuses existing securva-api endpoint
+- Write `checks/ssl_tls.py` - wraps openssl s_client
+- Write `checks/ndpa.py` - NDPA compliance scraper (ports Pejji contact form pattern)
+- Write `checks/subdomains.py` - wraps subfinder + dnsx on box
+- Write `checks/cves.py` - wraps nuclei with template matching
+- Write `checks/dorks.py` - reuses GitHub dork pipeline for the specific customer's GitHub org
+- Write `checks/remediation.py` - maps findings to Pejji upsell quotes
 - Add unit tests + integration tests for each module
 - Rate-limit policy: max 1 concurrent scan per domain, 10-second delay between probes
 - Open PR #3 "feat: scanner orchestrator + integration tests"
@@ -68,7 +68,7 @@
 
 ---
 
-## Phase 3 — PDF rendering engine (Day 5, 4 hours)
+## Phase 3 - PDF rendering engine (Day 5, 4 hours)
 
 **Status:** pending Phase 2 merge
 
@@ -89,16 +89,16 @@
 
 ---
 
-## Phase 4 — Payment + fulfillment plumbing (Day 6-7, 8 hours)
+## Phase 4 - Payment + fulfillment plumbing (Day 6-7, 8 hours)
 
 **Status:** pending Phase 3 merge
 
 **Deliverable:** end-to-end flow: customer pays → 5 minutes later PDF lands in their inbox
 
 **Work (desktop Claude):**
-- Build `snapshot/webhooks/gumroad-webhook.js` — Cloudflare Worker
-- Build `snapshot/webhooks/paystack-webhook.js` — Cloudflare Worker
-- Build `snapshot/scanner/queue_runner.py` — cron runner that picks up new jobs, runs scan, renders PDF, emails
+- Build `snapshot/webhooks/gumroad-webhook.js` - Cloudflare Worker
+- Build `snapshot/webhooks/paystack-webhook.js` - Cloudflare Worker
+- Build `snapshot/scanner/queue_runner.py` - cron runner that picks up new jobs, runs scan, renders PDF, emails
 - Wire Resend or Mailgun for email delivery with branded HTML template
 - Set up SQLite customer DB on the box (first 1000 customers)
 - Open PR #5 "feat: payment webhooks + fulfillment pipeline"
@@ -113,7 +113,7 @@
 
 ---
 
-## Phase 5 — Landing page + sales copy (Day 8, 4 hours)
+## Phase 5 - Landing page + sales copy (Day 8, 4 hours)
 
 **Status:** pending Phase 4 merge
 
@@ -136,7 +136,7 @@
 
 ---
 
-## Phase 6 — Dry run + internal testing (Day 9, 2 hours)
+## Phase 6 - Dry run + internal testing (Day 9, 2 hours)
 
 **Status:** pending Phase 5 merge
 
@@ -157,7 +157,7 @@
 
 ---
 
-## Phase 7 — Soft launch + first sales (Day 10-14, monitoring)
+## Phase 7 - Soft launch + first sales (Day 10-14, monitoring)
 
 **Status:** pending Phase 6 approval
 
@@ -192,7 +192,7 @@
 
 **Risk 1: Gumroad or Paystack integration breaks.** Mitigation: test in Phase 6 with a real test payment before launch. Hot-patch fast.
 
-**Risk 2: Scanner hits Cloudflare or AWS WAF on customer targets and gets blocked.** Mitigation: polite User-Agent, rate limiting, clear messaging in the FAQ ("if your scan failed, it may be because your WAF blocked us — try disabling during scan").
+**Risk 2: Scanner hits Cloudflare or AWS WAF on customer targets and gets blocked.** Mitigation: polite User-Agent, rate limiting, clear messaging in the FAQ ("if your scan failed, it may be because your WAF blocked us - try disabling during scan").
 
 **Risk 3: Customer scans a domain they do not own.** Mitigation: TOS checkbox, legal disclaimer, manual review for high-scope customers (agency tier), refund policy if abused.
 

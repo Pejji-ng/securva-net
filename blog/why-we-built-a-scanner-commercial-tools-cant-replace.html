@@ -76,7 +76,7 @@
 
         <p>This is not a GitGuardian bug. Their detectors are correct for the providers they cover. The problem is architectural: every commercial secret scanner in the market checks for one provider at a time. When they find a Flutterwave key, they flag it and move on. They do not know that the same file contains thirteen more credentials sitting next to the one they found.</p>
 
-        <p>For a US SaaS startup with one Stripe integration in one service, this works perfectly. For a Nigerian fintech aggregator backend with fourteen payment provider integrations in one <code>config.js</code> file, it is a 7% detection rate, and a 7% detection rate is not a scanner — it is a false sense of security.</p>
+        <p>For a US SaaS startup with one Stripe integration in one service, this works perfectly. For a Nigerian fintech aggregator backend with fourteen payment provider integrations in one <code>config.js</code> file, it is a 7% detection rate, and a 7% detection rate is not a scanner - it is a false sense of security.</p>
 
         <h2>What commercial tools do well</h2>
 
@@ -92,13 +92,13 @@
 
         <h2>Why Nigerian fintech is different</h2>
 
-        <p>A typical Nigerian fintech backend is an <strong>aggregator</strong>. One Node.js or Python or PHP application wraps multiple payment providers — Flutterwave for card payments, Monnify for bank transfers, Paystack for subscriptions, WalletAfrica for USD wallets, Seerbit for Pan-African reach — and routes customer traffic through whichever provider has the best uptime or lowest fees. This makes business sense. A Nigerian fintech does not want to bet their entire customer experience on one payment processor's availability.</p>
+        <p>A typical Nigerian fintech backend is an <strong>aggregator</strong>. One Node.js or Python or PHP application wraps multiple payment providers - Flutterwave for card payments, Monnify for bank transfers, Paystack for subscriptions, WalletAfrica for USD wallets, Seerbit for Pan-African reach - and routes customer traffic through whichever provider has the best uptime or lowest fees. This makes business sense. A Nigerian fintech does not want to bet their entire customer experience on one payment processor's availability.</p>
 
         <p>But it means the backend's <code>.env</code> or <code>config.js</code> file has dozens of provider credentials, not one.</p>
 
         <p>Commercial scanners were designed for the "one startup, one provider per service category" model. When they scan a Nigerian fintech aggregator backend, they find the first credential they have a rule for and stop. They report a single finding. The security team fixes that one finding and believes the job is done. Meanwhile, the same file contains thirteen more credentials for providers the commercial scanner has never heard of.</p>
 
-        <p>We found a real example of this during our research. One public GitHub repository with a single 38-line <code>config/.env</code> file leaked production credentials for sixteen distinct service integrations — ten payment processors, two Nigerian commercial banks, a production MySQL database, a KYC provider, a transactional email service, and an SMS gateway. The file had been public for nearly four years. Existing secret scanners would have flagged it as "1 Flutterwave leak," because that is the only rule any of them had for the Nigerian fintech stack. Nobody rotated the other fifteen.</p>
+        <p>We found a real example of this during our research. One public GitHub repository with a single 38-line <code>config/.env</code> file leaked production credentials for sixteen distinct service integrations - ten payment processors, two Nigerian commercial banks, a production MySQL database, a KYC provider, a transactional email service, and an SMS gateway. The file had been public for nearly four years. Existing secret scanners would have flagged it as "1 Flutterwave leak," because that is the only rule any of them had for the Nigerian fintech stack. Nobody rotated the other fifteen.</p>
 
         <h2>Three things Securva does differently</h2>
 
@@ -146,28 +146,28 @@
 
         <p>Securva does. We compute a <strong>credential density score</strong> per file and automatically flag any file with five or more distinct provider categories as CRITICAL, independent of the severity of any individual credential in the file.</p>
 
-        <p>Why this matters: a fourteen-credential aggregator file is not fourteen independent incidents. It is one systemic incident with fourteen blast radii. The remediation is not "rotate one key" — it is "rotate fourteen credentials across fourteen providers and audit the backend template that generated the leak." Commercial scanners miss this distinction entirely. In the 38-line file I mentioned earlier, GitGuardian would have reported "density 1" (one Flutterwave match). Securva scored it as "density 16, CRITICAL, systemic aggregator failure." The difference is the mental model, and it changes what a security team does next.</p>
+        <p>Why this matters: a fourteen-credential aggregator file is not fourteen independent incidents. It is one systemic incident with fourteen blast radii. The remediation is not "rotate one key" - it is "rotate fourteen credentials across fourteen providers and audit the backend template that generated the leak." Commercial scanners miss this distinction entirely. In the 38-line file I mentioned earlier, GitGuardian would have reported "density 1" (one Flutterwave match). Securva scored it as "density 16, CRITICAL, systemic aggregator failure." The difference is the mental model, and it changes what a security team does next.</p>
 
         <h3>3. Owner expansion and template clustering</h3>
 
-        <p>When Securva finds a CRITICAL hit on a public GitHub owner, we automatically enumerate all of that owner's other public repositories and scan them for the same patterns. This catches the freelance template reuse class of leak — where a developer builds the same backend template for multiple clients, and all the clients inherit the same hardcoded secrets.</p>
+        <p>When Securva finds a CRITICAL hit on a public GitHub owner, we automatically enumerate all of that owner's other public repositories and scan them for the same patterns. This catches the freelance template reuse class of leak - where a developer builds the same backend template for multiple clients, and all the clients inherit the same hardcoded secrets.</p>
 
         <p>We also detect template clone signatures across owners. When the same hardcoded value (like an AES master encryption key) appears in multiple repositories owned by different developers, Securva groups them as a single cluster representing the shared template's total blast radius.</p>
 
-        <p>This is how we recently discovered that one freelance developer had built five different gambling backends for five different clients, all sharing the same hardcoded Flutterwave secret key, the same Twilio auth token, the same SPENN API key, and the same AES-256-CBC master encryption key. Commercial scanners would have reported five independent incidents across five repositories. Securva reports one template-scale security failure affecting every operator who hired that developer. We also identified a second freelance developer — completely unknown to us until the signature search surfaced him — who uses the same AES master key in his own four gambling backend repositories. That is a new class of finding: not "one developer made one mistake" but "the same template code is being cloned across multiple freelance developers in the African gambling ecosystem." No commercial scanner catches this pattern.</p>
+        <p>This is how we recently discovered that one freelance developer had built five different gambling backends for five different clients, all sharing the same hardcoded Flutterwave secret key, the same Twilio auth token, the same SPENN API key, and the same AES-256-CBC master encryption key. Commercial scanners would have reported five independent incidents across five repositories. Securva reports one template-scale security failure affecting every operator who hired that developer. We also identified a second freelance developer - completely unknown to us until the signature search surfaced him - who uses the same AES master key in his own four gambling backend repositories. That is a new class of finding: not "one developer made one mistake" but "the same template code is being cloned across multiple freelance developers in the African gambling ecosystem." No commercial scanner catches this pattern.</p>
 
         <h2>Honest positioning</h2>
 
         <div class="callout">
             <h3>We are not broader than GitGuardian.</h3>
-            <p>Commercial scanners cover more universal providers. If you are a US SaaS startup with one Stripe integration, commercial tools are the right choice. We are deeper in a specific vertical. If you are Nigerian fintech, African gambling backend, or Web3 developer tooling, Securva catches patterns commercial tools are structurally unable to catch — because our vertical is not big enough for them to care.</p>
+            <p>Commercial scanners cover more universal providers. If you are a US SaaS startup with one Stripe integration, commercial tools are the right choice. We are deeper in a specific vertical. If you are Nigerian fintech, African gambling backend, or Web3 developer tooling, Securva catches patterns commercial tools are structurally unable to catch - because our vertical is not big enough for them to care.</p>
         </div>
 
         <h2>When to use Securva</h2>
 
         <p><strong>Use Securva if you are:</strong></p>
         <ul>
-            <li>A Nigerian fintech integrating any local provider beyond Flutterwave and Paystack — Monnify, Seerbit, WalletAfrica, Providus, GTBank, SPENN, Kaleyra</li>
+            <li>A Nigerian fintech integrating any local provider beyond Flutterwave and Paystack - Monnify, Seerbit, WalletAfrica, Providus, GTBank, SPENN, Kaleyra</li>
             <li>An African payments aggregator routing traffic through three or more providers</li>
             <li>A gambling or gaming backend built by a freelance developer from a template</li>
             <li>A Web3 or DeFi team worried about Ethereum private keys, BIP39 mnemonics, or Privy credentials in your codebase</li>
@@ -187,7 +187,7 @@
 
         <p>The Securva scanner went through eight versions in three days during the research sprint that produced this article. Version 1 scanned seven auth providers. Version 4.2 added depth-check and owner expansion. Version 4.3 added thirteen Web3 patterns including Ethereum private key detection, BIP39 mnemonic phrase detection, and Privy credential detection. The full evolution is visible in our private scanner repository, and the architectural decisions are documented in the commit history.</p>
 
-        <p>What we found with it, also in seventy-two hours, is the subject of several follow-up research posts that will appear on this blog in the coming weeks. Each one is gated on coordinated disclosure practice — vendors get notified first, given time to verify and remediate, and only after rotation is confirmed do we write about the findings publicly. That is how security research is supposed to work.</p>
+        <p>What we found with it, also in seventy-two hours, is the subject of several follow-up research posts that will appear on this blog in the coming weeks. Each one is gated on coordinated disclosure practice - vendors get notified first, given time to verify and remediate, and only after rotation is confirmed do we write about the findings publicly. That is how security research is supposed to work.</p>
 
         <div class="cta-box">
             <h3>Free multi-provider density audit</h3>

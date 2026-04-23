@@ -1,5 +1,5 @@
 """
-Known-CVE matcher — fingerprints the tech stack from response headers and
+Known-CVE matcher - fingerprints the tech stack from response headers and
 HTML, then cross-references against a known-vulnerability list.
 
 Without box_ssh, this collector uses HTTP response headers only (coarse

@@ -1,5 +1,5 @@
 /**
- * Securva Snapshot — Payment + Fulfillment Worker
+ * Securva Snapshot - Payment + Fulfillment Worker
  *
  * Cloudflare Worker that handles the full automated Snapshot lifecycle:
  *   1. Gumroad / Paystack webhook → create job, email customer the intake form
@@ -199,7 +199,7 @@ async function handlePaystackWebhook(request, env) {
 }
 
 // ============================================================
-// Tally webhook — customer submits their URL
+// Tally webhook - customer submits their URL
 // ============================================================
 
 async function handleTallyWebhook(request, env) {
@@ -246,7 +246,7 @@ async function handleTallyWebhook(request, env) {
 }
 
 // ============================================================
-// Custom intake endpoint — called from securva.net/snapshot/intake
+// Custom intake endpoint - called from securva.net/snapshot/intake
 // Same purpose as Tally webhook but for our own form. No signature
 // verification needed since we control both sides. CORS restricted
 // to securva.net origin.
@@ -291,13 +291,13 @@ async function rateLimit(env, keyPrefix, request, maxReq, windowSec) {
 
 // SSRF guard: reject any hostname that resolves to a non-public space
 // (loopback, RFC1918, link-local, cloud metadata, reserved TLDs).
-// Hostname-level check — not a DNS resolve — because Workers can't
+// Hostname-level check - not a DNS resolve - because Workers can't
 // do raw DNS. This covers the attacker-supplied literal form.
 function isPublicScanTarget(hostname) {
   if (!hostname) return false;
   const h = hostname.toLowerCase();
 
-  // Bare IP literal — block common private ranges
+  // Bare IP literal - block common private ranges
   if (/^(\d{1,3}\.){3}\d{1,3}$/.test(h)) {
     const parts = h.split('.').map(Number);
     if (parts[0] === 10) return false;
@@ -310,7 +310,7 @@ function isPublicScanTarget(hostname) {
     if (parts[0] >= 224) return false; // multicast + reserved
   }
 
-  // IPv6 literal — block loopback + unique-local + link-local
+  // IPv6 literal - block loopback + unique-local + link-local
   if (h.startsWith('[') || h.includes(':')) {
     if (h === '::1' || h === '[::1]') return false;
     if (h.startsWith('fc') || h.startsWith('fd')) return false; // ULA
@@ -325,7 +325,7 @@ function isPublicScanTarget(hostname) {
   if (h.endsWith('.home.arpa')) return false;
   if (h.endsWith('.onion')) return false;
 
-  // Our own internal host — buyers shouldn't be able to loop us back
+  // Our own internal host - buyers shouldn't be able to loop us back
   if (h === 'scanner.internal.securva.net' || h.endsWith('.internal.securva.net')) return false;
 
   return true;
@@ -346,7 +346,7 @@ async function handleIntake(request, env) {
   }
 
   // P1 hotfix (2026-04-20 audit): fail closed when Origin is missing.
-  // Previous logic only rejected when Origin was set AND non-allowlisted —
+  // Previous logic only rejected when Origin was set AND non-allowlisted  - 
   // curl/non-browser clients sent no Origin and slipped through, enabling
   // a forged-Gumroad-webhook + intake-hijack chain to scan arbitrary URLs.
   if (!origin || !ALLOWED_ORIGINS.has(origin)) {
@@ -391,7 +391,7 @@ async function handleIntake(request, env) {
     });
   }
 
-  // P2 hotfix: block SSRF-style targets — private ranges, loopback,
+  // P2 hotfix: block SSRF-style targets - private ranges, loopback,
   // link-local, .internal / .local / .localhost, and bare IP literals
   // in RFC1918. Even authenticated buyers shouldn't be able to point
   // our scanner at internal infrastructure.

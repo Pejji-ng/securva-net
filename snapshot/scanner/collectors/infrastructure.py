@@ -1,5 +1,5 @@
 """
-Infrastructure footprint collector — subdomain enumeration, hosting provider
+Infrastructure footprint collector - subdomain enumeration, hosting provider
 breakdown, DNS hygiene (SPF/DMARC/DNSSEC/CAA).
 
 Subfinder + dnsx are only available on the Securva research box. When

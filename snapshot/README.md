@@ -12,36 +12,36 @@ This product is the Phase 2 priority in the Securva strategic roadmap. It is the
 
 ```
 snapshot/
-├── README.md              — this file
-├── CHANGELOG.md           — per-phase shipping log
+├── README.md              - this file
+├── CHANGELOG.md           - per-phase shipping log
 ├── docs/
-│   ├── product-spec.md    — full product specification (mirrored from securva-disclosures)
-│   ├── architecture.md    — data pipeline + infrastructure diagram
-│   ├── pricing.md         — current pricing tiers + change log
-│   ├── support-playbook.md — what to say when a customer emails with a complaint
-│   └── launch-plan.md     — 7-phase launch plan with checkpoints
-├── landing/               — Astro pages for securva.net/snapshot
-├── pdf-template/          — HTML + CSS template rendered by WeasyPrint
-│   ├── template.html      — main report layout
-│   ├── style.css          — Cabinet Grotesk + Newsreader fonts, dark theme
-│   └── sections/          — per-section partial templates
-├── scanner/               — Python orchestrator that runs the 7 checks
-│   ├── orchestrator.py    — main entry point (domain in, JSON out)
-│   ├── checks/            — individual scan modules
-│   │   ├── headers.py     — HTTP security headers (reuses securva-api)
-│   │   ├── ssl_tls.py     — openssl wrapper for cert + protocol checks
-│   │   ├── ndpa.py        — NDPA compliance scraper
-│   │   ├── subdomains.py  — subfinder + dnsx wrapper
-│   │   ├── cves.py        — nuclei integration for CVE matching
-│   │   ├── dorks.py       — GitHub code search for public secrets (reuses dork pipeline)
-│   │   └── remediation.py — maps findings to Pejji upsell quotes
-│   └── tests/             — unit + integration tests
-├── webhooks/              — Cloudflare Workers for Gumroad + Paystack
+│   ├── product-spec.md    - full product specification (mirrored from securva-disclosures)
+│   ├── architecture.md    - data pipeline + infrastructure diagram
+│   ├── pricing.md         - current pricing tiers + change log
+│   ├── support-playbook.md - what to say when a customer emails with a complaint
+│   └── launch-plan.md     - 7-phase launch plan with checkpoints
+├── landing/               - Astro pages for securva.net/snapshot
+├── pdf-template/          - HTML + CSS template rendered by WeasyPrint
+│   ├── template.html      - main report layout
+│   ├── style.css          - Cabinet Grotesk + Newsreader fonts, dark theme
+│   └── sections/          - per-section partial templates
+├── scanner/               - Python orchestrator that runs the 7 checks
+│   ├── orchestrator.py    - main entry point (domain in, JSON out)
+│   ├── checks/            - individual scan modules
+│   │   ├── headers.py     - HTTP security headers (reuses securva-api)
+│   │   ├── ssl_tls.py     - openssl wrapper for cert + protocol checks
+│   │   ├── ndpa.py        - NDPA compliance scraper
+│   │   ├── subdomains.py  - subfinder + dnsx wrapper
+│   │   ├── cves.py        - nuclei integration for CVE matching
+│   │   ├── dorks.py       - GitHub code search for public secrets (reuses dork pipeline)
+│   │   └── remediation.py - maps findings to Pejji upsell quotes
+│   └── tests/             - unit + integration tests
+├── webhooks/              - Cloudflare Workers for Gumroad + Paystack
 │   ├── gumroad-webhook.js
 │   ├── paystack-webhook.js
 │   └── deploy-notes.md
-└── sample/                — the downloadable sample PDF for sales demos
-    └── snapshot-sample-babakizo-com.pdf  — generated in Phase 1 for babakizo.com
+└── sample/                - the downloadable sample PDF for sales demos
+    └── snapshot-sample-babakizo-com.pdf  - generated in Phase 1 for babakizo.com
 ```
 
 ---
@@ -81,10 +81,10 @@ Total estimated: ~33 hours coding + 5 days monitoring = 10 calendar days from gr
 This product is designed within strict ethical boundaries:
 
 - Scans run ONLY against the domain the customer provides (terms of service require a "I own or have authorization to scan this domain" checkbox)
-- No active exploitation — passive discovery only
-- No authenticated testing — scanner behaves like an anonymous visitor
+- No active exploitation - passive discovery only
+- No authenticated testing - scanner behaves like an anonymous visitor
 - No attempt to exfiltrate data
-- Output can be used for internal security review only — NOT as a penetration test certification
+- Output can be used for internal security review only - NOT as a penetration test certification
 - Data retention: customer email + scan results kept for 90 days then automatically deleted
 - NDPA-compliant on our side
 

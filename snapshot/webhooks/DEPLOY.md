@@ -1,4 +1,4 @@
-# Securva Snapshot — Phase 4 Deploy Runbook
+# Securva Snapshot - Phase 4 Deploy Runbook
 
 Step-by-step deployment of the Phase 4 payment + fulfillment pipeline. Ordered by dependency. Each step has a clear success check.
 
@@ -9,12 +9,12 @@ Step-by-step deployment of the Phase 4 payment + fulfillment pipeline. Ordered b
 - Python 3.10+ on the research box
 - SSH access to the box (babakinzo@securva-box)
 - Resend.com account (free tier OK to start)
-- (no Tally needed — custom intake form at securva.net/snapshot/intake auto-deploys via CF Pages)
+- (no Tally needed - custom intake form at securva.net/snapshot/intake auto-deploys via CF Pages)
 - Gumroad seller account
 
 ---
 
-## Step 1 — Cloudflare resources (Kingsley desk, 15 min)
+## Step 1 - Cloudflare resources (Kingsley desk, 15 min)
 
 ### 1a. Create D1 database
 ```bash
@@ -50,13 +50,13 @@ wrangler kv:namespace create snapshot-locks
 # → copy the id into wrangler.toml [[kv_namespaces]] section
 ```
 
-### 1d. R2 access credentials — NOT NEEDED
+### 1d. R2 access credentials - NOT NEEDED
 
 Phase 4.1 removed the S3-API code path. The Worker writes to R2 via its native `BUCKET` binding (configured in `wrangler.toml`). No R2 API tokens or S3 access keys need to be created or distributed.
 
 ---
 
-## Step 2 — Intake form (no manual setup needed)
+## Step 2 - Intake form (no manual setup needed)
 
 The customer intake form is a custom page at `securva.net/snapshot/intake`. It ships with this repo as `snapshot/intake.html` and auto-deploys via CF Pages when merged to main. When the Gumroad webhook fires, the Worker emails the customer a link like `https://securva.net/snapshot/intake?order_ref=ABC123`. The customer enters their URL, form POSTs directly to `https://snap.securva.net/api/intake`, Worker validates and queues the job.
 
@@ -70,11 +70,11 @@ curl -sI https://securva.net/snapshot/intake
 
 ---
 
-## Step 3 — Resend email setup (Kingsley desk, 10 min)
+## Step 3 - Resend email setup (Kingsley desk, 10 min)
 
 1. Sign up at resend.com (free tier: 100 emails/day, 3K/month)
-2. Add + verify domain `securva.net` — follow Resend's DNS wizard (3 SPF/DKIM records to add to Cloudflare DNS)
-3. Create API key with scope `send:*@securva.net` — save as `RESEND_API_KEY`
+2. Add + verify domain `securva.net` - follow Resend's DNS wizard (3 SPF/DKIM records to add to Cloudflare DNS)
+3. Create API key with scope `send:*@securva.net` - save as `RESEND_API_KEY`
 
 Wait for the domain to verify (usually <5 min after DNS records propagate).
 
@@ -88,7 +88,7 @@ curl -X POST https://api.resend.com/emails \
 
 ---
 
-## Step 4 — Box-side scanner API (Baba, 3 hours)
+## Step 4 - Box-side scanner API (Baba, 3 hours)
 
 On the research box (babakinzo@165.232.109.143):
 
@@ -203,11 +203,11 @@ Add 2 DNS records in Cloudflare:
 
 **scanner.internal** (for box API, already created):
 - Type: A, Name: `scanner.internal`, Value: `165.232.109.143` (box IP)
-- Proxy: DNS-only (gray cloud) — we want the Worker to hit the box directly, not through another CF layer
+- Proxy: DNS-only (gray cloud) - we want the Worker to hit the box directly, not through another CF layer
 
 **snap** (for Worker route, NEW):
 - Type: CNAME, Name: `snap`, Target: `securva.net`
-- Proxy: **Proxied (orange cloud)** — required for Worker route to intercept requests
+- Proxy: **Proxied (orange cloud)** - required for Worker route to intercept requests
 - Without this record, the Worker route in wrangler.toml cannot attach
 
 ### 4e. Smoke test
@@ -225,7 +225,7 @@ Save for Step 5:
 
 ---
 
-## Step 5 — Deploy the Cloudflare Worker (Baba, 1 hour)
+## Step 5 - Deploy the Cloudflare Worker (Baba, 1 hour)
 
 ### 5a. Fill in wrangler.toml
 Replace `FILL_IN_AFTER_CREATE` placeholders with the IDs from Step 1.
@@ -257,7 +257,7 @@ curl https://snap.securva.net/api/health
 
 ---
 
-## Step 6 — Gumroad products (Kingsley desk, 30 min)
+## Step 6 - Gumroad products (Kingsley desk, 30 min)
 
 1. Log into Gumroad
 2. Unpublish + delete the old CAD$97 / USD$97 duplicate products (per the gumroad_launch_package tasks)
@@ -265,10 +265,10 @@ curl https://snap.securva.net/api/health
 
 | Product Name | Permalink | Price | Tier field in Worker |
 |---|---|---|---|
-| Securva Snapshot — Card | `securva-snapshot-card` | $10 USD | Card |
-| Securva Snapshot — Starter | `securva-snapshot-starter` | $29 USD | Starter |
-| Securva Snapshot — Pro | `securva-snapshot-pro` | $49 USD | Pro |
-| Securva Snapshot — Whitelabel | `securva-snapshot-whitelabel` | $99 USD | Whitelabel |
+| Securva Snapshot - Card | `securva-snapshot-card` | $10 USD | Card |
+| Securva Snapshot - Starter | `securva-snapshot-starter` | $29 USD | Starter |
+| Securva Snapshot - Pro | `securva-snapshot-pro` | $49 USD | Pro |
+| Securva Snapshot - Whitelabel | `securva-snapshot-whitelabel` | $99 USD | Whitelabel |
 
 For each product:
 - Upload the sample PDF as the deliverable (customers get the actual PDF later via email; Gumroad's default download is the sample/teaser)
@@ -277,7 +277,7 @@ For each product:
 
 ---
 
-## Step 7 — End-to-end dry run (Baba + Kingsley, 30 min)
+## Step 7 - End-to-end dry run (Baba + Kingsley, 30 min)
 
 ### 7a. Self-purchase on Gumroad
 - Use a test email you control
@@ -303,7 +303,7 @@ Don't forget, so you can repeat the test cleanly.
 
 ---
 
-## Step 8 — Go live (Kingsley, 30 min)
+## Step 8 - Go live (Kingsley, 30 min)
 
 Once Step 7 passes cleanly:
 1. Update securva.net/snapshot landing page to point buy buttons at the live Gumroad product URLs

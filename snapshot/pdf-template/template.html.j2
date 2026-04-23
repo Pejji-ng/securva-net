@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Securva Snapshot Report — {{ domain }}</title>
+  <title>Securva Snapshot Report - {{ domain }}</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -239,7 +239,7 @@
     <li><strong>Edge:</strong> Cloudflare CDN + WAF (auto-detected)</li>
     <li><strong>Origin:</strong> Cloudflare Pages (static site hosting)</li>
     <li><strong>DNS provider:</strong> Cloudflare DNS with DNSSEC</li>
-    <li><strong>Email:</strong> Not configured on the apex (no MX records) — reasonable for a portfolio site that does not need inbound email</li>
+    <li><strong>Email:</strong> Not configured on the apex (no MX records) - reasonable for a portfolio site that does not need inbound email</li>
   </ul>
 
   <h3>DNS hygiene</h3>
@@ -269,7 +269,7 @@
   <div class="section-tag">Section 6</div>
   <h2>Known Vulnerability Check</h2>
 
-  <p>We fingerprint the site's detected tech stack and cross-reference against the National Vulnerability Database (NVD) and the Nuclei community templates for known CVEs matching those components. Passive detection only — no active exploitation.</p>
+  <p>We fingerprint the site's detected tech stack and cross-reference against the National Vulnerability Database (NVD) and the Nuclei community templates for known CVEs matching those components. Passive detection only - no active exploitation.</p>
 
   <h3>Detected tech stack</h3>
   <table class="data-table">
@@ -320,7 +320,7 @@
 
   <div class="callout pass">
     <h4>Zero secrets exposed across all scanned pattern classes.</h4>
-    <p>babakizo420's public repositories have exemplary secret hygiene. This is not the norm — in our broader Nigerian research scan from April 2026, we surfaced 68 real production credentials across 210 repositories in 5 minutes of automated scanning. The fact that babakizo.com's operator has zero hits is a strong signal that pre-commit secret scanning, environment variable discipline, and .gitignore hygiene are all in place.</p>
+    <p>babakizo420's public repositories have exemplary secret hygiene. This is not the norm - in our broader Nigerian research scan from April 2026, we surfaced 68 real production credentials across 210 repositories in 5 minutes of automated scanning. The fact that babakizo.com's operator has zero hits is a strong signal that pre-commit secret scanning, environment variable discipline, and .gitignore hygiene are all in place.</p>
   </div>
 </section>
 
@@ -351,15 +351,15 @@
     <h3>Need help implementing any of these?</h3>
     <p>Pejji is the sister agency to Securva and specializes in Nigerian-market web security remediation. We build and harden websites with NDPA compliance baked in from day one.</p>
     <p><strong>Relevant Pejji packages:</strong><br>
-    Card (NGN 60,000) — quick-win configuration + DNS hardening<br>
-    Starter (NGN 150,000) — full privacy policy rewrite + DPO integration<br>
-    Growth (NGN 300,000) — site migration + monitoring bundle</p>
+    Card (NGN 60,000) - quick-win configuration + DNS hardening<br>
+    Starter (NGN 150,000) - full privacy policy rewrite + DPO integration<br>
+    Growth (NGN 300,000) - site migration + monitoring bundle</p>
     <a href="https://pejji.com/contact?ref=snapshot-SEC-SS-20260415-0001" class="cta">Get a quote at pejji.com</a>
   </div>
 </section>
 
 <!-- ========================================================= -->
-<!-- SECTION 9 — SECTOR PEER BENCHMARKS (Web2 pattern-lab v1)  -->
+<!-- SECTION 9 - SECTOR PEER BENCHMARKS (Web2 pattern-lab v1)  -->
 <!-- Sourced from pattern-lab-web2 scanner output.             -->
 <!-- Renders when `web2_findings` key is present in context.   -->
 <!-- No-op when key is absent → safe for reports that don't    -->
@@ -370,7 +370,7 @@
   <div class="section-tag">Section 9</div>
   <h2>Sector Peer Benchmarks</h2>
 
-  <p>Findings below come from Securva's Web2 pattern-lab scanner — a set of sector-specific security patterns we've observed across peers in your industry. Each finding is benchmarked against the Securva phase-intel dataset so you can see how your infrastructure compares to similarly-sized organizations in your sector.</p>
+  <p>Findings below come from Securva's Web2 pattern-lab scanner - a set of sector-specific security patterns we've observed across peers in your industry. Each finding is benchmarked against the Securva phase-intel dataset so you can see how your infrastructure compares to similarly-sized organizations in your sector.</p>
 
   {% for finding in web2_findings %}
   <div class="web2-finding">
@@ -415,7 +415,7 @@
         {% else %}
         <tr>
           <th>Peer benchmark</th>
-          <td><em>{{ peer.note | default('Sector sample too small to benchmark — peer stats will populate as we scan more organizations.') }}</em></td>
+          <td><em>{{ peer.note | default('Sector sample too small to benchmark - peer stats will populate as we scan more organizations.') }}</em></td>
         </tr>
         {% endif %}
 
@@ -445,7 +445,7 @@
         {% if extra.legacy_stack_co_occurrence %}
         <tr>
           <th>Co-occurring signals</th>
-          <td><em>Legacy-stack co-occurrence detected — same organization also shows IIS/ASP.NET legacy stack in Securva phase-intel. Combined signal elevates severity.</em></td>
+          <td><em>Legacy-stack co-occurrence detected - same organization also shows IIS/ASP.NET legacy stack in Securva phase-intel. Combined signal elevates severity.</em></td>
         </tr>
         {% endif %}
 

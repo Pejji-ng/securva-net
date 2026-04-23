@@ -44,7 +44,7 @@ binding = "LOCKS"
 id = "FILL_IN_AFTER_CREATE"
 
 # ============================================================
-# Cron trigger — pick up queued jobs every 5 minutes
+# Cron trigger - pick up queued jobs every 5 minutes
 # ============================================================
 
 [triggers]

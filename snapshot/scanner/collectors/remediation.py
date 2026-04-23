@@ -1,5 +1,5 @@
 """
-Remediation roadmap builder — derivative collector. Consumes all other section
+Remediation roadmap builder - derivative collector. Consumes all other section
 outputs and produces a grouped list of action items with estimated fix cost
 (in-house hours OR Pejji package pricing in naira).
 

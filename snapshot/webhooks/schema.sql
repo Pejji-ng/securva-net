@@ -1,4 +1,4 @@
--- Securva Snapshot — D1 database schema
+-- Securva Snapshot - D1 database schema
 --
 -- Apply after creating the D1 database:
 --   wrangler d1 execute securva-snapshot --file=./schema.sql
@@ -25,11 +25,11 @@ CREATE TABLE IF NOT EXISTS jobs (
   tier TEXT NOT NULL,
 
   -- State machine
-  --   awaiting_url — purchased but customer has not yet submitted URL via Tally
-  --   queued       — URL submitted, waiting for cron pickup
-  --   running      — cron has picked up, scan is executing
-  --   done         — scan complete, PDF delivered
-  --   failed       — scan errored, customer notified + refund pending
+  --   awaiting_url - purchased but customer has not yet submitted URL via Tally
+  --   queued       - URL submitted, waiting for cron pickup
+  --   running      - cron has picked up, scan is executing
+  --   done         - scan complete, PDF delivered
+  --   failed       - scan errored, customer notified + refund pending
   status TEXT NOT NULL,
 
   -- Public URL of the generated PDF (served by the Worker via /api/pdf/:token,

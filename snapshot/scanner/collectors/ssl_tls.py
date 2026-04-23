@@ -1,5 +1,5 @@
 """
-SSL/TLS posture collector — reuses api.securva.net/api/scan's ssl block when
+SSL/TLS posture collector - reuses api.securva.net/api/scan's ssl block when
 available, and falls back to a local `openssl s_client` wrapper otherwise.
 
 Returns:

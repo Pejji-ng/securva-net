@@ -1,4 +1,4 @@
-# Securva Snapshot — Scanner (Phase 2)
+# Securva Snapshot - Scanner (Phase 2)
 
 This directory contains the scanner orchestrator for the Securva Snapshot
 product. The orchestrator takes a domain as input, runs 8 section collectors

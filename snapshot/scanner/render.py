@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Securva Snapshot — Render Pipeline (Phase 3)
+Securva Snapshot - Render Pipeline (Phase 3)
 
 End-to-end rendering: takes a domain, runs the orchestrator (Phase 2),
 feeds the JSON into the Jinja2 template (template.html.j2), and produces
@@ -155,7 +155,7 @@ def render_pdf(html: str, output_path: str) -> None:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Securva Snapshot — render PDF from domain or JSON")
+    parser = argparse.ArgumentParser(description="Securva Snapshot - render PDF from domain or JSON")
     src = parser.add_mutually_exclusive_group(required=True)
     src.add_argument("--domain", help="Target domain (runs orchestrator first)")
     src.add_argument("--json", help="Pre-computed orchestrator JSON file")

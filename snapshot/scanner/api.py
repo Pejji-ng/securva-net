@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Securva Snapshot — Scanner API (Phase 4.1)
+Securva Snapshot - Scanner API (Phase 4.1)
 
 FastAPI service that wraps orchestrator.py + render.py so the Cloudflare
 Worker can invoke end-to-end scan+render over HTTP.
@@ -13,7 +13,7 @@ Rationale: eliminates dependency on R2 S3-API endpoint, removes need
 for R2 S3 credentials on the box, keeps all R2 writes inside the
 Worker runtime (tighter blast radius).
 
-Deployed on the Securva research box. Not publicly accessible — nginx
+Deployed on the Securva research box. Not publicly accessible - nginx
 reverse-proxies from scanner.internal.securva.net with IP allowlist
 restricted to Cloudflare's edge IPs + our own IPs.
 
@@ -97,7 +97,7 @@ TIN_VERIFY_MAX_VENDOR_CSV_BYTES = 256 * 1024  # Enforced pre-decode. Caps list s
 def _invoke_web2_scanner(domain: str) -> tuple[Optional[str], Optional[str]]:
     """Run scanner-web2.py for this domain and return (jsonl_path, tmpdir).
 
-    Returns (None, None) on any failure — the render path's `{% if web2_findings %}`
+    Returns (None, None) on any failure - the render path's `{% if web2_findings %}`
     guard in the template means absent JSONL is safe (report renders without Section 9).
 
     Caller is responsible for cleaning up `tmpdir` once render is complete.
@@ -203,7 +203,7 @@ MAX_PDF_BYTES = 20 * 1024 * 1024
 
 EXPECTED_TOKEN = os.environ.get("BOX_API_TOKEN")
 if not EXPECTED_TOKEN:
-    print("WARNING: BOX_API_TOKEN not set — every request will 401", file=sys.stderr)
+    print("WARNING: BOX_API_TOKEN not set - every request will 401", file=sys.stderr)
 
 
 app = FastAPI(
@@ -279,7 +279,7 @@ async def scan_and_render(
 
     # v1.0 (2026-04-21): fire the pattern-lab-web2 scanner in-line. The JSONL
     # gets passed into render so Section 9 (Sector Peer Benchmarks) renders when
-    # findings exist. Scanner failure degrades gracefully — report renders
+    # findings exist. Scanner failure degrades gracefully - report renders
     # without Section 9 rather than failing the whole /scan-and-render call.
     web2_jsonl, web2_tmpdir = _invoke_web2_scanner(req.domain)
 
@@ -321,7 +321,7 @@ async def scan_and_render(
             raise HTTPException(
                 500,
                 f"PDF exceeds {MAX_PDF_BYTES} byte ceiling "
-                f"({len(pdf_bytes)} bytes) — refusing to return",
+                f"({len(pdf_bytes)} bytes) - refusing to return",
             )
 
         pdf_b64 = base64.b64encode(pdf_bytes).decode("ascii")

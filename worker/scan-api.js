@@ -1,5 +1,5 @@
 /**
- * Securva Scan API — Cloudflare Worker v2
+ * Securva Scan API - Cloudflare Worker v2
  * Fixed: uses fetch with cf.resolveOverride to get real headers
  */
 
