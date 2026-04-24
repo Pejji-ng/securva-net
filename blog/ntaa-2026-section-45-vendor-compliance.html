@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NTAA 2026 Section 45: What Nigerian SMEs Need to Know About the New ₦5M-Per-Vendor Rule | Securva</title>
+  <meta name="description" content="The Nigerian Tax Administration Act 2026 attaches a ₦5,000,000 penalty per vendor engaged without a valid NRS TIN. Here is what the rule actually says, who it applies to, and a 1-minute check you can run before your next payment run.">
+  <meta property="og:title" content="NTAA 2026 Section 45: The ₦5M-Per-Vendor Rule Nigerian SMEs Should Know">
+  <meta property="og:description" content="Plain-English breakdown of Section 45, who it hits, and how to check your vendor list in under a minute.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://securva.net/blog/ntaa-2026-section-45-vendor-compliance">
+  <meta property="og:image" content="https://securva.net/images/og-snapshot.png">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23030308'/><path d='M50 15L20 30V50C20 68 32 82 50 90C68 82 80 68 80 50V30L50 15Z' stroke='%237B68EE' stroke-width='3' fill='none'/><circle cx='50' cy='48' r='8' fill='%237B68EE' opacity='0.6'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#030308;--surface:#0A0A12;--card:#101020;--border:#1a1a30;--text:#F0EDF7;--muted:#6a6680;--accent:#7B68EE;--accent-dim:rgba(123,104,238,0.12);--font:'Cabinet Grotesk',system-ui,sans-serif;--serif:'Newsreader',Georgia,serif;--mono:'IBM Plex Mono',monospace}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:var(--serif);background:var(--bg);color:var(--text);min-height:100vh;line-height:1.7;font-size:18px}
+    .container{max-width:720px;margin:0 auto;padding:0 24px}
+
+    .nav{padding:18px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);font-family:var(--font)}
+    .nav-logo{font-weight:900;font-size:1.2rem;color:var(--text);text-decoration:none;letter-spacing:-0.02em}
+    .nav-logo span{color:var(--accent)}
+    .nav-links{display:flex;gap:20px}
+    .nav-links a{color:var(--muted);text-decoration:none;font-size:0.85rem;font-weight:500}
+    .nav-links a:hover{color:var(--text)}
+
+    header.post{max-width:760px;margin:60px auto 32px;padding:0 24px;font-family:var(--font)}
+    .post-eyebrow{font-family:var(--mono);font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:var(--accent);margin-bottom:16px}
+    .post-title{font-size:clamp(1.9rem,5vw,3rem);font-weight:900;letter-spacing:-0.025em;line-height:1.08;margin-bottom:18px;max-width:700px}
+    .post-title span{color:var(--accent)}
+    .post-meta{font-family:var(--mono);font-size:0.8rem;color:var(--muted);margin-bottom:4px}
+    .post-meta a{color:var(--accent);text-decoration:none}
+
+    article{max-width:720px;margin:0 auto 80px;padding:0 24px}
+    article h2{font-family:var(--font);font-size:1.6rem;font-weight:900;letter-spacing:-0.02em;line-height:1.15;margin:56px 0 16px}
+    article h3{font-family:var(--font);font-size:1.15rem;font-weight:800;letter-spacing:-0.01em;margin:32px 0 10px}
+    article p{margin-bottom:20px;color:#E6E3EE}
+    article p strong{color:var(--text)}
+    article ul,article ol{margin:0 0 20px 22px;color:#E6E3EE}
+    article li{margin-bottom:8px}
+    article a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-dim)}
+    article a:hover{border-bottom-color:var(--accent)}
+    article code{font-family:var(--mono);font-size:0.82em;background:var(--surface);padding:2px 8px;border-radius:4px;color:var(--accent)}
+    article blockquote{border-left:3px solid var(--accent);padding:16px 20px;margin:24px 0;background:var(--surface);border-radius:0 8px 8px 0;color:var(--text);font-style:italic}
+
+    .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin:36px 0}
+    .stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center}
+    .stat-n{font-family:var(--font);font-size:1.9rem;font-weight:900;color:var(--accent);letter-spacing:-0.02em;line-height:1}
+    .stat-l{font-family:var(--mono);font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-top:10px}
+
+    .callout{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px;margin:32px 0}
+    .callout h3{margin-top:0;font-family:var(--font)}
+    .callout p:last-child{margin-bottom:0}
+
+    .cta{background:linear-gradient(135deg,var(--card) 0%,#0d0d1c 100%);border:1px solid var(--border);border-radius:16px;padding:32px 28px;margin:48px 0;text-align:center;font-family:var(--font)}
+    .cta-tag{display:inline-block;font-family:var(--mono);font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--accent);padding:4px 10px;background:var(--accent-dim);border-radius:6px;margin-bottom:14px}
+    .cta h3{font-family:var(--font);font-size:1.4rem;font-weight:900;letter-spacing:-0.02em;margin-bottom:10px}
+    .cta h3 span{color:var(--accent)}
+    .cta p{font-size:0.95rem;color:var(--muted);max-width:520px;margin:0 auto 22px;line-height:1.55}
+    .cta a.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 28px;border-radius:10px;background:var(--accent);color:white;text-decoration:none;font-weight:700;font-size:0.95rem;border-bottom:0}
+    .cta a.btn:hover{opacity:0.9}
+
+    footer{max-width:720px;margin:60px auto 40px;padding:40px 24px 0;border-top:1px solid var(--border);text-align:center;font-family:var(--font);color:var(--muted);font-size:0.85rem;line-height:1.6}
+    footer a{color:var(--accent);text-decoration:none}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Sec<span>urva</span></a>
+    <div class="nav-links">
+      <a href="/">Scan</a>
+      <a href="/snapshot">Snapshot</a>
+      <a href="/vendor-check">Vendor Sweep</a>
+      <a href="/research/">Research</a>
+      <a href="/blog">Blog</a>
+    </div>
+  </nav>
+
+  <header class="post">
+    <div class="post-eyebrow">Compliance · Nigerian SMEs</div>
+    <h1 class="post-title">NTAA 2026 Section 45: the <span>₦5M-per-vendor rule</span> your accountant probably has not flagged yet</h1>
+    <div class="post-meta">Published 2026-04-28 · 7 min read · <a href="/">Securva</a></div>
+  </header>
+
+  <article>
+    <p>The Nigerian Tax Administration Act 2026 carries a rule that most small business founders I have spoken to in the last two weeks have never heard of. It is called Section 45. It is in force. And it can cost ₦5,000,000 per vendor if you are not careful about who you pay.</p>
+
+    <p>This post is a plain-English walk-through of what the rule actually says, who it applies to, the small thing you can check in under a minute, and the bigger picture about how Nigerian SMEs are expected to adapt.</p>
+
+    <h2>What Section 45 actually says</h2>
+
+    <p>The rule itself is simple. Before you engage a vendor for a service or a product that your business will pay for, you are expected to confirm that vendor has a valid Tax Identification Number on file with the National Revenue Service.</p>
+
+    <p>If you engage the vendor anyway, and it later turns out the vendor does not have a valid NRS TIN, the penalty attaches to you. The business that engaged the unregistered vendor pays.</p>
+
+    <p>The penalty is <strong>₦5,000,000 per vendor</strong>. Not per violation. Not per payment. Per vendor you engaged. If your payable list at the end of the quarter has fifteen vendors and two of them turn out to be unregistered, you are looking at a ₦10,000,000 exposure before any mitigation.</p>
+
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-n">₦5M</div>
+        <div class="stat-l">Per unregistered vendor</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n">NRS</div>
+        <div class="stat-l">Is the authoritative register</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n">Section 45</div>
+        <div class="stat-l">NTAA 2026, in force</div>
+      </div>
+    </div>
+
+    <h2>Who it applies to</h2>
+
+    <p>Any business registered in Nigeria that pays vendors for services, supplies, or deliverables is within scope. That covers most of the people reading this. It applies whether the vendor is Nigerian or foreign, whether the payment is one-off or recurring, and whether the amount is ₦50,000 for a meal delivery or ₦50,000,000 for a construction contract.</p>
+
+    <p>The NRS does not care how big the invoice is. It cares whether the vendor is registered in the tax system. If you engaged someone to do work for you and paid them, you need to know their TIN exists and is active.</p>
+
+    <p>A handful of edge cases are out of scope for now, primarily casual labor under a threshold and foreign vendors with no Nigerian presence. The practical rule of thumb: if you are issuing a proper invoice or expense report for it, Section 45 applies.</p>
+
+    <h2>What your accountant probably already checks, and where the gap is</h2>
+
+    <p>Good accountants have been checking TINs for large invoices for years. The check itself is not new. What is new is the scope: Section 45 now expects every vendor, not just the big ones. And the penalty tier has moved from "you pay some tax correction" to a flat ₦5M per missed check.</p>
+
+    <p>Here is the gap I keep running into when I talk to Nigerian finance teams.</p>
+
+    <p>A vendor gets verified once, when they are first onboarded. The check gets saved in a spreadsheet. Two years later, the vendor is delisted by NRS for not filing returns or for a compliance issue on their end. The finance team does not know, because nobody ran the check a second time.</p>
+
+    <p>From the NRS's perspective, that vendor has an unregistered TIN at the moment you paid them. From your perspective, you remember verifying them. The penalty attaches anyway.</p>
+
+    <blockquote>
+      The only compliance position that actually survives an NRS audit is a recent, timestamped check. Saved in a spreadsheet from two years ago is not sufficient on its own.
+    </blockquote>
+
+    <h2>The one-minute check before your next payment run</h2>
+
+    <p>Before you release your next vendor payment batch, open a spreadsheet of all the vendors you intend to pay and run this mental filter.</p>
+
+    <ol>
+      <li>Do I have a TIN on file for this vendor?</li>
+      <li>Has anyone verified that TIN against the NRS register in the last 90 days?</li>
+      <li>If the vendor trades under a different name than the one on their TIN certificate, am I sure the same legal entity is being paid?</li>
+    </ol>
+
+    <p>If the answer to any of those is "no" or "I am not sure", pause that row. Do not hold up the whole payment run on one vendor, but do not pay that specific vendor until the TIN check is done.</p>
+
+    <p>You can run the check manually at the NRS's TIN verification portal, one vendor at a time, typing in the RC number and confirming the status. It works. It just takes a couple of minutes per vendor, and most finance teams simply do not have that time at scale.</p>
+
+    <h2>The name-mismatch trap</h2>
+
+    <p>Here is a quieter failure mode that trips even the most diligent accountants.</p>
+
+    <p>A vendor sends you an invoice that reads "Aliko Logistics". You match that against your onboarding record for "ALIKO LOGISTICS SERVICES NIG LTD". The TIN you have on file is for the registered entity. You pay the invoice. The NRS ledger, because of its own matching rules, records the payment as going to a name that does not perfectly line up with your recorded vendor name.</p>
+
+    <p>If an audit picks this up, the easy thing for the auditor to argue is that you paid an entity whose identity is not cleanly verified. Section 45 exposure attaches.</p>
+
+    <p>The fix is boring but important. When you verify, save the <em>exact</em> registered name on the NRS register as a separate field. Use that field on your payment vouchers. Your accounting records and the NRS ledger should agree on the string level, not just the semantic level.</p>
+
+    <h2>The recurring-vendor problem</h2>
+
+    <p>If you have a cleaner, a printer, and a delivery company you pay every month, Section 45 is structurally expensive for you. You have multiple payment runs per year, per vendor, and you need a fresh check on each of them.</p>
+
+    <p>"Fresh" is the part most teams get wrong. The NRS register can change between your September check and your October payment. A good rule, until something more formal is set, is to re-verify at least once per quarter for any vendor you pay recurrently, and always to re-verify if a vendor goes silent for two months and then resurfaces with a new invoice.</p>
+
+    <p>This is the part that pushed us to build a tool for ourselves, which we then packaged and launched for other Nigerian SMEs. You do not have to use ours to solve the problem, but if you are running finance for a business with more than twenty recurring vendors, doing this by hand every quarter is the kind of work that quietly stops getting done.</p>
+
+    <h2>What to actually do this week</h2>
+
+    <p>Whether you use any vendor-verification tool or not, this week is a good time to do three things.</p>
+
+    <ol>
+      <li><strong>Pull your current vendor list.</strong> Not the onboarded-ever list. The list of vendors you paid in the last ninety days.</li>
+      <li><strong>For each one, flag the TIN-verification date.</strong> Anything older than ninety days gets marked for re-verification before the next payment to that vendor.</li>
+      <li><strong>Add a TIN field to your vendor-onboarding form.</strong> New vendors should not progress past onboarding without a valid NRS TIN captured and verified.</li>
+    </ol>
+
+    <p>Those three steps get most Nigerian SMEs into a defensible position. They do not eliminate Section 45 risk entirely, but they move you from "exposed" to "good faith compliance" which is the line auditors draw their decisions against.</p>
+
+    <h2>A note on how Section 45 reads in the bigger picture</h2>
+
+    <p>This rule is part of a broader 2026 push to tighten vendor-level tax compliance across the Nigerian economy. The NRS has been clear for the last eighteen months that they want payment flows to be traceable by the identity of the payee, not just the payer. Section 45 is the enforcement lever for that. Expect more of these vendor-level rules as the year progresses.</p>
+
+    <p>The operational implication is simple. Businesses that treat vendor verification as a one-time onboarding step will keep getting caught. Businesses that treat it as an operational discipline, done before every payment run, will not.</p>
+
+    <p>It is the second kind of business you want to be. Not because the penalty is terrifying, although ₦5M-per-vendor is not nothing, but because the discipline itself tends to correlate with being the kind of operation that does not make other mistakes either.</p>
+
+    <div class="cta">
+      <div class="cta-tag">New · Securva Vendor Sweep</div>
+      <h3>Check your whole <span>vendor list</span> in under a minute.</h3>
+      <p>We check every vendor you pay against the NRS TIN register and send you a signed compliance report with red / amber / green verdict per vendor plus ₦5M-exposure math for any that come back red. Starts at ₦99,000 one-time.</p>
+      <a href="/vendor-check" class="btn">See how Vendor Sweep works →</a>
+    </div>
+
+    <p>Whatever you use to solve Section 45, please solve it. The penalty is large, the check is small, and the compliance position is simple to maintain once you have built the habit.</p>
+  </article>
+
+  <footer>
+    <p><strong>Securva</strong> is a Nigerian-first security and compliance lab. We build lightweight tools that help small businesses stay compliant without a consultant retainer.</p>
+    <p>Questions or a custom scope? <a href="mailto:hello@securva.net">hello@securva.net</a> · WhatsApp <a href="https://wa.me/2349044526924">+234 904 452 6924</a></p>
+    <p style="margin-top:16px"><a href="/">Home</a> · <a href="/snapshot">Snapshot</a> · <a href="/vendor-check">Vendor Sweep</a> · <a href="/blog">More posts</a></p>
+  </footer>
+</body>
+</html>
