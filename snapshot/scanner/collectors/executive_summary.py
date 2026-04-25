@@ -1,5 +1,5 @@
 """
-Executive summary derivator — takes all other section outputs and produces
+Executive summary derivator - takes all other section outputs and produces
 a top-level summary with overall grade, count of findings per severity, and
 plain-English headline findings.
 
@@ -37,7 +37,7 @@ def _headline(sections: dict) -> list[str]:
         issuer = cert.get("issuer", "unknown")
         headlines.append(f"SSL certificate valid from {issuer}, expires in {days} days")
     else:
-        headlines.append("SSL certificate INVALID or missing — critical")
+        headlines.append("SSL certificate INVALID or missing - critical")
 
     ndpa = sections.get("ndpa_compliance", {})
     if ndpa.get("cookie_consent") and ndpa.get("privacy_policy") and ndpa.get("ndpa_reference"):

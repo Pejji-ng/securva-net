@@ -1,5 +1,5 @@
 """
-Security headers collector — calls api.securva.net/api/scan for the existing
+Security headers collector - calls api.securva.net/api/scan for the existing
 header audit stack (HSTS, CSP, X-Frame-Options, X-Content-Type-Options,
 Referrer-Policy, Permissions-Policy).
 

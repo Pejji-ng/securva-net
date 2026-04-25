@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Securva Snapshot — Scanner Orchestrator (Phase 2)
+Securva Snapshot - Scanner Orchestrator (Phase 2)
 
 Takes a domain as input, runs all 8 report-section collectors in parallel where
 possible, and emits a single structured JSON blob that the PDF template
@@ -19,7 +19,7 @@ The JSON schema maps 1:1 to the 8 sections in the report:
 Each collector is in snapshot/scanner/collectors/<section>.py and returns a
 dict matching a well-defined shape. Collectors that need tools only available
 on the Securva research box (subfinder, dnsx, nuclei, github-dork-runner) can
-return a `box_required` marker — the orchestrator runs those via SSH in a
+return a `box_required` marker - the orchestrator runs those via SSH in a
 follow-up pass.
 
 Usage:
@@ -93,7 +93,7 @@ def orchestrate(domain: str, box_ssh: str | None = None) -> dict:
             print(f"[!]   {name} failed: {e}", file=sys.stderr)
             section_results[name] = {"collection_error": str(e), "status": "failed"}
 
-    # remediation + exec summary are derivative — they consume the other sections
+    # remediation + exec summary are derivative - they consume the other sections
     print("[+]   deriving remediation roadmap...", file=sys.stderr)
     section_results["remediation"] = remediation.derive(section_results)
 

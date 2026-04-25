@@ -1,4 +1,4 @@
-# Securva Snapshot — Product Specification (v0.1 DRAFT)
+# Securva Snapshot - Product Specification (v0.1 DRAFT)
 
 **Date:** 2026-04-14 Day 5
 **Status:** DRAFT, needs Kingsley review before any build
@@ -11,7 +11,7 @@
 
 A **self-serve $29 website security assessment** delivered as a 12-20 page PDF within 5 minutes of payment. Customer enters a domain, pays via Gumroad or Paystack, an automated pipeline runs the Securva scanner stack against the domain, and a branded PDF report lands in their email.
 
-**Positioning:** "The Nigerian cyber due diligence report that fits in your pocket." It is not a 50-page enterprise audit. It is not a compliance certification. It is the security equivalent of a car inspection report — fast, affordable, honest, useful.
+**Positioning:** "The Nigerian cyber due diligence report that fits in your pocket." It is not a 50-page enterprise audit. It is not a compliance certification. It is the security equivalent of a car inspection report - fast, affordable, honest, useful.
 
 **Target customer:**
 - Nigerian SME owners who want to know if their website is leaking anything
@@ -94,22 +94,22 @@ Each section is 1-2 pages. Total target: 12-16 pages including cover + back matt
 
 ## 4. Pricing tiers
 
-**Card — ₦15,000 or $10 USD**
+**Card - ₦15,000 or $10 USD**
 - Just the report, no phone call, no follow-up
 - Aimed at tight-budget SMEs who want the information only
 - Delivered within 5 minutes
 
-**Starter — ₦30,000 or $29 USD** ⭐ flagship
+**Starter - ₦30,000 or $29 USD** ⭐ flagship
 - The Card report PLUS a 30-minute Q&A call with the Securva team to walk through findings
-- This is the main product — matches the original Gumroad $29 plan from your memory
+- This is the main product - matches the original Gumroad $29 plan from your memory
 - Delivered within 5 minutes, Q&A call booked within 48 hours
 
-**Pro — ₦60,000 or $49 USD**
+**Pro - ₦60,000 or $49 USD**
 - Everything in Starter PLUS NDPA compliance add-on (detailed NDPC registration check, privacy policy draft, cookie consent banner starter code)
 - PLUS 90-day re-scan (we re-run the report 90 days after original purchase to check if findings were fixed)
 - Delivered within 5 minutes, NDPA add-on section added to the same PDF
 
-**Whitelabel — ₦150,000 or $99 USD**
+**Whitelabel - ₦150,000 or $99 USD**
 - Everything in Pro PLUS removal of Securva branding (customer uses the report internally as if it came from their own team)
 - Adds customer's logo + company name on cover
 - For marketing agencies and consultants who resell it
@@ -177,7 +177,7 @@ Each step is a separate Python script. Queue is a simple JSON file in `/var/secu
 
 **Day 6:** End-to-end test with a test payment + test domain.
 
-**Day 7:** Soft launch — announce to:
+**Day 7:** Soft launch - announce to:
 - Your existing Telegram channels
 - Pejji Outreach Notion list
 - One LinkedIn post
@@ -188,7 +188,7 @@ Each step is a separate Python script. Queue is a simple JSON file in `/var/secu
 
 **Week 3-4:** First 10 paying customers, collect feedback, tune the report content.
 
-**Week 5+:** Content marketing pipeline kicks in — each Securva blog post ends with "Want the full version of this analysis for your own site? ₦30K and 5 minutes — https://securva.net/snapshot".
+**Week 5+:** Content marketing pipeline kicks in - each Securva blog post ends with "Want the full version of this analysis for your own site? ₦30K and 5 minutes - https://securva.net/snapshot".
 
 ## 8. Revenue targets
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Securva Snapshot Report — babakizo.com</title>
+  <title>Securva Snapshot Report - babakizo.com</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -260,7 +260,7 @@
     <li><strong>Edge:</strong> Cloudflare CDN + WAF (auto-detected)</li>
     <li><strong>Origin:</strong> Cloudflare Pages (static site hosting)</li>
     <li><strong>DNS provider:</strong> Cloudflare DNS with DNSSEC</li>
-    <li><strong>Email:</strong> Not configured on the apex (no MX records) — reasonable for a portfolio site that does not need inbound email</li>
+    <li><strong>Email:</strong> Not configured on the apex (no MX records) - reasonable for a portfolio site that does not need inbound email</li>
   </ul>
 
   <h3>DNS hygiene</h3>
@@ -272,7 +272,7 @@
       <tr><td>SPF</td><td class="warn"><span class="badge warn">Not set</span></td><td>No SPF record. Acceptable for a site that does not send email. Required if you ever add email sending.</td></tr>
       <tr><td>DMARC</td><td class="warn"><span class="badge warn">Not set</span></td><td>No DMARC record. Same caveat as SPF.</td></tr>
       <tr><td>DNSSEC</td><td class="pass"><span class="badge pass">Enabled</span></td><td>DNSSEC validation chain complete via Cloudflare.</td></tr>
-      <tr><td>CAA record</td><td class="warn"><span class="badge warn">Not set</span></td><td>No Certificate Authority Authorization record. Low priority — consider adding if you want to restrict which CAs can issue certificates for your domain.</td></tr>
+      <tr><td>CAA record</td><td class="warn"><span class="badge warn">Not set</span></td><td>No Certificate Authority Authorization record. Low priority - consider adding if you want to restrict which CAs can issue certificates for your domain.</td></tr>
     </tbody>
   </table>
 
@@ -289,7 +289,7 @@
   <div class="section-tag">Section 6</div>
   <h2>Known Vulnerability Check</h2>
 
-  <p>We fingerprint the site's detected tech stack and cross-reference against the National Vulnerability Database (NVD) and the Nuclei community templates for known CVEs matching those components. Passive detection only — no active exploitation.</p>
+  <p>We fingerprint the site's detected tech stack and cross-reference against the National Vulnerability Database (NVD) and the Nuclei community templates for known CVEs matching those components. Passive detection only - no active exploitation.</p>
 
   <h3>Detected tech stack</h3>
   <table class="data-table">
@@ -340,7 +340,7 @@
 
   <div class="callout pass">
     <h4>Zero secrets exposed across all scanned pattern classes.</h4>
-    <p>babakizo420's public repositories have exemplary secret hygiene. This is not the norm — in our broader Nigerian research scan from April 2026, we surfaced 68 real production credentials across 210 repositories in 5 minutes of automated scanning. The fact that babakizo.com's operator has zero hits is a strong signal that pre-commit secret scanning, environment variable discipline, and .gitignore hygiene are all in place.</p>
+    <p>babakizo420's public repositories have exemplary secret hygiene. This is not the norm - in our broader Nigerian research scan from April 2026, we surfaced 68 real production credentials across 210 repositories in 5 minutes of automated scanning. The fact that babakizo.com's operator has zero hits is a strong signal that pre-commit secret scanning, environment variable discipline, and .gitignore hygiene are all in place.</p>
   </div>
 </section>
 
@@ -371,9 +371,9 @@
     <h3>Need help implementing any of these?</h3>
     <p>Pejji is the sister agency to Securva and specializes in Nigerian-market web security remediation. We build and harden websites with NDPA compliance baked in from day one.</p>
     <p><strong>Relevant Pejji packages:</strong><br>
-    Card (NGN 60,000) — quick-win configuration + DNS hardening<br>
-    Starter (NGN 150,000) — full privacy policy rewrite + DPO integration<br>
-    Growth (NGN 300,000) — site migration + monitoring bundle</p>
+    Card (NGN 60,000) - quick-win configuration + DNS hardening<br>
+    Starter (NGN 150,000) - full privacy policy rewrite + DPO integration<br>
+    Growth (NGN 300,000) - site migration + monitoring bundle</p>
     <a href="https://pejji.com/contact?ref=snapshot-SEC-SS-20260415-0001" class="cta">Get a quote at pejji.com</a>
   </div>
 </section>

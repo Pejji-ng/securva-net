@@ -14,7 +14,7 @@ report.
 
 Execution modes:
   - `box_ssh` provided: shells out via SSH to run the box-side v4.2 scanner.
-    Preferred for production — the box has the PAT, the rate-limit budget,
+    Preferred for production - the box has the PAT, the rate-limit budget,
     and the full provider pattern set.
   - `box_ssh` not provided: returns a stub that says "box required".
     Useful for local dev and testing without hitting the GitHub API.
@@ -59,7 +59,7 @@ DEFAULT_SSH_KEY = os.environ.get(
 def _guess_github_org(domain: str) -> str:
     """Guess the GitHub org name from the domain. 'babakizo.com' → 'babakizo420'."""
     base = domain.split(".")[0]
-    # Known Kingsley-side mappings — override for domains where the GitHub org
+    # Known Kingsley-side mappings - override for domains where the GitHub org
     # name doesn't obviously match the domain
     known = {
         "babakizo": "babakizo420",
@@ -96,7 +96,7 @@ def _run_v42_owner_scan_via_box(org: str, box_ssh: str) -> dict:
     SSH into the box and run a small Python bridge that invokes v4.2's
     expand_owner_scan(org) for a single org and returns JSON.
 
-    This is a focused invocation — not a full dork pass. It only enumerates
+    This is a focused invocation - not a full dork pass. It only enumerates
     the one org's repos and scans common config files. Fast (<30 seconds
     typical) and doesn't consume dork search rate limit budget.
     """
@@ -192,7 +192,7 @@ def collect(domain: str, box_ssh: str | None = None) -> dict:
             "grade": "A",
             "notes": [
                 f"Confirmed GitHub org: {org} ({public_repos} public repos)",
-                "Full credential scan requires the Securva research box — this field is populated in live scans",
+                "Full credential scan requires the Securva research box - this field is populated in live scans",
             ],
         }
 

@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Securva Research — The State of Nigerian Enterprise Infrastructure Security</title>
-    <meta name="description" content="Ongoing infrastructure-mapping research across 96 Nigerian organizations, 2,730 hosts, 6 sectors. Public aggregate data, methodology, and sector rollups. Updated weekly.">
-    <meta property="og:title" content="Securva Research — The State of Nigerian Enterprise Infrastructure Security">
-    <meta property="og:description" content="96 Nigerian organizations. 2,730 live hosts mapped. Sector-by-sector HSTS coverage, legacy stack flags, and infrastructure patterns. The dataset nobody else has.">
+    <title>Securva Research - The State of Nigerian Enterprise Infrastructure Security</title>
+    <meta name="description" content="Ongoing infrastructure-mapping research across 117 Nigerian organizations, 2,481 hosts, 7 sectors. Public aggregate data, methodology, and sector rollups. Updated weekly.">
+    <meta property="og:title" content="Securva Research - The State of Nigerian Enterprise Infrastructure Security">
+    <meta property="og:description" content="117 Nigerian organizations. 2,481 live hosts mapped. Sector-by-sector HSTS coverage, legacy stack flags, and infrastructure patterns. The dataset nobody else has.">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Securva Research">
     <meta property="og:image" content="https://securva.net/images/og-research.png">
@@ -14,8 +14,8 @@
     <meta property="og:image:height" content="630">
     <meta property="og:url" content="https://securva.net/research/">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Securva Research — Nigerian Enterprise Infrastructure Security">
-    <meta name="twitter:description" content="96 orgs. 2,730 hosts. Sector-level HSTS + legacy-stack data. Updated weekly, free aggregate, gated per-org detail.">
+    <meta name="twitter:title" content="Securva Research - Nigerian Enterprise Infrastructure Security">
+    <meta name="twitter:description" content="117 orgs. 2,481 hosts. Sector-level HSTS + legacy-stack data. Updated weekly, free aggregate, gated per-org detail.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,600&display=swap" rel="stylesheet">
@@ -161,24 +161,24 @@
     <div class="container">
         <div class="hero-label">Ongoing infrastructure research</div>
         <h1>The state of Nigerian enterprise <span>infrastructure security</span></h1>
-        <p class="subtitle">Measured, not assumed. We map live Nigerian infrastructure — banks, fintechs, healthcare, government, telecom, e-commerce — and publish the aggregate data so the country has an honest picture of where the attack surface actually is.</p>
-        <div class="updated">Updated 2026-04-21 &middot; Weekly refresh &middot; Free aggregate, paid per-org via <a href="/snapshot" style="color:var(--accent);text-decoration:none">Snapshot</a></div>
+        <p class="subtitle">Measured, not assumed. We map live Nigerian infrastructure - banks, fintechs, healthcare, government, telecom, e-commerce, ISPs - and publish the aggregate data so the country has an honest picture of where the attack surface actually is.</p>
+        <div class="updated">Updated 2026-04-23 &middot; Weekly refresh &middot; Free aggregate, paid per-org via <a href="/snapshot" style="color:var(--accent);text-decoration:none">Snapshot</a></div>
 
         <div class="stat-grid">
             <div class="stat-box">
-                <div class="stat-big">96</div>
+                <div class="stat-big">117</div>
                 <div class="stat-label">Organizations mapped</div>
             </div>
             <div class="stat-box">
-                <div class="stat-big">2,730</div>
+                <div class="stat-big">2,481</div>
                 <div class="stat-label">Hosts mapped</div>
             </div>
             <div class="stat-box">
-                <div class="stat-big">6</div>
+                <div class="stat-big">7</div>
                 <div class="stat-label">Sectors covered</div>
             </div>
             <div class="stat-box">
-                <div class="stat-big">31</div>
+                <div class="stat-big">44</div>
                 <div class="stat-label">Systemic findings</div>
             </div>
         </div>
@@ -187,7 +187,7 @@
 
         <p>Most "Nigerian cybersecurity" coverage is either breach-chasing (what just happened to Sterling, Flutterwave, Patricia) or vendor-marketing (why you need our MSSP). Neither answers the foundational question: <strong>across the sectors that matter, what does Nigerian enterprise infrastructure actually look like?</strong></p>
 
-        <p>We built the dataset to answer it. DNS enumeration, live-host probing, HSTS coverage analysis, legacy-stack flagging, ASN mapping — applied consistently to 96 Nigerian organizations across banking, fintech, healthcare, telecom, government, and e-commerce. What follows is the aggregate. No exploitation. No speculation. Just what a non-privileged observer can see.</p>
+        <p>We built the dataset to answer it. DNS enumeration, live-host probing, HSTS coverage analysis, legacy-stack flagging, ASN mapping - applied consistently to 96 Nigerian organizations across banking, fintech, healthcare, telecom, government, and e-commerce. What follows is the aggregate. No exploitation. No speculation. Just what a non-privileged observer can see.</p>
 
         <h2>Sector rollup</h2>
 
@@ -199,11 +199,11 @@
                 <tr>
                     <td><span class="sector-pill banking">Banking</span></td>
                     <td class="num">9</td>
-                    <td class="num">933</td>
+                    <td class="num">727</td>
                     <td>
                         <div class="sector-bar-wrap">
-                            <div class="sector-bar"><div class="sector-bar-fill low" style="width:36.5%"></div></div>
-                            <span class="sector-bar-label">36.5%</span>
+                            <div class="sector-bar"><div class="sector-bar-fill low" style="width:36.6%"></div></div>
+                            <span class="sector-bar-label">36.6%</span>
                         </div>
                     </td>
                 </tr>
@@ -220,34 +220,45 @@
                 </tr>
                 <tr>
                     <td><span class="sector-pill government">Government</span></td>
-                    <td class="num">4</td>
-                    <td class="num">239</td>
+                    <td class="num">5</td>
+                    <td class="num">240</td>
                     <td>
                         <div class="sector-bar-wrap">
-                            <div class="sector-bar"><div class="sector-bar-fill low" style="width:30%"></div></div>
-                            <span class="sector-bar-label">30.0%</span>
+                            <div class="sector-bar"><div class="sector-bar-fill low" style="width:24%"></div></div>
+                            <span class="sector-bar-label">24.0%</span>
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td><span class="sector-pill healthcare">Healthcare</span></td>
-                    <td class="num">4</td>
-                    <td class="num">122</td>
+                    <td class="num">5</td>
+                    <td class="num">123</td>
                     <td>
                         <div class="sector-bar-wrap">
-                            <div class="sector-bar"><div class="sector-bar-fill low" style="width:12.3%"></div></div>
-                            <span class="sector-bar-label">12.3%</span>
+                            <div class="sector-bar"><div class="sector-bar-fill low" style="width:17.8%"></div></div>
+                            <span class="sector-bar-label">17.8%</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="sector-pill" style="background:rgba(34,197,94,0.12);color:#22c55e">ISP</span></td>
+                    <td class="num">3</td>
+                    <td class="num">114</td>
+                    <td>
+                        <div class="sector-bar-wrap">
+                            <div class="sector-bar"><div class="sector-bar-fill low" style="width:0%"></div></div>
+                            <span class="sector-bar-label">n/a</span>
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td><span class="sector-pill fintech">Fintech</span></td>
                     <td class="num">4</td>
-                    <td class="num">117</td>
+                    <td class="num">70</td>
                     <td>
                         <div class="sector-bar-wrap">
-                            <div class="sector-bar"><div class="sector-bar-fill mid" style="width:51.3%"></div></div>
-                            <span class="sector-bar-label">51.3%</span>
+                            <div class="sector-bar"><div class="sector-bar-fill mid" style="width:48.5%"></div></div>
+                            <span class="sector-bar-label">48.5%</span>
                         </div>
                     </td>
                 </tr>
@@ -265,11 +276,11 @@
             </tbody>
         </table>
 
-        <p><strong>The punchline</strong>: healthcare is an outlier on the bad side (12.3% avg HSTS across 122 hosts — the sector of patient data is the sector with the worst baseline). Fintech is the outlier on the good side (51.3% — regulatory pressure from CBN appears to have moved the needle). Banking, telecom, government, e-commerce are all in the 30-37% range — comfortably below what "reasonable security hygiene" looks like in 2026.</p>
+        <p><strong>The punchline</strong>: healthcare and government are the outliers on the bad side (17.8% and 24% avg HSTS respectively - sectors holding the most sensitive data are also the sectors most behind on basic transport security). Fintech is the outlier on the good side (48.5% - CBN pressure appears to have moved the needle). Banking, telecom, e-commerce all sit in the 31-37% range - comfortably below what "reasonable security hygiene" looks like in 2026. ISPs don't have HSTS-measured data because the infrastructure they operate differs from the customer-facing web estates of the other sectors.</p>
 
-        <h2>Lowest HSTS coverage — orgs with material footprint</h2>
+        <h2>Lowest HSTS coverage - orgs with material footprint</h2>
 
-        <p>The orgs below have 6+ live hosts AND measurable HSTS coverage. Sorted worst-first. This is the list that matters operationally — small orgs fly under any attacker's radar, but anyone with 10+ subdomains IS on the radar and low HSTS is where attackers pivot.</p>
+        <p>The orgs below have 6+ live hosts AND measurable HSTS coverage. Sorted worst-first. This is the list that matters operationally - small orgs fly under any attacker's radar, but anyone with 10+ subdomains IS on the radar and low HSTS is where attackers pivot.</p>
 
         <div class="filter-bar" id="filterBar">
             <div class="filter-search-wrap">
@@ -325,26 +336,26 @@
         </table>
         </div>
 
-        <p><strong>What this table tells you</strong>: two healthcare orgs (Hygeia HMO + 54gene) have exactly zero HSTS coverage across 100+ hosts combined. Two government regulators (NCC + NITDA) are effectively unhardened at 5-6% coverage. The biggest Nigerian bank by host count (Access Bank at 381 live hosts) sits at 40% — better than peers, still not good. The fintech gap between Kuda (25%) and Flutterwave/Paystack (89-91%) shows what regulatory + institutional maturity does to a sector.</p>
+        <p><strong>What this table tells you</strong>: two healthcare orgs (Hygeia HMO + 54gene) have exactly zero HSTS coverage across 100+ hosts combined. Two government regulators (NCC + NITDA) are effectively unhardened at 5-6% coverage. The biggest Nigerian bank by host count (Access Bank at 381 live hosts) sits at 40% - better than peers, still not good. The fintech gap between Kuda (25%) and Flutterwave/Paystack (89-91%) shows what regulatory + institutional maturity does to a sector.</p>
 
         <h2>Methodology</h2>
 
         <div class="methodology-note">
             <p><strong>What we do:</strong> DNS enumeration (Amass + DNSX + crt.sh), live-host probing (httpx), HSTS + security-header coverage analysis (per-host), legacy-stack fingerprinting (ASP.NET / IIS version detection from response signatures), ASN ownership mapping, sector classification.</p>
-            <p><strong>What we don't do:</strong> exploitation, authenticated scanning, internal-network probing, data extraction, or any form of active intrusion. Everything on this page is observable from a non-privileged outside position — the same position a potential attacker has on day one.</p>
+            <p><strong>What we don't do:</strong> exploitation, authenticated scanning, internal-network probing, data extraction, or any form of active intrusion. Everything on this page is observable from a non-privileged outside position - the same position a potential attacker has on day one.</p>
             <p><strong>Cadence:</strong> portal refreshes weekly. Methodology details in the <a href="/blog/nigerian-attack-surface-2026-04.html" style="color:var(--accent)">companion blog post</a>. Quarterly deep-dive PDF reports start Q2 2026.</p>
         </div>
 
         <h2>What the data means for you</h2>
 
         <h3>If you run infrastructure for one of the 96 orgs above</h3>
-        <p>Your organization is on the list. The aggregate is public; the per-org detail is not. If you want the full 42-checkpoint scan for your organization — HSTS coverage per host, legacy-stack list, exposed-subdomain map, NDPA 2023 compliance gaps, remediation roadmap — that's our <a href="/snapshot" style="color:var(--accent)">Securva Snapshot</a> product. Starts at $10 USD.</p>
+        <p>Your organization is on the list. The aggregate is public; the per-org detail is not. If you want the full 42-checkpoint scan for your organization - HSTS coverage per host, legacy-stack list, exposed-subdomain map, NDPA 2023 compliance gaps, remediation roadmap - that's our <a href="/snapshot" style="color:var(--accent)">Securva Snapshot</a> product. Starts at $10 USD.</p>
 
         <h3>If you're a journalist, researcher, or regulator</h3>
-        <p>The data is free to cite. Email <a href="mailto:hello@securva.net" style="color:var(--accent)">hello@securva.net</a> with the specific sector / time window you need and we'll send the backing data. We're also drafting a quarterly "State of Nigerian Infrastructure Security" PDF report — first edition lands Q2 2026. Email to be on the notification list.</p>
+        <p>The data is free to cite. Email <a href="mailto:hello@securva.net" style="color:var(--accent)">hello@securva.net</a> with the specific sector / time window you need and we'll send the backing data. We're also drafting a quarterly "State of Nigerian Infrastructure Security" PDF report - first edition lands Q2 2026. Email to be on the notification list.</p>
 
         <h3>If you're one of the orgs above and want to understand what you actually look like</h3>
-        <p>Same email. We do coordinated first-party disclosure for free on request — no public shaming, no media, no monetization of the finding. Rotation window standard 14 days.</p>
+        <p>Same email. We do coordinated first-party disclosure for free on request - no public shaming, no media, no monetization of the finding. Rotation window standard 14 days.</p>
 
         <div class="cta-box">
             <div class="cta-box-inner">

@@ -80,7 +80,7 @@ sudo -u "$SERVICE_USER" .venv/bin/python3 -c "
 from orchestrator import orchestrate
 from render import prepare_template_context, render_html, render_pdf
 from api import app
-print('OK — all imports resolve')
+print('OK - all imports resolve')
 "
 
 # ---------- 5. Env file (placeholder, Kingsley fills via secure stdin) ----------

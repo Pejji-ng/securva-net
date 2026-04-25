@@ -1,5 +1,5 @@
 """
-NDPA compliance collector — reuses api.securva.net/api/scan's ndpa block when
+NDPA compliance collector - reuses api.securva.net/api/scan's ndpa block when
 present. Checks:
   - Cookie consent banner present
   - Privacy policy page exists and reachable
