@@ -1,0 +1,15 @@
+# Securva - https://securva.net
+# Public security tooling and audits for Nigerian SMEs
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://securva.net/sitemap.xml
+
+# Crawl-delay courtesy for high-frequency bots
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
