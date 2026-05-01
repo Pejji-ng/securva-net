@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Securva Research - The State of Nigerian Enterprise Infrastructure Security</title>
-    <meta name="description" content="Ongoing infrastructure-mapping research across 117 Nigerian organizations, 2,481 hosts, 7 sectors. Public aggregate data, methodology, and sector rollups. Updated weekly.">
+    <meta name="description" content="Ongoing infrastructure-mapping research across 116 Nigerian organizations, 4,948 hosts, 7 sectors. Public aggregate data, methodology, and sector rollups. Updated weekly.">
     <meta property="og:title" content="Securva Research - The State of Nigerian Enterprise Infrastructure Security">
-    <meta property="og:description" content="117 Nigerian organizations. 2,481 live hosts mapped. Sector-by-sector HSTS coverage, legacy stack flags, and infrastructure patterns. The dataset nobody else has.">
+    <meta property="og:description" content="116 Nigerian organizations. 4,948 live hosts mapped. Sector-by-sector HSTS coverage, legacy stack flags, and infrastructure patterns. The dataset nobody else has.">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Securva Research">
     <meta property="og:image" content="https://securva.net/images/og-research.png">
@@ -15,7 +15,7 @@
     <meta property="og:url" content="https://securva.net/research/">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Securva Research - Nigerian Enterprise Infrastructure Security">
-    <meta name="twitter:description" content="117 orgs. 2,481 hosts. Sector-level HSTS + legacy-stack data. Updated weekly, free aggregate, gated per-org detail.">
+    <meta name="twitter:description" content="116 orgs. 4,948 hosts. Sector-level HSTS + legacy-stack data. Updated weekly, free aggregate, gated per-org detail.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,600&display=swap" rel="stylesheet">
@@ -170,15 +170,15 @@
         <div class="hero-label">Ongoing infrastructure research</div>
         <h1>The state of Nigerian enterprise <span>infrastructure security</span></h1>
         <p class="subtitle">Measured, not assumed. We map live Nigerian infrastructure - banks, fintechs, healthcare, government, telecom, e-commerce, ISPs - and publish the aggregate data so the country has an honest picture of where the attack surface actually is.</p>
-        <div class="updated">Updated 2026-04-23 &middot; Weekly refresh &middot; Free aggregate, paid per-org via <a href="/snapshot" style="color:var(--accent);text-decoration:none">Snapshot</a></div>
+        <div class="updated">Updated 2026-05-01 &middot; Weekly refresh &middot; Free aggregate, paid per-org via <a href="/snapshot" style="color:var(--accent);text-decoration:none">Snapshot</a></div>
 
         <div class="stat-grid">
             <div class="stat-box">
-                <div class="stat-big">117</div>
+                <div class="stat-big">116</div>
                 <div class="stat-label">Organizations mapped</div>
             </div>
             <div class="stat-box">
-                <div class="stat-big">2,481</div>
+                <div class="stat-big">4,948</div>
                 <div class="stat-label">Hosts mapped</div>
             </div>
             <div class="stat-box">
@@ -195,7 +195,7 @@
 
         <p>Most "Nigerian cybersecurity" coverage is either breach-chasing (what just happened to Sterling, Flutterwave, Patricia) or vendor-marketing (why you need our MSSP). Neither answers the foundational question: <strong>across the sectors that matter, what does Nigerian enterprise infrastructure actually look like?</strong></p>
 
-        <p>We built the dataset to answer it. DNS enumeration, live-host probing, HSTS coverage analysis, legacy-stack flagging, ASN mapping - applied consistently to 96 Nigerian organizations across banking, fintech, healthcare, telecom, government, and e-commerce. What follows is the aggregate. No exploitation. No speculation. Just what a non-privileged observer can see.</p>
+        <p>We built the dataset to answer it. DNS enumeration, live-host probing, HSTS coverage analysis, legacy-stack flagging, ASN mapping - applied consistently to 116 Nigerian organizations across banking, fintech, healthcare, telecom, government, e-commerce, and ISPs. What follows is the aggregate. No exploitation. No speculation. Just what a non-privileged observer can see.</p>
 
         <h2>Sector rollup</h2>
 
@@ -205,64 +205,64 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><span class="sector-pill banking">Banking</span></td>
-                    <td class="num">9</td>
-                    <td class="num">727</td>
+                    <td><span class="sector-pill healthcare">Healthcare</span></td>
+                    <td class="num">10</td>
+                    <td class="num">1,790</td>
                     <td>
                         <div class="sector-bar-wrap">
-                            <div class="sector-bar"><div class="sector-bar-fill low" style="width:36.6%"></div></div>
-                            <span class="sector-bar-label">36.6%</span>
+                            <div class="sector-bar"><div class="sector-bar-fill low" style="width:18.2%"></div></div>
+                            <span class="sector-bar-label">18.2%</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="sector-pill banking">Banking</span></td>
+                    <td class="num">9</td>
+                    <td class="num">1,005</td>
+                    <td>
+                        <div class="sector-bar-wrap">
+                            <div class="sector-bar"><div class="sector-bar-fill low" style="width:46.6%"></div></div>
+                            <span class="sector-bar-label">46.6%</span>
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td><span class="sector-pill telecom">Telecom</span></td>
-                    <td class="num">9</td>
-                    <td class="num">248</td>
+                    <td class="num">17</td>
+                    <td class="num">947</td>
                     <td>
                         <div class="sector-bar-wrap">
-                            <div class="sector-bar"><div class="sector-bar-fill low" style="width:31.7%"></div></div>
-                            <span class="sector-bar-label">31.7%</span>
+                            <div class="sector-bar"><div class="sector-bar-fill low" style="width:28.0%"></div></div>
+                            <span class="sector-bar-label">28.0%</span>
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td><span class="sector-pill government">Government</span></td>
                     <td class="num">5</td>
-                    <td class="num">240</td>
+                    <td class="num">472</td>
                     <td>
                         <div class="sector-bar-wrap">
-                            <div class="sector-bar"><div class="sector-bar-fill low" style="width:24%"></div></div>
+                            <div class="sector-bar"><div class="sector-bar-fill low" style="width:24.0%"></div></div>
                             <span class="sector-bar-label">24.0%</span>
                         </div>
                     </td>
                 </tr>
                 <tr>
-                    <td><span class="sector-pill healthcare">Healthcare</span></td>
-                    <td class="num">5</td>
-                    <td class="num">123</td>
+                    <td><span class="sector-pill ecommerce-ng">E-commerce</span></td>
+                    <td class="num">11</td>
+                    <td class="num">360</td>
                     <td>
                         <div class="sector-bar-wrap">
-                            <div class="sector-bar"><div class="sector-bar-fill low" style="width:17.8%"></div></div>
-                            <span class="sector-bar-label">17.8%</span>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td><span class="sector-pill" style="background:rgba(34,197,94,0.12);color:#22c55e">ISP</span></td>
-                    <td class="num">3</td>
-                    <td class="num">114</td>
-                    <td>
-                        <div class="sector-bar-wrap">
-                            <div class="sector-bar"><div class="sector-bar-fill low" style="width:0%"></div></div>
-                            <span class="sector-bar-label">n/a</span>
+                            <div class="sector-bar"><div class="sector-bar-fill low" style="width:34.5%"></div></div>
+                            <span class="sector-bar-label">34.5%</span>
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td><span class="sector-pill fintech">Fintech</span></td>
                     <td class="num">4</td>
-                    <td class="num">70</td>
+                    <td class="num">210</td>
                     <td>
                         <div class="sector-bar-wrap">
                             <div class="sector-bar"><div class="sector-bar-fill mid" style="width:48.5%"></div></div>
@@ -271,20 +271,20 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><span class="sector-pill ecommerce-ng">E-commerce</span></td>
-                    <td class="num">2</td>
-                    <td class="num">104</td>
+                    <td><span class="sector-pill" style="background:rgba(34,197,94,0.12);color:#22c55e">ISP</span></td>
+                    <td class="num">8</td>
+                    <td class="num">164</td>
                     <td>
                         <div class="sector-bar-wrap">
-                            <div class="sector-bar"><div class="sector-bar-fill low" style="width:34.5%"></div></div>
-                            <span class="sector-bar-label">34.5%</span>
+                            <div class="sector-bar"><div class="sector-bar-fill low" style="width:0%"></div></div>
+                            <span class="sector-bar-label">n/a</span>
                         </div>
                     </td>
                 </tr>
             </tbody>
         </table>
 
-        <p><strong>The punchline</strong>: healthcare and government are the outliers on the bad side (17.8% and 24% avg HSTS respectively - sectors holding the most sensitive data are also the sectors most behind on basic transport security). Fintech is the outlier on the good side (48.5% - CBN pressure appears to have moved the needle). Banking, telecom, e-commerce all sit in the 31-37% range - comfortably below what "reasonable security hygiene" looks like in 2026. ISPs don't have HSTS-measured data because the infrastructure they operate differs from the customer-facing web estates of the other sectors.</p>
+        <p><strong>The punchline</strong>: healthcare is the worst-of-the-worst (10 orgs, 1,790 hosts, 18.2% avg HSTS coverage - the sector holding the most patient and HMO records is also the sector most behind on basic transport security). Government is second-worst (24%). Fintech is the outlier on the good side (48.5% - CBN pressure appears to have moved the needle). Banking has improved meaningfully since prior refresh (now 46.6%, up from 36.6%). Telecom and e-commerce sit in the 28-35% range - still below what "reasonable security hygiene" looks like in 2026. ISPs don't have HSTS-measured data because the infrastructure they operate differs from the customer-facing web estates of the other sectors.</p>
 
         <h2>Lowest HSTS coverage - orgs with material footprint</h2>
 
