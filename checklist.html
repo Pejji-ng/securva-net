@@ -138,7 +138,11 @@
         <div class="form-card">
             <h2>Get the full 10-page guide</h2>
             <p>Drop your email, get the PDF instantly. No follow-up funnels, no "premium" upsell on the basics. Unsubscribe whenever.</p>
-            <form id="checklist-form" action="https://formspree.io/f/REPLACE_WITH_FORMSPREE_ID" method="POST">
+            <form id="checklist-form" action="https://api.web3forms.com/submit" method="POST">
+                <input type="hidden" name="access_key" value="098e89e5-22db-4cde-92b4-c1ebd8125940">
+                <input type="hidden" name="subject" value="Securva Checklist Signup">
+                <input type="hidden" name="from_name" value="Securva Checklist Landing Page">
+                <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
                 <div class="form-row">
                     <input type="email" name="email" placeholder="you@example.com" required autocomplete="email">
                     <button type="submit">Send me the checklist</button>
