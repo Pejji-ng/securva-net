@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Securva Research - Security Disclosures &amp; CVEs</title>
+    <meta name="description" content="Real vulnerabilities Securva found and responsibly disclosed in widely-used open-source software (Gitea, File Browser). Maintainer-confirmed. The work behind the audits.">
+    <meta property="og:title" content="Securva - Security Disclosures &amp; CVEs">
+    <meta property="og:description" content="Real, maintainer-confirmed vulnerabilities we found in software with 470M+ downloads. What is hiding in your systems?">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://securva.net/research/disclosures.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<style>
+        :root{--bg:#030308;--surface:#0A0A12;--card:#101020;--border:#1a1a30;--text:#F0EDF7;--muted:#6a6680;--accent:#7B68EE;--green:#4ade80;--red:#f87171;--amber:#fbbf24;--font:'Cabinet Grotesk',system-ui,sans-serif;--serif:'Newsreader',Georgia,serif;--mono:'IBM Plex Mono',monospace}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:var(--font);background:var(--bg);color:var(--text)}
+
+        .nav{padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+        .nav-logo{font-weight:900;font-size:1.3rem;color:var(--text);text-decoration:none;letter-spacing:-0.02em}
+        .nav-logo span{color:var(--accent)}
+        .nav-links{display:flex;gap:24px}
+        .nav-links a{color:var(--muted);text-decoration:none;font-size:0.85rem;font-weight:500;transition:color 0.3s}
+        .nav-links a:hover{color:var(--text)}
+        .nav-links a.active{color:var(--accent)}
+
+        .container{max-width:880px;margin:0 auto;padding:60px 24px 80px}
+        .hero-label{font-family:var(--mono);font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:3px;color:var(--accent);margin-bottom:16px}
+        h1{font-size:clamp(2.2rem,5.5vw,3.2rem);font-weight:900;letter-spacing:-0.03em;line-height:1.1;margin-bottom:20px}
+        h1 span{color:var(--accent)}
+        .subtitle{font-family:var(--serif);font-size:1.15rem;line-height:1.7;color:#c8c4d0;margin-bottom:28px;max-width:640px}
+        .updated{font-family:var(--mono);font-size:0.75rem;color:var(--muted);margin-bottom:48px}
+
+        .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:56px}
+        .stat-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px 16px;text-align:center}
+        .stat-big{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:900;color:var(--accent);letter-spacing:-0.02em;line-height:1}
+        .stat-label{font-family:var(--mono);font-size:0.7rem;color:var(--muted);margin-top:8px;text-transform:uppercase;letter-spacing:1.5px}
+
+        h2{font-size:1.85rem;font-weight:800;margin:56px 0 20px;letter-spacing:-0.02em;border-left:3px solid var(--accent);padding-left:18px}
+        h3{font-size:1.2rem;font-weight:700;margin:36px 0 10px;color:var(--accent)}
+        p{font-family:var(--serif);font-size:1.05rem;line-height:1.75;color:#c8c4d0;margin-bottom:20px}
+        strong{color:var(--text)}
+
+        .sector-table{width:100%;border-collapse:collapse;margin:20px 0 40px;font-family:var(--font)}
+        .sector-table th,.sector-table td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--border);font-size:0.92rem}
+        .sector-table th{color:var(--muted);font-weight:700;font-size:0.72rem;text-transform:uppercase;letter-spacing:1px}
+        .sector-table td.num{font-family:var(--mono);text-align:right}
+        .sector-bar-wrap{display:flex;align-items:center;gap:10px;min-width:160px}
+        .sector-bar{flex:1;height:6px;background:var(--surface);border-radius:3px;overflow:hidden;position:relative}
+        .sector-bar-fill{height:100%;border-radius:3px;transition:width 0.6s ease}
+        .sector-bar-fill.low{background:var(--red)}
+        .sector-bar-fill.mid{background:var(--amber)}
+        .sector-bar-fill.high{background:var(--green)}
+        .sector-bar-label{font-family:var(--mono);font-size:0.75rem;color:var(--muted);min-width:40px;text-align:right}
+
+        .orgs-table{width:100%;border-collapse:collapse;margin:20px 0 40px;font-family:var(--font);font-size:0.88rem}
+        .orgs-table th,.orgs-table td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--border)}
+        .orgs-table th{color:var(--muted);font-weight:700;font-size:0.7rem;text-transform:uppercase;letter-spacing:1px}
+        .orgs-table td.num{font-family:var(--mono);text-align:right}
+        .orgs-table td.org-name{font-weight:700;color:var(--text)}
+        .orgs-table tr.bad td.num.hsts{color:var(--red);font-weight:700}
+        .orgs-table tr.mid td.num.hsts{color:var(--amber);font-weight:700}
+        .orgs-table tr.ok td.num.hsts{color:var(--green);font-weight:700}
+        .sector-pill{display:inline-block;padding:3px 10px;background:var(--accent-dim,rgba(123,104,238,0.12));color:var(--accent);border-radius:10px;font-family:var(--mono);font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;font-weight:600}
+        .sector-pill.banking{background:rgba(248,113,113,0.12);color:#f87171}
+        .sector-pill.fintech{background:rgba(74,222,128,0.12);color:#4ade80}
+        .sector-pill.healthcare{background:rgba(251,191,36,0.12);color:#fbbf24}
+        .sector-pill.telecom{background:rgba(96,165,250,0.12);color:#60a5fa}
+        .sector-pill.government{background:rgba(192,132,252,0.12);color:#c084fc}
+        .sector-pill.ecommerce-ng{background:rgba(244,114,182,0.12);color:#f472b6}
+
+        .methodology-note{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:10px;padding:22px 24px;margin:32px 0;font-size:0.95rem}
+        .methodology-note p{margin-bottom:12px;font-size:0.95rem}
+        .methodology-note p:last-child{margin-bottom:0}
+
+        .cta-box{background:linear-gradient(135deg,var(--card) 0%,#0d0d1c 100%);border:1px solid var(--border);border-radius:18px;padding:36px 28px;margin:48px 0;position:relative;overflow:hidden}
+        .cta-box::before{content:"";position:absolute;top:-40%;right:-20%;width:360px;height:360px;background:radial-gradient(circle,rgba(123,104,238,0.12) 0%,transparent 60%);pointer-events:none}
+        .cta-box-inner{position:relative;z-index:1}
+        .cta-box h3{color:var(--text);margin-top:0}
+        .cta-box p{font-family:var(--font);font-size:0.95rem;margin-bottom:20px}
+        .cta-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:var(--accent);color:white;text-decoration:none;font-weight:700;font-size:0.95rem;border-radius:10px;transition:all 0.3s}
+        .cta-btn:hover{opacity:0.9;transform:translateY(-1px);box-shadow:0 8px 24px rgba(123,104,238,0.3)}
+
+        .footer{padding:48px 24px;border-top:1px solid var(--border);text-align:center}
+        .footer p{font-family:var(--font);font-size:0.8rem;color:var(--muted);margin:0}
+        .footer a{color:var(--accent);text-decoration:none}
+
+        @media(max-width:600px){
+            .stat-grid{grid-template-columns:repeat(2,1fr)}
+            .nav-links{gap:14px}
+            .sector-table,.orgs-table{font-size:0.82rem}
+            .sector-table th,.sector-table td,.orgs-table th,.orgs-table td{padding:10px 8px}
+        }
+
+        /* Phase 2: filter UI */
+        .filter-bar{display:none;flex-direction:column;gap:14px;margin:20px 0 24px;padding:18px 20px;background:var(--card);border:1px solid var(--border);border-radius:14px}
+        .filter-bar.js-enabled{display:flex}
+        .filter-search-wrap{position:relative}
+        .filter-search{width:100%;padding:11px 14px 11px 40px;background:var(--surface);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:var(--font);font-size:0.92rem;outline:none;transition:border-color 0.2s}
+        .filter-search:focus{border-color:var(--accent)}
+        .filter-search::placeholder{color:var(--muted)}
+        .filter-search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:0.9rem;pointer-events:none}
+        .filter-search-kbd{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:0.7rem;color:var(--muted);background:var(--bg);padding:2px 7px;border:1px solid var(--border);border-radius:4px;pointer-events:none;transition:opacity 0.15s}
+        .filter-search:focus ~ .filter-search-kbd{opacity:0}
+        .filter-search:not(:placeholder-shown) ~ .filter-search-kbd{opacity:0}
+        .filter-pills{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+        .filter-pills-label{font-family:var(--mono);font-size:0.7rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-right:6px;white-space:nowrap}
+        .filter-pill{padding:5px 12px;background:var(--surface);border:1px solid var(--border);border-radius:16px;color:var(--muted);font-family:var(--font);font-size:0.78rem;font-weight:600;cursor:pointer;transition:all 0.15s;user-select:none;white-space:nowrap}
+        .filter-pill:hover{border-color:var(--accent);color:var(--text)}
+        .filter-pill.active{background:rgba(123,104,238,0.15);border-color:var(--accent);color:var(--accent);box-shadow:0 0 0 1px rgba(123,104,238,0.25)}
+        .filter-result-count{font-family:var(--mono);font-size:0.72rem;color:var(--muted);margin-left:auto;white-space:nowrap}
+
+        .orgs-table-wrap{overflow-x:auto;margin:0 -2px;padding:0 2px;-webkit-overflow-scrolling:touch}
+        .orgs-table{min-width:560px}
+        .orgs-table th.sortable{cursor:pointer;user-select:none;position:relative;padding-right:20px;transition:color 0.15s}
+        .orgs-table th.sortable:hover{color:var(--text)}
+        .orgs-table th.sortable::after{content:"↕";position:absolute;right:4px;top:50%;transform:translateY(-50%);opacity:0.32;font-size:0.78rem}
+        .orgs-table th.sortable.sort-asc::after{content:"▲";opacity:1;color:var(--accent)}
+        .orgs-table th.sortable.sort-desc::after{content:"▼";opacity:1;color:var(--accent)}
+        .orgs-table tbody tr{transition:background 0.15s}
+        .orgs-table tbody tr:hover:not(.no-results-row){background:rgba(123,104,238,0.05)}
+        .orgs-table tr.filtered-out{display:none}
+        .no-results-row{display:none}
+        .no-results-row.visible{display:table-row}
+        .no-results-row td{padding:36px 16px;text-align:center;color:var(--muted);font-style:italic;background:transparent}
+        .no-results-row:hover{background:transparent !important}
+
+        @media(max-width:600px){
+            .filter-bar{padding:14px;gap:11px;margin:14px 0 18px;border-radius:12px}
+            .filter-search{padding:10px 12px 10px 36px;font-size:16px}
+            .filter-search-kbd{display:none}
+            .filter-search-icon{left:12px}
+            .filter-pills{gap:6px}
+            .filter-pills-label{display:none}
+            .filter-pill{padding:4px 10px;font-size:0.72rem}
+            .filter-result-count{width:100%;text-align:right;margin-left:0;order:99;font-size:0.68rem;margin-top:2px}
+            .orgs-table th.sortable{padding-right:16px}
+            .orgs-table th.sortable::after{right:2px;font-size:0.7rem}
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="nav-logo">Sec<span>urva</span></a>
+        <div class="nav-links">
+            <a href="/#scanner">Scan</a>
+            <a href="/snapshot">Snapshot</a>
+            <a href="/research/" class="active">Research</a>
+            <a href="/blog">Blog</a>
+        </div>
+    </nav>
+    <div class="container" style="max-width:860px;margin:0 auto;padding:48px 24px 20px">
+      <div style="font-family:var(--mono);font-size:0.78rem;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:14px">Research &middot; Disclosures</div>
+      <h1 style="font-size:2.5rem;line-height:1.1;margin:0 0 16px">Vulnerabilities we found in software <span style="color:var(--accent)">the world runs on</span></h1>
+      <p style="font-size:1.15rem;color:var(--muted);line-height:1.6;max-width:660px;margin:0 0 28px">Real bugs, found, reproduced from scratch, and responsibly disclosed. Confirmed by the maintainers themselves. This is the work behind the audits, not marketing.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:40px">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 22px"><div style="font-size:1.8rem;font-weight:800;color:var(--accent)">2</div><div style="font-size:0.8rem;color:var(--muted)">maintainer-confirmed</div></div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 22px"><div style="font-size:1.8rem;font-weight:800;color:var(--accent)">470M+</div><div style="font-size:0.8rem;color:var(--muted)">combined downloads</div></div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 22px"><div style="font-size:1.8rem;font-weight:800;color:var(--accent)">100%</div><div style="font-size:0.8rem;color:var(--muted)">responsible disclosure</div></div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 26px;margin-bottom:20px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+          <div style="font-family:var(--mono);font-size:0.8rem;color:var(--muted);letter-spacing:0.04em">CVE-2026-27761 &middot; GHSA-3pww-vcvm-3gmj</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span style="font-family:var(--mono);font-size:0.72rem;font-weight:700;color:var(--amber);border:1px solid var(--amber);border-radius:20px;padding:3px 11px">Moderate 4.3</span>
+            <span style="font-family:var(--mono);font-size:0.72rem;font-weight:700;color:var(--green);border:1px solid var(--green);border-radius:20px;padding:3px 11px">Accepted &middot; CVE assigned</span>
+          </div>
+        </div>
+        <div style="font-size:0.82rem;color:var(--accent);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px">Gitea</div>
+        <h3 style="font-size:1.45rem;line-height:1.25;margin:0 0 14px;color:var(--text)">Low-scope API token could read a private repository's commit history</h3>
+        <p style="color:var(--muted);margin:0 0 16px;line-height:1.6">A read-only, issues-only API token, one that should have zero access to code, could pull a private repo's full commit history (messages, SHAs, committer emails) through the RSS and Atom feed endpoints, while the same token was correctly blocked everywhere else. An incomplete-coverage gap in a recent scope fix.</p>
+        <div style="display:flex;gap:26px;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:14px">
+          <div><div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em">Reach</div><div style="font-weight:700;color:var(--text);font-size:1.05rem">373M+ pulls</div></div>
+          <div><div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em">Weakness</div><div style="font-weight:700;color:var(--text);font-size:1.05rem">CWE-863 (auth)</div></div>
+          <div style="flex:1;min-width:200px"><div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em">Our role</div><div style="color:var(--text);font-size:0.95rem">Found, independently reproduced, and responsibly disclosed.</div></div>
+        </div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 26px;margin-bottom:20px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+          <div style="font-family:var(--mono);font-size:0.8rem;color:var(--muted);letter-spacing:0.04em">CVE-2026-55667 &middot; GHSA-fmm7-x4gx-8jhr</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span style="font-family:var(--mono);font-size:0.72rem;font-weight:700;color:var(--red);border:1px solid var(--red);border-radius:20px;padding:3px 11px">High 8.2</span>
+            <span style="font-family:var(--mono);font-size:0.72rem;font-weight:700;color:var(--green);border:1px solid var(--green);border-radius:20px;padding:3px 11px">Published &middot; CVE assigned</span>
+          </div>
+        </div>
+        <div style="font-size:0.82rem;color:var(--accent);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px">File Browser</div>
+        <h3 style="font-size:1.45rem;line-height:1.25;margin:0 0 14px;color:var(--text)">A locked-down upload-only user could delete any file and wipe the database</h3>
+        <p style="color:var(--muted);margin:0 0 16px;line-height:1.6">A scoped user with only the Create permission, the most restricted account you can hand out, could delete files anywhere on the server (other tenants' data) and even delete the app's own database, wiping every user, share, and setting and locking the owner out. An incomplete fix of a prior symlink CVE.</p>
+        <div style="display:flex;gap:26px;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:14px">
+          <div><div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em">Reach</div><div style="font-weight:700;color:var(--text);font-size:1.05rem">100M+ pulls</div></div>
+          <div><div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em">Weakness</div><div style="font-weight:700;color:var(--text);font-size:1.05rem">CWE-22 / 863</div></div>
+          <div style="flex:1;min-width:200px"><div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em">Our role</div><div style="color:var(--text);font-size:0.95rem">Found, independently reproduced, responsibly disclosed, and validated the maintainer's fix. Published as CVE-2026-55667, credited to us.</div></div>
+        </div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin-top:6px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+        <div style="font-family:var(--mono);font-size:0.72rem;font-weight:700;color:var(--green);border:1px solid var(--green);border-radius:20px;padding:3px 11px">Paid bounty</div>
+        <div style="flex:1;min-width:220px"><span style="color:var(--text);font-weight:600">Critical-severity finding, responsibly disclosed and rewarded.</span> <span style="color:var(--muted)">Part of ongoing live bug-bounty research alongside the open-source disclosures above.</span></div>
+      </div>
+      <div style="background:linear-gradient(160deg,var(--card),var(--surface));border:1px solid var(--accent);border-radius:16px;padding:30px 26px;margin-top:32px">
+        <h2 style="font-size:1.5rem;margin:0 0 12px">If it is hiding in software trusted hundreds of millions of times, what is hiding in yours?</h2>
+        <p style="color:var(--muted);line-height:1.6;margin:0 0 20px">A single low-privilege user could read all the private code in one of these, or destroy the whole server in the other. We find the gaps others miss, then tell you how to close them. That is what a Securva audit does for your systems.</p>
+        <a href="/snapshot" style="display:inline-block;background:var(--accent);color:#fff;font-weight:700;padding:13px 26px;border-radius:30px;text-decoration:none">Get your Securva Snapshot</a>
+        <a href="mailto:hello@securva.net" style="display:inline-block;margin-left:10px;color:var(--accent);font-weight:600;padding:13px 4px;text-decoration:none">or email us</a>
+      </div>
+      <p style="color:var(--muted);font-size:0.85rem;margin-top:24px;line-height:1.6">Disclosure note: all testing was performed on our own self-hosted copies of this open-source software. We never test third-party systems without authorization. CVE identifiers are assigned by the maintainers after a fix ships; this page is updated as each advisory publishes.</p>
+    </div>
+    <footer class="footer">
+        <p>Securva Research &middot; Built by <a href="/">Securva</a> at <a href="https://pejji.com">Pejji Agency</a> &middot; <a href="mailto:hello@securva.net">hello@securva.net</a></p>
+    </footer>
+</body>
+</html>
