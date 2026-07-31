@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The first 10 fixes for Nigerian website security | Securva</title>
+    <meta name="description" content="Practical 30-day plan based on scanning 1,180 Nigerian websites. 10 fixes, ranked by impact-per-minute. Most take under 15 minutes each.">
+    <meta property="og:title" content="The first 10 fixes for Nigerian website security">
+    <meta property="og:description" content="Practical 30-day plan based on scanning 1,180 Nigerian websites. 10 fixes, ranked by impact-per-minute.">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Securva">
+    <meta property="og:image" content="https://securva.net/images/og-blog-default.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://securva.net/blog/first-10-fixes-nigerian-website-security-2026.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="The first 10 fixes for Nigerian website security">
+    <meta name="twitter:description" content="Practical 30-day plan based on scanning 1,180 Nigerian websites. 10 fixes, ranked by impact-per-minute.">
+    <meta name="twitter:image" content="https://securva.net/images/og-blog-default.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#030308;--surface:#0A0A12;--card:#101020;--border:#1a1a30;--text:#F0EDF7;--muted:#6a6680;--accent:#7B68EE;--green:#4ade80;--red:#f87171;--amber:#fbbf24;--font:'Cabinet Grotesk',system-ui,sans-serif;--serif:'Newsreader',Georgia,serif;--mono:'IBM Plex Mono',monospace}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:var(--font);background:var(--bg);color:var(--text)}
+        .nav{padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+        .nav-logo{font-weight:900;font-size:1.3rem;color:var(--text);text-decoration:none}.nav-logo span{color:var(--accent)}
+        .nav a.back{color:var(--muted);text-decoration:none;font-size:0.85rem}
+        article{max-width:740px;margin:0 auto;padding:60px 24px 80px}
+        .tag{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:16px}
+        h1{font-size:clamp(2rem,5vw,2.8rem);font-weight:900;letter-spacing:-0.03em;line-height:1.15;margin-bottom:16px}
+        .meta{font-size:0.85rem;color:var(--muted);margin-bottom:40px}
+        article p{font-family:var(--serif);font-size:1.05rem;line-height:1.8;color:#c8c4d0;margin-bottom:24px}
+        article h2{font-size:1.6rem;font-weight:800;margin:48px 0 12px;letter-spacing:-0.02em;border-left:3px solid var(--accent);padding-left:16px}
+        article h3{font-size:1.2rem;font-weight:800;margin:32px 0 8px;letter-spacing:-0.01em}
+        article strong{color:var(--text)}
+        article ul{margin:0 0 24px 20px;font-family:var(--serif);font-size:1rem;color:#c8c4d0;line-height:1.8}
+        article ol{margin:0 0 24px 20px;font-family:var(--serif);font-size:1rem;color:#c8c4d0;line-height:1.8}
+        .fix-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin:24px 0}
+        .fix-num{display:inline-block;font-family:var(--mono);font-size:0.78rem;font-weight:700;color:var(--accent);background:rgba(123,104,238,0.12);padding:4px 10px;border-radius:6px;margin-bottom:10px}
+        .fix-title{font-size:1.15rem;font-weight:800;margin-bottom:6px}
+        .fix-time{font-family:var(--mono);font-size:0.78rem;color:var(--muted);margin-bottom:14px}
+        .fix-body{font-family:var(--serif);font-size:0.98rem;color:#c8c4d0;line-height:1.7;margin-bottom:14px}
+        .fix-howto{font-family:var(--mono);font-size:0.82rem;color:var(--muted);background:var(--surface);padding:12px 14px;border-radius:8px;line-height:1.6;word-break:break-all;border:1px solid rgba(255,255,255,0.04)}
+        .fix-howto strong{color:var(--accent);font-weight:600}
+        .stat-bar{background:var(--card);border-left:3px solid var(--accent);padding:14px 20px;margin:14px 0;font-family:var(--font);font-size:0.92rem;color:#c8c4d0}
+        .stat-bar strong{color:var(--accent);font-weight:800}
+        .cta-box{background:var(--card);border:1px solid var(--accent);border-radius:12px;padding:32px;text-align:center;margin:48px 0 16px}
+        .cta-box h3{margin:0 0 8px;font-size:1.35rem}
+        .cta-box p{font-family:var(--font) !important;color:var(--muted);font-size:0.92rem;margin-bottom:18px}
+        .cta-link{display:inline-block;padding:13px 26px;background:var(--accent);color:white;text-decoration:none;border-radius:10px;font-weight:800;font-size:0.92rem}
+        .cta-link:hover{opacity:0.9}
+        .footer-bar{padding:32px 24px 60px;border-top:1px solid var(--border);text-align:center;color:var(--muted);font-size:0.82rem}
+        .footer-bar a{color:var(--muted)}
+        .footer-bar a:hover{color:var(--text)}
+    </style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGNPGH83M7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZGNPGH83M7');
+</script>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="nav-logo">Sec<span>urva</span></a>
+        <a href="/" class="back">&larr; Back to scanner</a>
+    </nav>
+    <article>
+        <div class="tag">Guide</div>
+        <h1>The first 10 fixes for Nigerian website security</h1>
+        <div class="meta">April 2026 | 8 min read</div>
+
+        <p>We scanned 1,180 Nigerian websites this year. Banks. Fintech. Government. Healthcare. Universities. SME stores. Across all of them, the same 10 problems kept showing up.</p>
+
+        <p>The good news: most take under 15 minutes to fix. The annoying part: they keep showing up because nobody has a list. So here is the list.</p>
+
+        <p>Ranked by impact-per-minute. Number 1 is the highest leverage. Number 10 is the polish step. If you do all 10, your site will be in the top 5% of Nigerian websites for security posture.</p>
+
+        <div class="stat-bar">Across the 1,180 sites we scanned: <strong>64% are missing HSTS</strong>, <strong>71% are missing Content-Security-Policy</strong>, and <strong>58% have no cookie consent banner</strong>. The bar is genuinely low. Clearing it puts you ahead.</div>
+
+        <h2>The 10 fixes (in priority order)</h2>
+
+        <div class="fix-card">
+            <div class="fix-num">FIX 01</div>
+            <div class="fix-title">Add HSTS to your main domain</div>
+            <div class="fix-time">Time: 2 minutes | Impact: very high</div>
+            <div class="fix-body">HSTS (Strict-Transport-Security) tells browsers to ALWAYS use HTTPS for your domain. Without it, users on public WiFi can be silently downgraded to HTTP and their session cookies stolen. This is the single most important header for a Nigerian website where customers use cybercafe / hotel / event WiFi.</div>
+            <div class="fix-howto"><strong>What to add:</strong> <code>Strict-Transport-Security: max-age=31536000; includeSubDomains</code><br><br><strong>Where:</strong> nginx → server block → <code>add_header</code>. Apache → .htaccess → <code>Header always set</code>. Cloudflare → SSL/TLS → Edge Certificates → enable HSTS.</div>
+        </div>
+
+        <div class="fix-card">
+            <div class="fix-num">FIX 02</div>
+            <div class="fix-title">Set Content-Security-Policy</div>
+            <div class="fix-time">Time: 30 minutes (testing) | Impact: very high</div>
+            <div class="fix-body">CSP (Content-Security-Policy) tells the browser which sources of scripts, styles, and images are trusted. With CSP, even if an attacker injects malicious JavaScript onto your page, the browser refuses to execute it because it is from an unapproved source. This blocks 80% of XSS attacks.</div>
+            <div class="fix-howto"><strong>Start with:</strong> <code>Content-Security-Policy: default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com</code><br><br><strong>Adjust:</strong> add the specific third-party scripts you actually use (analytics, payment SDKs, embedded widgets). Test in <code>Content-Security-Policy-Report-Only</code> mode first to find what breaks.</div>
+        </div>
+
+        <div class="fix-card">
+            <div class="fix-num">FIX 03</div>
+            <div class="fix-title">Audit your subdomains</div>
+            <div class="fix-time">Time: 30 minutes | Impact: very high</div>
+            <div class="fix-body">Your main domain might be hardened. Your forgotten staging-test-12.yourdomain.com from 2 years ago might still be running an old default install of WordPress. Attackers find these via DNS enumeration in seconds. You need to know what is out there.</div>
+            <div class="fix-howto"><strong>Run:</strong> <code>subfinder -d yourdomain.com</code> (or use crt.sh in browser: paste your domain). Review every subdomain. For anything you do not recognize, log into your DNS panel and delete it. For anything you DO recognize but is no longer needed, take it offline.</div>
+        </div>
+
+        <div class="fix-card">
+            <div class="fix-num">FIX 04</div>
+            <div class="fix-title">Add a cookie consent banner</div>
+            <div class="fix-time">Time: 20 minutes | Impact: high (NDPA compliance)</div>
+            <div class="fix-body">The Nigeria Data Protection Act (NDPA) 2023 Section 26 requires user consent before processing personal data. Cookies that track users (analytics, marketing, session management) qualify. A cookie consent banner is the standard mechanism. NDPC has issued ₦5.2 billion in fines this year alone, partly for this exact gap.</div>
+            <div class="fix-howto"><strong>Drop in:</strong> CookieYes (free up to 25,000 monthly views) or Osano free tier. Both deploy via single script tag. <strong>Configure:</strong> categories for "Strictly Necessary", "Analytics", "Marketing". Block Google Analytics + Pixel until user accepts.</div>
+        </div>
+
+        <div class="fix-card">
+            <div class="fix-num">FIX 05</div>
+            <div class="fix-title">Search GitHub for your committed credentials</div>
+            <div class="fix-time">Time: 5 minutes | Impact: very high</div>
+            <div class="fix-body">Every Nigerian fintech we have disclosed to in the last 30 days had this gap: a developer committed an .env file with live production credentials to a public GitHub repo. Paystack secrets. Stripe keys. Database passwords. Search GitHub for your domain right now and scan the results.</div>
+            <div class="fix-howto"><strong>Search:</strong> <code>"yourdomain.com" filename:.env</code> on github.com → search → code. Also check <code>"FLWSECK"</code>, <code>"sk_live_"</code>, <code>"GOCSPX-"</code> if your stack uses Flutterwave / Stripe / Google OAuth. <strong>If found:</strong> rotate the credentials FIRST (panic mode), then `git filter-repo` to scrub history, then add `.env*` to <code>.gitignore</code>.</div>
+        </div>
+
+        <div class="fix-card">
+            <div class="fix-num">FIX 06</div>
+            <div class="fix-title">Set X-Content-Type-Options + X-Frame-Options + Referrer-Policy</div>
+            <div class="fix-time">Time: 5 minutes | Impact: medium-high</div>
+            <div class="fix-body">Three small headers that block three small but real attacks. <strong>X-Content-Type-Options: nosniff</strong> stops MIME sniffing attacks. <strong>X-Frame-Options: DENY</strong> stops clickjacking. <strong>Referrer-Policy: strict-origin-when-cross-origin</strong> stops your URLs leaking sensitive query strings to third-party sites.</div>
+            <div class="fix-howto"><strong>What to add:</strong><br><code>X-Content-Type-Options: nosniff</code><br><code>X-Frame-Options: DENY</code> (or <code>SAMEORIGIN</code> if you embed your own pages)<br><code>Referrer-Policy: strict-origin-when-cross-origin</code><br><br><strong>Where:</strong> same place as HSTS in fix 01.</div>
+        </div>
+
+        <div class="fix-card">
+            <div class="fix-num">FIX 07</div>
+            <div class="fix-title">Patch your CMS / framework</div>
+            <div class="fix-time">Time: 30-90 minutes (test environment first) | Impact: very high if behind</div>
+            <div class="fix-body">If your site runs WordPress, Drupal, Joomla, Laravel, Django, or any other framework, check the version. Compare against the latest. If you are more than ONE major version behind, you are running known-vulnerable code. Sterling Bank's 2026 breach was an unpatched CVE that had been public for 3 months.</div>
+            <div class="fix-howto"><strong>Check:</strong> for WordPress: <code>view-source:</code> on your homepage and search for <code>generator</code>. For others: framework documentation. <strong>Patch:</strong> always test in a staging environment first. Take a backup before patching. Document what changed.</div>
+        </div>
+
+        <div class="fix-card">
+            <div class="fix-num">FIX 08</div>
+            <div class="fix-title">Remove the Server header / framework version disclosure</div>
+            <div class="fix-time">Time: 5 minutes | Impact: medium</div>
+            <div class="fix-body">By default, your web server sends headers like <code>Server: nginx/1.18.0</code> or <code>X-Powered-By: PHP/7.4</code>. This tells attackers exactly what software you run, which lets them look up the right CVE. Remove or generalize these.</div>
+            <div class="fix-howto"><strong>nginx:</strong> in nginx.conf, <code>server_tokens off;</code><br><strong>Apache:</strong> in .htaccess, <code>Header unset Server</code> + <code>Header unset X-Powered-By</code><br><strong>Express.js:</strong> <code>app.disable('x-powered-by')</code></div>
+        </div>
+
+        <div class="fix-card">
+            <div class="fix-num">FIX 09</div>
+            <div class="fix-title">Document your incident response process (1 page)</div>
+            <div class="fix-time">Time: 60 minutes | Impact: high (NDPA compliance + faster response)</div>
+            <div class="fix-body">NDPA 2023 mandates breach notification within 72 hours of awareness. Most Nigerian businesses do not have a written process. They scramble when something happens, and the 72-hour clock runs out. Write a 1-page document NOW. Five steps: (1) detect, (2) contain, (3) preserve evidence, (4) notify NDPC, (5) notify affected users. Names, phone numbers, decision tree.</div>
+            <div class="fix-howto"><strong>Template:</strong> see Securva's NDPA compliance guide at <code>securva.net/blog/what-is-ndpa.html</code>. Adapt the response template. <strong>Print it.</strong> Pin it to the wall above your CTO's desk. The 72-hour clock starts BEFORE you remember where the document is.</div>
+        </div>
+
+        <div class="fix-card">
+            <div class="fix-num">FIX 10</div>
+            <div class="fix-title">Set up a 30-day re-scan reminder</div>
+            <div class="fix-time">Time: 2 minutes | Impact: medium-high (compounds)</div>
+            <div class="fix-body">Security is not a one-time fix. Code changes. New developers join. Configurations drift. The single biggest reason Nigerian websites slowly degrade is that nobody re-checks. Set a calendar reminder NOW for 30 days from today: re-run the Securva scan, compare against today's baseline, fix anything that regressed.</div>
+            <div class="fix-howto"><strong>Calendar reminder:</strong> "Re-run security scan on yourdomain.com" → repeat every 30 days. <strong>Bookmark:</strong> <code>https://securva.net</code> → run scan → check headers tab. Compare to today's results.</div>
+        </div>
+
+        <h2>How long the whole list takes</h2>
+        <p>If you sit down with your DevOps person and a fresh terminal, you can complete fixes 1, 2, 5, 6, 8, 10 in <strong>about 90 minutes</strong>. Fixes 3 (subdomain audit), 4 (cookie consent), 7 (patching), and 9 (incident response doc) need 30-90 minutes each but spread across a week.</p>
+
+        <p>Total realistic timeline for all 10: <strong>about a week of part-time work</strong>. Not a 6-month project. Not a ₦5 million consulting engagement. A normal developer can do it in spare hours.</p>
+
+        <h2>What we did NOT include</h2>
+        <p>Common items you might expect on a "10 fixes" list that we deliberately left off:</p>
+        <ul>
+            <li><strong>Web Application Firewall (WAF)</strong>: useful but expensive and adds latency. Wait until you have done 1-10 first.</li>
+            <li><strong>Intrusion Detection System (IDS)</strong>: same as WAF, advanced posture not foundational.</li>
+            <li><strong>Two-factor authentication for admins</strong>: critically important but lives at the application layer, not the website-config layer. Worth its own article.</li>
+            <li><strong>Database encryption at rest</strong>: foundational for compliance but outside the scope of website hardening.</li>
+            <li><strong>Pen-test</strong>: useful AFTER the basics are in place. A pen-test before you have done the 10 above is just expensive validation that you forgot the basics.</li>
+        </ul>
+
+        <h2>The pattern in 1,180 Nigerian sites</h2>
+        <p>Most Nigerian websites we scanned in 2026 were missing 6-8 of these 10 fixes. The HSTS gap alone affects 64% of the country's commercial web. The pattern is not malice. It is just nobody owning the security checklist.</p>
+
+        <p>If you finish fixes 1-10 above, you will be in the top 5% of Nigerian sites by basic security posture. That is a very low bar. Clearing it makes you measurably safer than your peers, satisfies NDPA Section 26 baseline compliance, and removes the most common attacker entry points.</p>
+
+        <p>The fix is not better tools. The fix is having a list. Now you have one.</p>
+
+        <div class="cta-box">
+            <h3>Score yourself in 30 seconds</h3>
+            <p>Run a free Securva scan on your site. We check fixes 1, 2, 6, 8, 10 automatically and tell you which apply.</p>
+            <a href="/" class="cta-link">Run free scan</a>
+        </div>
+
+        <p style="font-size:0.9rem;font-style:italic;color:var(--muted);text-align:center;margin-top:48px">Built for Nigerian businesses, by a Nigerian team. Securva.net</p>
+    </article>
+
+    <div class="footer-bar">
+        <div>More guides:</div>
+        <div style="margin-top:10px">
+            <a href="/blog/security-headers-explained.html">5 Security Headers</a> &middot;
+            <a href="/blog/what-is-ndpa.html">NDPA Quick Start</a> &middot;
+            <a href="/blog/how-sterling-got-breached-2026-04.html">Sterling Bank Breach Analysis</a> &middot;
+            <a href="/blog/why-we-built-a-scanner-commercial-tools-cant-replace.html">Why we built a scanner</a>
+        </div>
+    </div>
+</body>
+</html>

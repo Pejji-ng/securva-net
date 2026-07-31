@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Securva | Free Website Security Scanner</title>
+    <meta name="description" content="Scan any website for security headers and NDPA compliance. Free, instant results. No signup required.">
+    <meta property="og:title" content="Securva | Free Website Security Scanner">
+    <meta property="og:description" content="Scan any website for security headers and NDPA compliance. Instant A-F grade.">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23030308'/><path d='M50 15L20 30V50C20 68 32 82 50 90C68 82 80 68 80 50V30L50 15Z' stroke='%237B68EE' stroke-width='3' fill='none'/><circle cx='50' cy='48' r='8' fill='%237B68EE' opacity='0.6'/></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#030308;--surface:#0A0A12;--card:#101020;--border:#1a1a30;--text:#F0EDF7;--muted:#6a6680;--accent:#7B68EE;--accent-dim:rgba(123,104,238,0.12);--green:#4ade80;--red:#f87171;--amber:#fbbf24;--font:'Cabinet Grotesk',system-ui,sans-serif;--mono:'IBM Plex Mono',monospace}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+        .container{max-width:800px;margin:0 auto;padding:0 24px}
+
+        /* Nav */
+        .nav{padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+        .nav-logo{font-weight:900;font-size:1.3rem;color:var(--text);text-decoration:none;letter-spacing:-0.02em}
+        .nav-logo span{color:var(--accent)}
+        .nav-links{display:flex;gap:24px}
+        .nav-links a{color:var(--muted);text-decoration:none;font-size:0.85rem;font-weight:500;transition:color 0.3s}
+        .nav-links a:hover{color:var(--text)}
+
+        /* Hero */
+        .hero{text-align:center;padding:80px 24px 40px}
+        .hero h1{font-size:clamp(2.5rem,7vw,4rem);font-weight:900;letter-spacing:-0.04em;margin-bottom:12px}
+        .hero h1 span{color:var(--accent)}
+        .hero p{color:var(--muted);font-size:1.1rem;max-width:500px;margin:0 auto 40px;line-height:1.6}
+
+        /* Scanner */
+        .scanner{max-width:600px;margin:0 auto 60px;padding:0 24px}
+        .scan-input{display:flex;gap:8px}
+        .scan-input input{flex:1;padding:16px 20px;border-radius:12px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:0.95rem;outline:none;transition:border-color 0.3s}
+        .scan-input input:focus{border-color:var(--accent)}
+        .scan-input input::placeholder{color:var(--muted)}
+        .scan-btn{padding:16px 28px;border-radius:12px;background:var(--accent);color:white;border:none;font-family:var(--font);font-weight:700;font-size:0.95rem;cursor:pointer;transition:all 0.3s;white-space:nowrap}
+        .scan-btn:hover{opacity:0.9;transform:translateY(-1px)}
+        .scan-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+
+        /* Results */
+        .results{display:none;max-width:600px;margin:0 auto 60px;padding:0 24px}
+        .results.show{display:block}
+        .grade-card{text-align:center;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:40px;margin-bottom:24px}
+        .grade-letter{font-size:5rem;font-weight:900;line-height:1}
+        .grade-letter.a{color:var(--green)}
+        .grade-letter.b{color:var(--green)}
+        .grade-letter.c{color:var(--amber)}
+        .grade-letter.d{color:var(--red)}
+        .grade-letter.f{color:var(--red)}
+        .grade-url{font-family:var(--mono);font-size:0.8rem;color:var(--muted);margin-top:8px}
+        .grade-score{font-size:0.9rem;color:var(--muted);margin-top:4px}
+
+        .check-list{display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+        .check-item{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--card);border:1px solid var(--border);border-radius:10px}
+        .check-name{font-size:0.85rem;font-weight:600}
+        .check-sev{font-family:var(--mono);font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+        .check-pass{color:var(--green);font-weight:700;font-size:0.85rem}
+        .check-fail{color:var(--red);font-weight:700;font-size:0.85rem}
+
+        .section-label{font-family:var(--mono);font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:12px}
+
+        .cta-box{text-align:center;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px;margin-bottom:40px}
+        .cta-box h3{font-size:1.1rem;margin-bottom:8px}
+        .cta-box p{color:var(--muted);font-size:0.85rem;margin-bottom:16px}
+        .cta-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:10px;background:#25D366;color:white;text-decoration:none;font-weight:700;font-size:0.9rem;transition:all 0.3s}
+        .cta-btn:hover{opacity:0.9;transform:translateY(-1px)}
+
+        /* Vendor Sweep promo - compact secondary */
+        .vendor-promo{max-width:820px;margin:0 auto 60px;padding:0 24px}
+        .vendor-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:26px 28px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+        .vendor-card-body{flex:1;min-width:240px}
+        .vendor-tag{display:inline-block;font-family:var(--mono);font-size:0.62rem;font-weight:600;text-transform:uppercase;letter-spacing:2px;color:var(--accent);padding:3px 9px;background:var(--accent-dim);border-radius:6px;margin-bottom:10px}
+        .vendor-card h3{font-size:1.15rem;font-weight:800;letter-spacing:-0.01em;margin-bottom:6px}
+        .vendor-card h3 span{color:var(--accent)}
+        .vendor-card p{color:var(--muted);font-size:0.85rem;line-height:1.5}
+        .vendor-cta{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:9px;background:transparent;color:var(--text);text-decoration:none;font-weight:700;font-size:0.85rem;border:1px solid var(--border);transition:all 0.25s;white-space:nowrap}
+        .vendor-cta:hover{border-color:var(--accent);color:var(--accent)}
+
+        /* Snapshot promo */
+        .snapshot-promo{max-width:820px;margin:0 auto 60px;padding:0 24px}
+        .snapshot-card{background:linear-gradient(135deg,var(--card) 0%,#0d0d1c 100%);border:1px solid var(--border);border-radius:20px;padding:40px 32px;position:relative;overflow:hidden}
+        .snapshot-card::before{content:"";position:absolute;top:-40%;right:-20%;width:400px;height:400px;background:radial-gradient(circle,var(--accent-dim) 0%,transparent 60%);pointer-events:none}
+        .snapshot-card-inner{position:relative;z-index:1}
+        .snapshot-tag{display:inline-block;font-family:var(--mono);font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:2px;color:var(--accent);padding:4px 10px;background:var(--accent-dim);border-radius:6px;margin-bottom:16px}
+        .snapshot-card h3{font-size:1.6rem;font-weight:900;letter-spacing:-0.02em;margin-bottom:10px}
+        .snapshot-card h3 span{color:var(--accent)}
+        .snapshot-card p.lead{color:var(--muted);font-size:0.95rem;line-height:1.6;margin-bottom:24px;max-width:560px}
+        .snapshot-features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:28px}
+        .snapshot-feature{display:flex;align-items:flex-start;gap:10px;font-size:0.85rem;color:var(--text)}
+        .snapshot-feature-check{color:var(--accent);font-weight:900;flex-shrink:0;line-height:1.6}
+        .snapshot-pricing{display:flex;flex-wrap:wrap;gap:10px;font-family:var(--mono);font-size:0.75rem;color:var(--muted);margin-bottom:24px}
+        .snapshot-pricing span{padding:6px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px}
+        .snapshot-pricing span strong{color:var(--text);font-weight:700}
+        .snapshot-cta{display:inline-flex;align-items:center;gap:10px;padding:14px 28px;border-radius:10px;background:var(--accent);color:white;text-decoration:none;font-weight:700;font-size:0.95rem;transition:all 0.3s}
+        .snapshot-cta:hover{opacity:0.9;transform:translateY(-1px);box-shadow:0 8px 24px rgba(123,104,238,0.3)}
+        .snapshot-cta-arrow{transition:transform 0.3s}
+        .snapshot-cta:hover .snapshot-cta-arrow{transform:translateX(4px)}
+
+        /* Blog */
+        .blog-section{padding:60px 0;border-top:1px solid var(--border)}
+        .blog-section h2{font-size:1.8rem;font-weight:900;margin-bottom:32px;text-align:center;letter-spacing:-0.02em}
+        .blog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:40px}
+        .blog-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;text-decoration:none;color:var(--text);transition:border-color 0.3s}
+        .blog-card:hover{border-color:var(--accent)}
+        .blog-tag{font-family:var(--mono);font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px}
+        .blog-card h3{font-size:1rem;font-weight:700;margin-bottom:8px;line-height:1.3}
+        .blog-card p{font-size:0.8rem;color:var(--muted);line-height:1.5}
+
+        /* Footer */
+        .footer{padding:40px 0;border-top:1px solid var(--border);text-align:center}
+        .footer p{font-size:0.75rem;color:var(--muted)}
+        .footer a{color:var(--accent);text-decoration:none}
+
+        @media(max-width:780px){
+            .nav{padding:16px 18px;gap:12px}
+            .nav-logo{font-size:1.05rem}
+            .nav-links{gap:14px;flex-wrap:wrap;justify-content:flex-end}
+            .nav-links a{font-size:0.78rem}
+            .nav-links a.hide-mobile{display:none}
+        }
+        @media(max-width:600px){
+            .scan-input{flex-direction:column}
+            .scan-btn{width:100%}
+            .nav{padding:14px 14px;gap:10px}
+            .nav-logo{font-size:0.98rem}
+            .nav-links{gap:12px}
+            .nav-links a{font-size:0.74rem}
+        }
+        @media(max-width:380px){
+            .nav-links a.hide-xs{display:none}
+        }
+    </style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGNPGH83M7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZGNPGH83M7');
+</script>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="nav-logo">Sec<span>urva</span></a>
+        <div class="nav-links">
+            <a href="#scanner">Scan</a>
+            <a href="/snapshot">Snapshot</a>
+            <a href="/vendor-check" class="hide-xs">Vendors</a>
+            <a href="/research/">Research</a>
+            <a href="/research/disclosures">Disclosures</a>
+            <a href="#blog" class="hide-xs">Blog</a>
+            <a href="https://github.com/babakizo420/headerguard" target="_blank" rel="noopener" class="hide-mobile">GitHub</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1>Is your website <span>secure?</span></h1>
+        <p>Paste any URL. Get an instant security grade with specific recommendations. Free. No signup.</p>
+        <p style="font-size:0.75rem; color:var(--muted); margin-top:-20px; margin-bottom:30px;">Powered by <a href="https://github.com/babakizo420/headerguard" style="color:var(--accent);">HeaderGuard</a>. Open source.</p>
+    </header>
+
+    <div class="scanner" id="scanner">
+        <div class="scan-input">
+            <input type="text" id="url-input" placeholder="e.g. pejji.com" autofocus>
+            <button class="scan-btn" id="scan-btn" onclick="runScan()">Scan</button>
+        </div>
+    </div>
+
+    <div class="results" id="results">
+        <div class="grade-card">
+            <div class="grade-letter" id="grade-letter">A</div>
+            <div class="grade-url" id="grade-url">https://example.com</div>
+            <div class="grade-score" id="grade-score">90/100 points</div>
+        </div>
+
+        <div class="section-label">Security Headers</div>
+        <div class="check-list" id="header-checks"></div>
+
+        <div class="section-label">NDPA Compliance</div>
+        <div class="check-list" id="ndpa-checks"></div>
+
+        <div class="cta-box" id="cta-box" style="display:none">
+            <h3>Need help fixing these?</h3>
+            <p>Pejji builds secure, NDPA-compliant websites for Nigerian businesses. We can fix your security headers and get you to an A.</p>
+            <a href="https://wa.me/2349044526924?text=Hi%20Pejji!%20I%20just%20scanned%20my%20site%20on%20Securva%20and%20need%20help%20fixing%20my%20security%20headers." class="cta-btn" target="_blank" rel="noopener">
+                Chat with Pejji on WhatsApp
+            </a>
+        </div>
+    </div>
+
+    <section class="snapshot-promo">
+        <div class="snapshot-card">
+            <div class="snapshot-card-inner">
+                <div class="snapshot-tag">Paid Upgrade</div>
+                <h3>Want the <span>full audit?</span></h3>
+                <p class="lead">The free scanner checks security headers + NDPA basics. The Snapshot goes much deeper: public GitHub credential leaks, shadow subdomains, CVE-matched tech stack, DPIA + ROPA templates for NDPC filing, all delivered as a PDF within 24 hours.</p>
+                <div class="snapshot-features">
+                    <div class="snapshot-feature"><span class="snapshot-feature-check">+</span><span>50+ credential patterns scanned across public GitHub</span></div>
+                    <div class="snapshot-feature"><span class="snapshot-feature-check">+</span><span>Infrastructure deep-scan for forgotten pages + exposed repos</span></div>
+                    <div class="snapshot-feature"><span class="snapshot-feature-check">+</span><span>Tech stack matched to NIST CVE database</span></div>
+                    <div class="snapshot-feature"><span class="snapshot-feature-check">+</span><span>NDPA 2023 DPIA + ROPA templates included (Pro tier)</span></div>
+                </div>
+                <div class="snapshot-pricing">
+                    <span><strong>Card</strong> $10</span>
+                    <span><strong>Starter</strong> $29</span>
+                    <span><strong>Pro</strong> $49</span>
+                    <span><strong>Whitelabel</strong> $99</span>
+                </div>
+                <a href="/snapshot" class="snapshot-cta">
+                    See the Snapshot
+                    <span class="snapshot-cta-arrow">&rarr;</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="vendor-promo">
+        <div class="vendor-card">
+            <div class="vendor-card-body">
+                <div class="vendor-tag">New &middot; NTAA 2026 &sect;45</div>
+                <h3>Pay vendors in Nigeria? Check every <span>TIN</span> before your next run.</h3>
+                <p>NTAA 2026 &sect;45 imposes a &#8358;5M penalty per vendor engaged without a valid NRS-registered TIN. Our Vendor Sweep verifies your whole list in under a minute.</p>
+            </div>
+            <a href="/vendor-check" class="vendor-cta">
+                Run a Vendor Sweep
+                <span>&rarr;</span>
+            </a>
+        </div>
+    </section>
+
+    <div class="container">
+        <section class="blog-section" id="blog">
+            <h2>Learn</h2>
+            <div class="blog-grid">
+                <a href="blog/sterling-bank-sme-lesson-2026-04.html" class="blog-card">
+                    <div class="blog-tag">For Founders</div>
+                    <h3>Sterling Bank Had A Known Vulnerability On A Test Server. They Did Not Fix It. 900,000 Customers Paying The Price.</h3>
+                    <p>You are not Sterling Bank. But the way they got hacked is how your website is exposed too. Three common patterns in plain English, and a 10-minute free check. For non-technical founders.</p>
+                </a>
+                <a href="blog/how-sterling-got-breached-2026-04.html" class="blog-card">
+                    <div class="blog-tag">Breach Analysis</div>
+                    <h3>How Sterling Bank Got Breached, And Why 60% of Nigerian Enterprises Are Next.</h3>
+                    <p>A single unpatched vulnerability gave an attacker 9 days inside Sterling Bank, 3TB of customer KYC data, and a pivot into Remita. The pattern is not sophisticated. Here are the six structural weaknesses hiding in most Nigerian enterprises right now.</p>
+                </a>
+                <a href="blog/we-found-68-exposed-credentials-in-5-minutes-2026.html" class="blog-card">
+                    <div class="blog-tag">Research</div>
+                    <h3>We built a secret scanner. In 5 minutes, we found 68 exposed auth credentials.</h3>
+                    <p>One automated pass across 7 auth providers (Supabase, Firebase, Auth0, Cognito, Okta, Keycloak, Azure B2C) found 68 real credentials and 3 Supabase service_role keys that unlock entire databases.</p>
+                </a>
+                <a href="blog/nigerian-enterprise-security-2026.html" class="blog-card">
+                    <div class="blog-tag">Research</div>
+                    <h3>We Scanned 20 Nigerian Enterprises. 64% Lack Basic Security Headers.</h3>
+                    <p>We mapped 4,336 subdomains across banks, telcos, and fintechs. 64% of live hosts are missing HSTS. Here is what we found.</p>
+                </a>
+                <a href="blog/nigerian-websites-security-scan.html" class="blog-card">
+                    <div class="blog-tag">Research</div>
+                    <h3>We scanned 50 Nigerian business websites. 43 scored F.</h3>
+                    <p>Most Nigerian business websites are missing basic security headers. Here's what we found and why it matters.</p>
+                </a>
+                <a href="blog/what-is-ndpa.html" class="blog-card">
+                    <div class="blog-tag">Compliance</div>
+                    <h3>What is NDPA and does your website comply?</h3>
+                    <p>The Nigeria Data Protection Act affects every business with a website. Here's what you need to know in plain English.</p>
+                </a>
+                <a href="blog/security-headers-explained.html" class="blog-card">
+                    <div class="blog-tag">Guide</div>
+                    <h3>5 security headers every Nigerian business website needs</h3>
+                    <p>Your website might be leaking information right now. These 5 headers stop the most common attacks.</p>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <p>Securva is open source. Powered by <a href="https://github.com/babakizo420/headerguard" target="_blank" rel="noopener">HeaderGuard</a>. A <a href="https://blessedops.com" target="_blank" rel="noopener">BlessedOps Group</a> project.</p>
+    </footer>
+
+<script>
+// Securva HeaderGuard API (DO box behind Cloudflare proxy)
+const API_URL = 'https://api.securva.net';
+
+async function runScan() {
+    const input = document.getElementById('url-input');
+    const btn = document.getElementById('scan-btn');
+    const results = document.getElementById('results');
+    let url = input.value.trim();
+
+    if (!url) return;
+    // Clean up input: remove spaces, auto-add https
+    url = url.toLowerCase().replace(/\s+/g, '');
+    if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
+
+    btn.disabled = true;
+    btn.textContent = 'Scanning...';
+
+    // Strip protocol for the API domain param
+    let domain = url.replace(/^https?:\/\//, '').replace(/\/+$/, '');
+
+    try {
+        const res = await fetch(API_URL + '/api/scan?domain=' + encodeURIComponent(domain));
+        const data = await res.json();
+
+        if (data.error) throw new Error(data.error);
+
+        // Map DO API response to display format
+        const gradeLetter = document.getElementById('grade-letter');
+        gradeLetter.textContent = data.grade;
+        gradeLetter.className = 'grade-letter ' + data.grade.toLowerCase();
+        document.getElementById('grade-url').textContent = 'https://' + data.domain;
+        document.getElementById('grade-score').textContent = `${data.score}/10 points`;
+
+        // Header severity mapping
+        const severityMap = {
+            'Strict-Transport-Security': 'HIGH',
+            'Content-Security-Policy': 'HIGH',
+            'X-Frame-Options': 'MEDIUM',
+            'X-Content-Type-Options': 'MEDIUM',
+            'Referrer-Policy': 'LOW',
+            'Permissions-Policy': 'LOW',
+        };
+
+        document.getElementById('header-checks').innerHTML = data.headers.map(h => `
+            <div class="check-item">
+                <div><div class="check-name">${h.name}</div><div class="check-sev">${severityMap[h.name] || 'LOW'}</div></div>
+                <span class="${h.status === 'pass' ? 'check-pass' : 'check-fail'}">${h.status === 'pass' ? 'PASS' : 'FAIL'}</span>
+            </div>
+        `).join('');
+
+        // SSL check row
+        const sslHtml = data.ssl ? `
+            <div class="check-item">
+                <div><div class="check-name">SSL Certificate</div><div class="check-sev">HIGH</div></div>
+                <span class="${data.ssl.valid ? 'check-pass' : 'check-fail'}">${data.ssl.valid ? 'PASS' : 'FAIL'}</span>
+            </div>
+        ` : '';
+
+        document.getElementById('ndpa-checks').innerHTML = sslHtml + `
+            <div class="check-item"><div><div class="check-name">Cookie Consent</div><div class="check-sev">NDPA S.25</div></div><span class="${data.ndpa.cookie_consent ? 'check-pass' : 'check-fail'}">${data.ndpa.cookie_consent ? 'PASS' : 'FAIL'}</span></div>
+            <div class="check-item"><div><div class="check-name">Privacy Policy</div><div class="check-sev">NDPA S.26-27</div></div><span class="${data.ndpa.privacy_policy ? 'check-pass' : 'check-fail'}">${data.ndpa.privacy_policy ? 'PASS' : 'FAIL'}</span></div>
+            <div class="check-item"><div><div class="check-name">NDPA/NDPR Reference</div><div class="check-sev">NDPA</div></div><span class="${data.ndpa.ndpa_reference ? 'check-pass' : 'check-fail'}">${data.ndpa.ndpa_reference ? 'PASS' : 'FAIL'}</span></div>
+        `;
+
+        document.getElementById('cta-box').style.display = data.score < 8 ? 'block' : 'none';
+        document.getElementById('results').classList.add('show');
+        document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    } catch (err) {
+        const results = document.getElementById('results');
+        document.getElementById('grade-letter').textContent = '?';
+        document.getElementById('grade-letter').className = 'grade-letter f';
+        document.getElementById('grade-url').textContent = url;
+        document.getElementById('grade-score').textContent = 'Could not reach this website. Check the URL and try again.';
+        document.getElementById('header-checks').innerHTML = '';
+        document.getElementById('ndpa-checks').innerHTML = '';
+        document.getElementById('cta-box').style.display = 'none';
+        results.classList.add('show');
+        results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Scan';
+}
+
+// Enter key triggers scan
+document.getElementById('url-input').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') runScan();
+});
+</script>
+</body>
+</html>
