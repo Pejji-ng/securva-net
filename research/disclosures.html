@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Securva Research - Security Disclosures &amp; CVEs</title>
-    <meta name="description" content="Real vulnerabilities Securva found and responsibly disclosed in widely-used open-source software (Gitea, File Browser, OpenBao). Maintainer-confirmed. The work behind the audits.">
+    <meta name="description" content="Real vulnerabilities Securva found and responsibly disclosed in widely-used open-source software (Gitea, File Browser, OpenBao, Canonical LXD, Incus). Maintainer-confirmed. The work behind the audits.">
     <meta property="og:title" content="Securva - Security Disclosures &amp; CVEs">
-    <meta property="og:description" content="Real, maintainer-confirmed vulnerabilities we found in software with 470M+ downloads. What is hiding in your systems?">
+    <meta property="og:description" content="Real, maintainer-confirmed vulnerabilities we found in software with 500M+ downloads. What is hiding in your systems?">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://securva.net/research/disclosures.html">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -154,9 +154,26 @@
       <h1 style="font-size:2.5rem;line-height:1.1;margin:0 0 16px">Vulnerabilities we found in software <span style="color:var(--accent)">the world runs on</span></h1>
       <p style="font-size:1.15rem;color:var(--muted);line-height:1.6;max-width:660px;margin:0 0 28px">Real bugs, found, reproduced from scratch, and responsibly disclosed. Confirmed by the maintainers themselves. This is the work behind the audits, not marketing.</p>
       <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:40px">
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 22px"><div style="font-size:1.8rem;font-weight:800;color:var(--accent)">3</div><div style="font-size:0.8rem;color:var(--muted)">maintainer-confirmed</div></div>
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 22px"><div style="font-size:1.8rem;font-weight:800;color:var(--accent)">470M+</div><div style="font-size:0.8rem;color:var(--muted)">combined downloads</div></div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 22px"><div style="font-size:1.8rem;font-weight:800;color:var(--accent)">4</div><div style="font-size:0.8rem;color:var(--muted)">maintainer-confirmed</div></div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 22px"><div style="font-size:1.8rem;font-weight:800;color:var(--accent)">500M+</div><div style="font-size:0.8rem;color:var(--muted)">combined downloads</div></div>
         <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 22px"><div style="font-size:1.8rem;font-weight:800;color:var(--accent)">100%</div><div style="font-size:0.8rem;color:var(--muted)">responsible disclosure</div></div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 26px;margin-bottom:20px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+          <div style="font-family:var(--mono);font-size:0.8rem;color:var(--muted);letter-spacing:0.04em"><a href="https://github.com/canonical/lxd/security/advisories/GHSA-9hcm-hxh5-7xxh" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">CVE-2026-16033 &middot; GHSA-9hcm-hxh5-7xxh &#8599;</a></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span style="font-family:var(--mono);font-size:0.72rem;font-weight:700;color:var(--red);border:1px solid var(--red);border-radius:20px;padding:3px 11px">High 8.5</span>
+            <span style="font-family:var(--mono);font-size:0.72rem;font-weight:700;color:var(--green);border:1px solid var(--green);border-radius:20px;padding:3px 11px">Published &middot; CVE assigned</span>
+          </div>
+        </div>
+        <div style="font-size:0.82rem;color:var(--accent);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px">Canonical LXD and Incus</div>
+        <h3 style="font-size:1.45rem;line-height:1.25;margin:0 0 14px;color:var(--text)">A template-path traversal in the VM engine let attacker input write files anywhere on the host</h3>
+        <p style="color:var(--muted);margin:0 0 16px;line-height:1.6">A prior fix for a template-path traversal was added to the container driver but never ported to the virtual-machine (QEMU) driver. Through that gap the VM template path could read and write arbitrary files on the host, including creating root-owned files. The same flaw lived in both sibling projects, LXD (Canonical) and Incus, because they share the driver code, so each published its own advisory.</p>
+        <div style="display:flex;gap:26px;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:14px">
+          <div><div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em">Reach</div><div style="font-weight:700;color:var(--text);font-size:1.05rem">Ubuntu, LXD, Incus</div></div>
+          <div><div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em">Weakness</div><div style="font-weight:700;color:var(--text);font-size:1.05rem">CWE-22 / 59</div></div>
+          <div style="flex:1;min-width:200px"><div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em">Our role</div><div style="color:var(--text);font-size:0.95rem">Found the incomplete-fix, independently reproduced, and responsibly disclosed. Published and credited to us by Canonical (CVE-2026-16033) and by Incus.</div></div>
+        </div>
       </div>
       <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 26px;margin-bottom:20px">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:14px">
