@@ -77,6 +77,16 @@
         .sector-pill.government{background:rgba(192,132,252,0.12);color:#c084fc}
         .sector-pill.ecommerce-ng{background:rgba(244,114,182,0.12);color:#f472b6}
 
+        .trend-wrap{margin:24px 0 8px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 16px}
+        .trend-svg{width:100%;height:auto;display:block;max-width:720px;margin:0 auto}
+        .trend-legend{display:flex;flex-wrap:wrap;gap:9px 20px;justify-content:center;margin:14px auto 2px;max-width:720px}
+        .tl-item{font-family:var(--mono);font-size:0.78rem;color:#c8c4d0;display:inline-flex;align-items:center;gap:7px}
+        .tl-dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex-shrink:0}
+        .tl-delta{font-weight:700}
+        .tl-delta.up{color:var(--green)}
+        .tl-delta.down{color:var(--red)}
+        .trend-caption{font-size:0.95rem;color:var(--muted)}
+
         .methodology-note{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:10px;padding:22px 24px;margin:32px 0;font-size:0.95rem}
         .methodology-note p{margin-bottom:12px;font-size:0.95rem}
         .methodology-note p:last-child{margin-bottom:0}
@@ -285,7 +295,49 @@
             </tbody>
         </table>
 
-        <p><strong>The punchline</strong>: healthcare is the worst-of-the-worst (10 orgs, 1,790 hosts, 18.2% avg HSTS coverage - the sector holding the most patient and HMO records is also the sector most behind on basic transport security). Government is second-worst (24%). Fintech is the outlier on the good side (48.5% - CBN pressure appears to have moved the needle). Banking has improved meaningfully since prior refresh (now 46.6%, up from 36.6%). Telecom and e-commerce sit in the 28-35% range - still below what "reasonable security hygiene" looks like in 2026. ISPs don't have HSTS-measured data because the infrastructure they operate differs from the customer-facing web estates of the other sectors.</p>
+        <p><strong>The punchline</strong>: healthcare and government, the two sectors holding the most sensitive records, were also the two furthest behind on basic transport security. Both moved up materially this refresh: healthcare from 18% to 30.6% (10 orgs, 1,790 hosts), government from 24% to 33.6%. Fintech remains the steady leader at 50.5% (CBN pressure appears to have moved the needle). Banking has held its earlier gains at 55.4%. E-commerce surged mid-year and has settled around 65%. Telecom is the one outlier moving the wrong way, down from 28% to 15.2%, and it is the sector to watch. ISPs don't have HSTS-measured data because the infrastructure they operate differs from the customer-facing web estates of the other sectors.</p>
+
+        <h2>How coverage is trending</h2>
+
+        <p>This is the first published view of the dataset over time. We re-probe the same estates each month, so the movement below reflects real configuration changes on live infrastructure, not a change in what we measure. Per-sector HSTS coverage, April to September 2026:</p>
+
+        <div class="trend-wrap">
+            <svg class="trend-svg" viewBox="0 0 760 320" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Per-sector HSTS coverage trend, April to September 2026" xmlns="http://www.w3.org/2000/svg">
+                <line x1="62" y1="280.0" x2="720" y2="280.0" stroke="#1a1a30" stroke-width="1"/>
+                <text x="52" y="284.0" text-anchor="end" fill="#6a6680" font-family="IBM Plex Mono,monospace" font-size="12">0%</text>
+                <line x1="62" y1="196.7" x2="720" y2="196.7" stroke="#1a1a30" stroke-width="1"/>
+                <text x="52" y="200.7" text-anchor="end" fill="#6a6680" font-family="IBM Plex Mono,monospace" font-size="12">25%</text>
+                <line x1="62" y1="113.3" x2="720" y2="113.3" stroke="#1a1a30" stroke-width="1"/>
+                <text x="52" y="117.3" text-anchor="end" fill="#6a6680" font-family="IBM Plex Mono,monospace" font-size="12">50%</text>
+                <line x1="62" y1="30.0" x2="720" y2="30.0" stroke="#1a1a30" stroke-width="1"/>
+                <text x="52" y="34.0" text-anchor="end" fill="#6a6680" font-family="IBM Plex Mono,monospace" font-size="12">75%</text>
+                <text x="62" y="304" text-anchor="middle" fill="#6a6680" font-family="IBM Plex Mono,monospace" font-size="12">Apr &rsquo;26</text>
+                <text x="391" y="304" text-anchor="middle" fill="#6a6680" font-family="IBM Plex Mono,monospace" font-size="12">Jul &rsquo;26</text>
+                <text x="720" y="304" text-anchor="middle" fill="#6a6680" font-family="IBM Plex Mono,monospace" font-size="12">Sep &rsquo;26</text>
+                <polyline points="62,165.0 391,49.7 720,63.0" fill="none" stroke="#f472b6" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+                <circle cx="62" cy="165.0" r="3.5" fill="#f472b6"/><circle cx="391" cy="49.7" r="3.5" fill="#f472b6"/><circle cx="720" cy="63.0" r="3.5" fill="#f472b6"/>
+                <polyline points="62,124.7 391,93.3 720,95.3" fill="none" stroke="#f87171" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+                <circle cx="62" cy="124.7" r="3.5" fill="#f87171"/><circle cx="391" cy="93.3" r="3.5" fill="#f87171"/><circle cx="720" cy="95.3" r="3.5" fill="#f87171"/>
+                <polyline points="62,118.3 391,116.7 720,111.7" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+                <circle cx="62" cy="118.3" r="3.5" fill="#4ade80"/><circle cx="391" cy="116.7" r="3.5" fill="#4ade80"/><circle cx="720" cy="111.7" r="3.5" fill="#4ade80"/>
+                <polyline points="62,200.0 391,202.0 720,168.0" fill="none" stroke="#c084fc" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+                <circle cx="62" cy="200.0" r="3.5" fill="#c084fc"/><circle cx="391" cy="202.0" r="3.5" fill="#c084fc"/><circle cx="720" cy="168.0" r="3.5" fill="#c084fc"/>
+                <polyline points="62,219.3 391,219.0 720,178.0" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+                <circle cx="62" cy="219.3" r="3.5" fill="#fbbf24"/><circle cx="391" cy="219.0" r="3.5" fill="#fbbf24"/><circle cx="720" cy="178.0" r="3.5" fill="#fbbf24"/>
+                <polyline points="62,186.7 391,223.3 720,229.3" fill="none" stroke="#60a5fa" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+                <circle cx="62" cy="186.7" r="3.5" fill="#60a5fa"/><circle cx="391" cy="223.3" r="3.5" fill="#60a5fa"/><circle cx="720" cy="229.3" r="3.5" fill="#60a5fa"/>
+            </svg>
+            <div class="trend-legend">
+                <span class="tl-item"><span class="tl-dot" style="background:#f472b6"></span>E-commerce <span class="tl-delta up">+30.6</span></span>
+                <span class="tl-item"><span class="tl-dot" style="background:#f87171"></span>Banking <span class="tl-delta up">+8.8</span></span>
+                <span class="tl-item"><span class="tl-dot" style="background:#4ade80"></span>Fintech <span class="tl-delta up">+2.0</span></span>
+                <span class="tl-item"><span class="tl-dot" style="background:#c084fc"></span>Government <span class="tl-delta up">+9.6</span></span>
+                <span class="tl-item"><span class="tl-dot" style="background:#fbbf24"></span>Healthcare <span class="tl-delta up">+12.4</span></span>
+                <span class="tl-item"><span class="tl-dot" style="background:#60a5fa"></span>Telecom <span class="tl-delta down">&minus;12.8</span></span>
+            </div>
+        </div>
+
+        <p class="trend-caption">Reading it: the sectors handling the most sensitive data (healthcare, government) are improving fastest, while telecom is the one sector moving backward. Each point is the average HSTS coverage across every measured host in that sector. History is captured at every monthly refresh, so this line lengthens over time.</p>
 
         <h2>Lowest HSTS coverage - orgs with material footprint</h2>
 
