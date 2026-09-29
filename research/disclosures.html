@@ -154,9 +154,26 @@
       <h1 style="font-size:2.5rem;line-height:1.1;margin:0 0 16px">Vulnerabilities we found in software <span style="color:var(--accent)">the world runs on</span></h1>
       <p style="font-size:1.15rem;color:var(--muted);line-height:1.6;max-width:660px;margin:0 0 28px">Real bugs, found, reproduced from scratch, and responsibly disclosed. Confirmed by the maintainers themselves. This is the work behind the audits, not marketing.</p>
       <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:40px">
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 22px"><div style="font-size:1.8rem;font-weight:800;color:var(--accent)">4</div><div style="font-size:0.8rem;color:var(--muted)">maintainer-confirmed</div></div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 22px"><div style="font-size:1.8rem;font-weight:800;color:var(--accent)">5</div><div style="font-size:0.8rem;color:var(--muted)">maintainer-confirmed</div></div>
         <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 22px"><div style="font-size:1.8rem;font-weight:800;color:var(--accent)">500M+</div><div style="font-size:0.8rem;color:var(--muted)">combined downloads</div></div>
         <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 22px"><div style="font-size:1.8rem;font-weight:800;color:var(--accent)">100%</div><div style="font-size:0.8rem;color:var(--muted)">responsible disclosure</div></div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 26px;margin-bottom:20px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+          <div style="font-family:var(--mono);font-size:0.8rem;color:var(--muted);letter-spacing:0.04em"><a href="https://github.com/jpadilla/pyjwt/security/advisories/GHSA-2gx3-rcp4-g85q" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">CVE-2026-101917 &middot; GHSA-2gx3-rcp4-g85q &#8599;</a></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span style="font-family:var(--mono);font-size:0.72rem;font-weight:700;color:var(--amber);border:1px solid var(--amber);border-radius:20px;padding:3px 11px">DoS &middot; amplification</span>
+            <span style="font-family:var(--mono);font-size:0.72rem;font-weight:700;color:var(--green);border:1px solid var(--green);border-radius:20px;padding:3px 11px">Published &middot; CVE assigned</span>
+          </div>
+        </div>
+        <div style="font-size:0.82rem;color:var(--accent);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px">PyJWT</div>
+        <h3 style="font-size:1.45rem;line-height:1.25;margin:0 0 14px;color:var(--text)">Any made-up key-id forced an unauthenticated, uncached fetch to the JWKS endpoint</h3>
+        <p style="color:var(--muted);margin:0 0 16px;line-height:1.6">On any unknown key-id (kid), PyJWKClient still forced a fresh, uncached request to the JWKS endpoint, with no rate limit, no negative cache, and no authentication required. An attacker could send a stream of made-up kids and turn every one into a new outbound request. An incomplete fix of a prior denial-of-service patch (CVE-2026-48524).</p>
+        <div style="display:flex;gap:26px;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:14px">
+          <div><div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em">Reach</div><div style="font-weight:700;color:var(--text);font-size:1.05rem">A top Python JWT lib</div></div>
+          <div><div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em">Weakness</div><div style="font-weight:700;color:var(--text);font-size:1.05rem">Unauth DoS</div></div>
+          <div style="flex:1;min-width:200px"><div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em">Our role</div><div style="color:var(--text);font-size:0.95rem">Read the prior fix, found the residual, reproduced it, and responsibly disclosed. Published and credited to us.</div></div>
+        </div>
       </div>
       <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 26px;margin-bottom:20px">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:14px">
