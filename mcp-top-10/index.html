@@ -1,38 +1,66 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex">
-<title>The MCP Security Top 10 — by Securva</title>
+<title>The MCP Security Top 10 — Securva</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23030308'/><path d='M50 15L20 30V50C20 68 32 82 50 90C68 82 80 68 80 50V30L50 15Z' stroke='%237B68EE' stroke-width='3' fill='none'/><circle cx='50' cy='48' r='8' fill='%237B68EE' opacity='0.6'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#07070a;--card:#111119;--card2:#0c0c12;--line:#23232f;--gold:#d4a843;--cream:#efeada;--muted:#847d6e;--green:#5ec98a;--teal:#2dd4bf;--red:#e0685f;--mono:ui-monospace,"SF Mono",Menlo,monospace}
+  :root{--bg:#030308;--surface:#0A0A12;--card:#101020;--border:#1a1a30;--text:#F0EDF7;--muted:#6a6680;--accent:#7B68EE;--accent-dim:rgba(123,104,238,0.12);--green:#4ade80;--red:#f87171;--amber:#fbbf24;--font:'Cabinet Grotesk',system-ui,sans-serif;--mono:'IBM Plex Mono',monospace}
   *{margin:0;padding:0;box-sizing:border-box}
-  body{background:var(--bg);color:var(--cream);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:840px;margin:0 auto;padding:32px 18px 100px}
-  .kicker{font-size:.7rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:12px}
-  .tagp{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--teal);border:1px solid var(--teal);border-radius:20px;padding:2px 8px;margin-left:8px}
-  h1{font-size:clamp(2rem,7vw,3.1rem);line-height:1.03;font-weight:800;letter-spacing:-.02em}
-  h1 span{color:var(--gold)}
-  .sub{color:var(--muted);margin-top:14px;font-size:1.04rem;max-width:660px}
-  .anchor{background:linear-gradient(135deg,#14140e,#0c0c10);border:1px solid var(--gold);border-radius:14px;padding:16px 18px;margin:24px 0}
-  .anchor b{color:var(--gold)}
-  .risk{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:18px 20px;margin-top:16px}
-  .risk .rh{display:flex;gap:14px;align-items:baseline}
-  .num{flex-shrink:0;font-family:var(--mono);font-size:1.4rem;font-weight:800;color:var(--gold);min-width:42px}
-  .rt{font-size:1.15rem;font-weight:800;color:var(--cream);line-height:1.2}
-  .sev{display:inline-block;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:1px 7px;border-radius:20px;margin-left:8px;vertical-align:middle}
-  .high{color:var(--red);border:1px solid var(--red)} .med{color:var(--gold);border:1px solid var(--gold)}
-  .lbl{font-size:.68rem;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:700;margin-top:13px}
-  .txt{color:#cdc6b6;font-size:.92rem;margin-top:3px}
-  .txt b{color:var(--cream)} .txt code{font-family:var(--mono);font-size:.85rem;color:var(--teal);background:var(--card2);padding:1px 5px;border-radius:4px}
-  .tell{border-left:2px solid var(--gold);padding-left:12px;margin-top:4px}
-  .rcpt{color:var(--green);font-weight:600}
-  h2{font-size:1.05rem;font-weight:800;margin:40px 0 4px;color:var(--gold);letter-spacing:.3px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-top:12px}
-  .desc{color:#cdc6b6;font-size:.92rem}
-  .foot{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:.8rem}
-</style></head>
-<body><div class="wrap">
-  <div class="kicker">Securva · Original Research<span class="tagp">Draft for review</span></div>
+  body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .nav{padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+  .nav-logo{font-weight:900;font-size:1.3rem;color:var(--text);text-decoration:none;letter-spacing:-0.02em}
+  .nav-logo span{color:var(--accent)}
+  .nav-links{display:flex;gap:22px;flex-wrap:wrap}
+  .nav-links a{color:var(--muted);text-decoration:none;font-size:0.85rem;font-weight:500;transition:color 0.3s}
+  .nav-links a:hover{color:var(--text)}
+  @media(max-width:620px){.hide-xs{display:none}}
+  .wrap{max-width:820px;margin:0 auto;padding:48px 24px 100px}
+  .kicker{font-family:var(--mono);font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:14px}
+  .tagp{font-family:var(--mono);font-size:.6rem;letter-spacing:1px;text-transform:uppercase;color:var(--amber);border:1px solid var(--amber);border-radius:20px;padding:2px 8px;margin-left:8px}
+  h1{font-size:clamp(2.2rem,7vw,3.4rem);line-height:1.02;font-weight:900;letter-spacing:-0.04em}
+  h1 span{color:var(--accent)}
+  .sub{color:var(--muted);margin-top:16px;font-size:1.05rem;max-width:640px;line-height:1.6}
+  .anchor{background:var(--accent-dim);border:1px solid var(--accent);border-radius:14px;padding:16px 18px;margin:26px 0}
+  .anchor b{color:var(--accent)}
+  .risk{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 22px;margin-top:16px}
+  .rh{display:flex;gap:14px;align-items:baseline}
+  .num{flex-shrink:0;font-family:var(--mono);font-size:1.5rem;font-weight:600;color:var(--accent);min-width:46px}
+  .rt{font-size:1.18rem;font-weight:800;color:var(--text);line-height:1.2;letter-spacing:-.01em}
+  .sev{display:inline-block;font-family:var(--mono);font-size:.6rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;padding:2px 8px;border-radius:20px;margin-left:8px;vertical-align:middle}
+  .high{color:var(--red);border:1px solid var(--red)} .med{color:var(--amber);border:1px solid var(--amber)}
+  .lbl{font-family:var(--mono);font-size:.64rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:600;margin-top:15px}
+  .txt{color:#c9c5db;font-size:.93rem;margin-top:4px}
+  .txt b{color:var(--text)} .txt code{font-family:var(--mono);font-size:.84rem;color:var(--accent);background:var(--surface);padding:1px 6px;border-radius:5px}
+  .tell{border-left:2px solid var(--accent);padding-left:13px;margin-top:4px}
+  .rcpt{color:var(--green);font-weight:500}
+  h2{font-size:1.15rem;font-weight:800;margin:44px 0 4px;color:var(--accent);letter-spacing:-.01em}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 20px;margin-top:14px}
+  .desc{color:#c9c5db;font-size:.93rem}
+  .footer{text-align:center;padding:40px 24px;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem;margin-top:50px}
+  .footer a{color:var(--muted);text-decoration:underline}
+  .pagefoot{margin-top:40px;color:var(--muted);font-size:.78rem;line-height:1.6}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="/" class="nav-logo">Sec<span>urva</span></a>
+  <div class="nav-links">
+    <a href="/#scanner">Scan</a>
+    <a href="/snapshot" class="hide-xs">Snapshot</a>
+    <a href="/research/">Research</a>
+    <a href="/research/disclosures">Disclosures</a>
+    <a href="https://github.com/babakizo420" target="_blank" rel="noopener" class="hide-xs">GitHub</a>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div class="kicker">Securva · Original Research<span class="tagp">Draft</span></div>
   <h1>The MCP Security<br><span>Top 10.</span></h1>
   <p class="sub">The ten ways Model Context Protocol servers, SDKs, and AI-agent clients actually get broken. Not theory, compiled from a hands-on cross-ecosystem audit and real published CVEs. Each risk comes with the "incomplete-fix tell" we use to find it, and the fix.</p>
 
@@ -105,5 +133,11 @@
   <h2>How to use this</h2>
   <div class="card"><div class="desc">Building an MCP server, SDK, or agent? Run every item against your code. Shipping an AI product and need it checked? That is exactly the audit <b>Securva</b> does, we wrote the list because we found the bugs. Each risk here maps to a real finding, a detection rule, and a one-line fix. <b>Measured, reproduced, fixable.</b></div></div>
 
-  <div class="foot">Securva · 2026-10-05 · DRAFT for review (noindex). Compiled from original cross-ecosystem MCP security research by Kingsley Olukanni (babakizo). Severity labels are indicative; each item is grounded in a reproduced finding or a public advisory. When published, this becomes securva.net/mcp-top-10, the category reference. Companion to the Securva Positioning + AI Security Engine.</div>
-</div></body></html>
+  <div class="pagefoot">Compiled from original cross-ecosystem MCP security research by Kingsley Olukanni. Severity labels are indicative; each item is grounded in a reproduced finding or a public advisory.</div>
+</div>
+
+<footer class="footer">
+  <p>Securva is open source. A <a href="https://blessedops.com" target="_blank" rel="noopener">BlessedOps Group</a> project.</p>
+</footer>
+</body>
+</html>
