@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>The MCP Security Top 10 — by Securva</title>
+<style>
+  :root{--bg:#07070a;--card:#111119;--card2:#0c0c12;--line:#23232f;--gold:#d4a843;--cream:#efeada;--muted:#847d6e;--green:#5ec98a;--teal:#2dd4bf;--red:#e0685f;--mono:ui-monospace,"SF Mono",Menlo,monospace}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--cream);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:840px;margin:0 auto;padding:32px 18px 100px}
+  .kicker{font-size:.7rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:12px}
+  .tagp{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--teal);border:1px solid var(--teal);border-radius:20px;padding:2px 8px;margin-left:8px}
+  h1{font-size:clamp(2rem,7vw,3.1rem);line-height:1.03;font-weight:800;letter-spacing:-.02em}
+  h1 span{color:var(--gold)}
+  .sub{color:var(--muted);margin-top:14px;font-size:1.04rem;max-width:660px}
+  .anchor{background:linear-gradient(135deg,#14140e,#0c0c10);border:1px solid var(--gold);border-radius:14px;padding:16px 18px;margin:24px 0}
+  .anchor b{color:var(--gold)}
+  .risk{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:18px 20px;margin-top:16px}
+  .risk .rh{display:flex;gap:14px;align-items:baseline}
+  .num{flex-shrink:0;font-family:var(--mono);font-size:1.4rem;font-weight:800;color:var(--gold);min-width:42px}
+  .rt{font-size:1.15rem;font-weight:800;color:var(--cream);line-height:1.2}
+  .sev{display:inline-block;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:1px 7px;border-radius:20px;margin-left:8px;vertical-align:middle}
+  .high{color:var(--red);border:1px solid var(--red)} .med{color:var(--gold);border:1px solid var(--gold)}
+  .lbl{font-size:.68rem;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:700;margin-top:13px}
+  .txt{color:#cdc6b6;font-size:.92rem;margin-top:3px}
+  .txt b{color:var(--cream)} .txt code{font-family:var(--mono);font-size:.85rem;color:var(--teal);background:var(--card2);padding:1px 5px;border-radius:4px}
+  .tell{border-left:2px solid var(--gold);padding-left:12px;margin-top:4px}
+  .rcpt{color:var(--green);font-weight:600}
+  h2{font-size:1.05rem;font-weight:800;margin:40px 0 4px;color:var(--gold);letter-spacing:.3px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-top:12px}
+  .desc{color:#cdc6b6;font-size:.92rem}
+  .foot{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:.8rem}
+</style></head>
+<body><div class="wrap">
+  <div class="kicker">Securva · Original Research<span class="tagp">Draft for review</span></div>
+  <h1>The MCP Security<br><span>Top 10.</span></h1>
+  <p class="sub">The ten ways Model Context Protocol servers, SDKs, and AI-agent clients actually get broken. Not theory, compiled from a hands-on cross-ecosystem audit and real published CVEs. Each risk comes with the "incomplete-fix tell" we use to find it, and the fix.</p>
+
+  <div class="anchor"><p style="margin:0"><b>Why this exists, and why it's ours:</b> as AI agents and MCP go mainstream, nobody has written the canonical security checklist for them. We have, because we <b>found the bugs first</b>: published CVEs in widely-used software plus an audit that mapped this exact class across the official Go, .NET, and Swift MCP SDKs, Zed, and VS Code. Receipts, not opinions.</p></div>
+
+  <div class="risk"><div class="rh"><div class="num">01</div><div class="rt">OAuth credential leak on cross-origin redirect<span class="sev med">High-impact</span></div></div>
+    <div class="lbl">What it is</div><div class="txt">An MCP client's OAuth <b>token / refresh / registration</b> request follows a redirect from the token endpoint using a default auto-redirecting HTTP client with no same-origin clamp. On a cross-origin 307/308 the request body (<code>client_secret</code>, PKCE <code>code_verifier</code>, <code>refresh_token</code>, even an enterprise ID token) is re-POSTed to the attacker's origin.</div>
+    <div class="lbl">The incomplete-fix tell</div><div class="tell txt">A client that clamps redirects on the <b>discovery</b> request but not the credential-bearing token POST (internal inconsistency). Or a fix that ports to one language's SDK but not the others (cross-language parity gap).</div>
+    <div class="lbl">Receipts</div><div class="txt rcpt">Mapped across the official Go, .NET, and Swift SDKs + mark3labs/mcp-go + Zed + VS Code (reported). Parent fixes: Python GHSA-qx49, TS PRs #2901/#2902. Rust &amp; Ruby SDKs show the correct safe-by-default pattern.</div>
+    <div class="lbl">Fix</div><div class="txt">Route credential-bearing OAuth POSTs through a no-redirect (or same-origin-only) HTTP client. Mirror the Rust SDK's <code>stop_redirects</code> / Ruby's origin-guard.</div>
+  </div>
+
+  <div class="risk"><div class="rh"><div class="num">02</div><div class="rt">Server-chosen authorization server / unbound credentials<span class="sev high">Critical</span></div></div>
+    <div class="lbl">What it is</div><div class="txt">The client sends OAuth credentials (especially a configured confidential <code>client_secret</code>) to a token endpoint the <b>untrusted MCP server</b> chose via discovery, with no binding of the credential to its expected issuer. A malicious server harvests the secret directly, no redirect needed.</div>
+    <div class="lbl">The incomplete-fix tell</div><div class="tell txt">Issuer <i>self-consistency</i> (metadata issuer == fetched URL) is NOT the defense. The real fix binds the configured credential to its expected AS and refuses a server-chosen AS change.</div>
+    <div class="lbl">Receipts</div><div class="txt rcpt">Parent: Python SDK GHSA-qx49-fqc8-xw99 (High). Official Go &amp; .NET SDKs correctly defend it (SEP-2352 binding); the audit confirmed which clients do and don't.</div>
+    <div class="lbl">Fix</div><div class="txt">Bind every configured credential to its expected authorization server; reject a server-initiated AS switch for confidential clients.</div>
+  </div>
+
+  <div class="risk"><div class="rh"><div class="num">03</div><div class="rt">SSRF via attacker-influenced fetch URL<span class="sev high">Critical</span></div></div>
+    <div class="lbl">What it is</div><div class="txt">A server or gateway fetches a URL the caller (or an upstream token/discovery doc) controls, with no scheme/host allowlist and/or redirect-following, reaching internal services and cloud metadata (<code>169.254.169.254</code>).</div>
+    <div class="lbl">The incomplete-fix tell</div><div class="tell txt">A fix that guards one sub-request (ping/realm/auth) but leaves the data-plane fetch (manifest/blob/content) or the redirect unguarded. Validate-by-name then fetch-by-name with no IP pin = DNS-rebinding TOCTOU. IPv4-only resolution = IPv6/AAAA bypass.</div>
+    <div class="lbl">Receipts</div><div class="txt rcpt">IBM mcp-context-forge SSE health-check redirect SSRF; docker/model-runner registry-fetch SSRF-to-IMDS (both incomplete-fixes of prior guards).</div>
+    <div class="lbl">Fix</div><div class="txt">Allowlist scheme + host, pin the resolved IP across validate-and-fetch, block private/link-local ranges on both IPv4 and IPv6, and don't follow redirects on server-side fetches.</div>
+  </div>
+
+  <div class="risk"><div class="rh"><div class="num">04</div><div class="rt">JWKS fetch amplification + JKU/X5U SSRF<span class="sev med">Moderate</span></div></div>
+    <div class="lbl">What it is</div><div class="txt">A JWKS client re-fetches remote keys on an attacker-controlled unknown <code>kid</code> (parsed <b>before</b> signature verification, so unauthenticated) with no cooldown or negative cache, an amplification DoS. The JKU/X5U variant takes the key URL from an attacker token header with no allowlist (SSRF).</div>
+    <div class="lbl">The incomplete-fix tell</div><div class="tell txt">A cooldown keyed on a per-<code>kid</code> cache with no global throttle is still vulnerable (rotate the kid). A global-timestamp cooldown mitigates it.</div>
+    <div class="lbl">Receipts</div><div class="txt rcpt">PyJWT CVE-2026-101917 (ours) + the CVE-2026-48524 family; confirmed residuals in Authlib &amp; get-jwks; safe exemplars in panva/jose &amp; jwx.</div>
+    <div class="lbl">Fix</div><div class="txt">Global rate-limit + negative-cache unknown-kid refetches; allowlist any header-supplied JWKS URL.</div>
+  </div>
+
+  <div class="risk"><div class="rh"><div class="num">05</div><div class="rt">Unauthenticated tool-dispatch to exec / file sinks (RCE)<span class="sev high">Critical</span></div></div>
+    <div class="lbl">What it is</div><div class="txt">A server exposes a tool that reaches a command / eval / file read-write sink, dispatchable with no auth (or before the auth/approval gate) on the released version and default config.</div>
+    <div class="lbl">The incomplete-fix tell</div><div class="tell txt">Read the sink to the metal: host <code>exec</code> vs a forwarded/gated sandbox (not the same risk). Confirm the sink ships in a <b>release</b>, not just <code>main</code>. Check auth-transport parity (an auth that exists on stdio but got dropped on the HTTP transport).</div>
+    <div class="lbl">Fix</div><div class="txt">Authenticate the transport, gate tool dispatch before any sink, and never wire a raw host-exec/file sink to an unauthenticated tool.</div>
+  </div>
+
+  <div class="risk"><div class="rh"><div class="num">06</div><div class="rt">Broken auth / scope / tenant isolation (BOLA)<span class="sev high">High</span></div></div>
+    <div class="lbl">What it is</div><div class="txt">A tool or route is reachable cross-tenant / cross-user with no ownership check, or a scope gate that a sibling helper skips.</div>
+    <div class="lbl">The incomplete-fix tell</div><div class="tell txt">Enumerate <b>all</b> gate-helper names first, a sibling like <code>userHasGroupPermission</code> won't contain the substring you grepped. A lone narrow authz fix has higher residual odds than a batch sweep.</div>
+    <div class="lbl">Fix</div><div class="txt">Centralize the ownership/scope check; make every route and helper go through it.</div>
+  </div>
+
+  <div class="risk"><div class="rh"><div class="num">07</div><div class="rt">Tool-poisoning &amp; indirect prompt injection<span class="sev high">High</span></div></div>
+    <div class="lbl">What it is</div><div class="txt">Tool descriptions, metadata, or results are attacker-controllable and flow into the model as instructions, steering the agent into calling a tool with attacker-chosen arguments (e.g. a malicious backend URL). The realistic MCP attacker needs no network access, just a poisoned document or record the agent later reads.</div>
+    <div class="lbl">Fix</div><div class="txt">Treat every tool argument and header as attacker-controllable in an agent context; don't ingest untrusted tool metadata as trusted instructions; isolate and label tool output.</div>
+  </div>
+
+  <div class="risk"><div class="rh"><div class="num">08</div><div class="rt">Secret leakage into tool output, logs, or model context<span class="sev med">Moderate</span></div></div>
+    <div class="lbl">What it is</div><div class="txt">Tokens/keys get serialized into tool output, logs, or the model's context (where a prompt-injection can then exfiltrate them).</div>
+    <div class="lbl">The incomplete-fix tell</div><div class="tell txt">A serialization fix is complete only if <b>every</b> serializer routes through the redacting DTO, a left-intact struct JSON tag after a secret-exposure fix is a sibling-serializer gap.</div>
+    <div class="lbl">Fix</div><div class="txt">Redact at a single serialization boundary; never place raw credentials into model-visible context.</div>
+  </div>
+
+  <div class="risk"><div class="rh"><div class="num">09</div><div class="rt">Insecure defaults &amp; DNS-rebinding / transport mismatch<span class="sev high">High</span></div></div>
+    <div class="lbl">What it is</div><div class="txt">An HTTP/SSE MCP server ships open-by-default, bound to <code>0.0.0.0</code> with an empty/weak token and auto-approve on, or lacks <code>Origin</code>/<code>Host</code> validation (DNS-rebinding), or carries auth on stdio but not the HTTP transport.</div>
+    <div class="lbl">The incomplete-fix tell</div><div class="tell txt">A "documented open-by-default" repeatedly declared intentional is a by-design dead end, but an <i>undocumented</i> weak default + a missing rebinding guard is a real finding.</div>
+    <div class="lbl">Fix</div><div class="txt">Secure defaults (loopback bind, required token, no auto-approve), validate <code>Origin</code>/<code>Host</code>, and keep auth parity across every transport.</div>
+  </div>
+
+  <div class="risk"><div class="rh"><div class="num">10</div><div class="rt">Path traversal in file-handling tools<span class="sev med">Moderate</span></div></div>
+    <div class="lbl">What it is</div><div class="txt">A tool that reads or writes files builds the path from attacker input (a tool argument, a filename in a response) with only a lexical check, allowing escape outside the intended directory.</div>
+    <div class="lbl">The incomplete-fix tell</div><div class="tell txt">Read the guard to the metal: a <code>tagError()</code>/<code>assert()</code> that looks log-only may actually <b>throw</b> (type <code>: never</code>) and be safe, while a named "validate" may only log. Confirm halt-vs-continue by control flow, not by the function's name. Watch for the symlink-escape the resolver's own docs wave off.</div>
+    <div class="lbl">Receipts</div><div class="txt rcpt">Audited across figma-developer-mcp and the reference filesystem servers (guards found complete, the method confirmed).</div>
+    <div class="lbl">Fix</div><div class="txt">Canonicalize + contain to an allowed root (and handle symlinks), on every path-building tool.</div>
+  </div>
+
+  <h2>How to use this</h2>
+  <div class="card"><div class="desc">Building an MCP server, SDK, or agent? Run every item against your code. Shipping an AI product and need it checked? That is exactly the audit <b>Securva</b> does, we wrote the list because we found the bugs. Each risk here maps to a real finding, a detection rule, and a one-line fix. <b>Measured, reproduced, fixable.</b></div></div>
+
+  <div class="foot">Securva · 2026-10-05 · DRAFT for review (noindex). Compiled from original cross-ecosystem MCP security research by Kingsley Olukanni (babakizo). Severity labels are indicative; each item is grounded in a reproduced finding or a public advisory. When published, this becomes securva.net/mcp-top-10, the category reference. Companion to the Securva Positioning + AI Security Engine.</div>
+</div></body></html>
