@@ -1,143 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex">
-<title>The MCP Security Top 10 — Securva</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23030308'/><path d='M50 15L20 30V50C20 68 32 82 50 90C68 82 80 68 80 50V30L50 15Z' stroke='%237B68EE' stroke-width='3' fill='none'/><circle cx='50' cy='48' r='8' fill='%237B68EE' opacity='0.6'/></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root{--bg:#030308;--surface:#0A0A12;--card:#101020;--border:#1a1a30;--text:#F0EDF7;--muted:#6a6680;--accent:#7B68EE;--accent-dim:rgba(123,104,238,0.12);--green:#4ade80;--red:#f87171;--amber:#fbbf24;--font:'Cabinet Grotesk',system-ui,sans-serif;--mono:'IBM Plex Mono',monospace}
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;line-height:1.55;-webkit-font-smoothing:antialiased}
-  .nav{padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
-  .nav-logo{font-weight:900;font-size:1.3rem;color:var(--text);text-decoration:none;letter-spacing:-0.02em}
-  .nav-logo span{color:var(--accent)}
-  .nav-links{display:flex;gap:22px;flex-wrap:wrap}
-  .nav-links a{color:var(--muted);text-decoration:none;font-size:0.85rem;font-weight:500;transition:color 0.3s}
-  .nav-links a:hover{color:var(--text)}
-  @media(max-width:620px){.hide-xs{display:none}}
-  .wrap{max-width:820px;margin:0 auto;padding:48px 24px 100px}
-  .kicker{font-family:var(--mono);font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:14px}
-  .tagp{font-family:var(--mono);font-size:.6rem;letter-spacing:1px;text-transform:uppercase;color:var(--amber);border:1px solid var(--amber);border-radius:20px;padding:2px 8px;margin-left:8px}
-  h1{font-size:clamp(2.2rem,7vw,3.4rem);line-height:1.02;font-weight:900;letter-spacing:-0.04em}
-  h1 span{color:var(--accent)}
-  .sub{color:var(--muted);margin-top:16px;font-size:1.05rem;max-width:640px;line-height:1.6}
-  .anchor{background:var(--accent-dim);border:1px solid var(--accent);border-radius:14px;padding:16px 18px;margin:26px 0}
-  .anchor b{color:var(--accent)}
-  .risk{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 22px;margin-top:16px}
-  .rh{display:flex;gap:14px;align-items:baseline}
-  .num{flex-shrink:0;font-family:var(--mono);font-size:1.5rem;font-weight:600;color:var(--accent);min-width:46px}
-  .rt{font-size:1.18rem;font-weight:800;color:var(--text);line-height:1.2;letter-spacing:-.01em}
-  .sev{display:inline-block;font-family:var(--mono);font-size:.6rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;padding:2px 8px;border-radius:20px;margin-left:8px;vertical-align:middle}
-  .high{color:var(--red);border:1px solid var(--red)} .med{color:var(--amber);border:1px solid var(--amber)}
-  .lbl{font-family:var(--mono);font-size:.64rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:600;margin-top:15px}
-  .txt{color:#c9c5db;font-size:.93rem;margin-top:4px}
-  .txt b{color:var(--text)} .txt code{font-family:var(--mono);font-size:.84rem;color:var(--accent);background:var(--surface);padding:1px 6px;border-radius:5px}
-  .tell{border-left:2px solid var(--accent);padding-left:13px;margin-top:4px}
-  .rcpt{color:var(--green);font-weight:500}
-  h2{font-size:1.15rem;font-weight:800;margin:44px 0 4px;color:var(--accent);letter-spacing:-.01em}
-  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 20px;margin-top:14px}
-  .desc{color:#c9c5db;font-size:.93rem}
-  .footer{text-align:center;padding:40px 24px;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem;margin-top:50px}
-  .footer a{color:var(--muted);text-decoration:underline}
-  .pagefoot{margin-top:40px;color:var(--muted);font-size:.78rem;line-height:1.6}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The MCP Security Top 10 - Securva</title>
+    <meta name="description" content="A practical, business-impact-ranked Top 10 of security risks in Model Context Protocol (MCP) and AI-tool deployments: session hijack, broken authorization, exposed gateways, SSRF, excessive agency, credential sprawl, prompt injection, and more. What each is, why it matters, how to check and fix.">
+    <meta property="og:title" content="The MCP Security Top 10 - Securva">
+    <meta property="og:description" content="The security risks that actually matter when you wire LLMs and agents into real tools and data - ranked by business impact, with concrete detection and remediation.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Securva">
+    <meta property="og:url" content="https://securva.net/mcp-top-10/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="The MCP Security Top 10 - Securva">
+    <meta name="twitter:description" content="MCP / AI-tool security risks ranked by business impact, with detection + remediation for each.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,600&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#030308;--surface:#0A0A12;--card:#101020;--border:#1a1a30;--text:#F0EDF7;--muted:#6a6680;--accent:#7B68EE;--green:#4ade80;--red:#f87171;--amber:#fbbf24;--font:'Cabinet Grotesk',system-ui,sans-serif;--serif:'Newsreader',Georgia,serif;--mono:'IBM Plex Mono',monospace}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:var(--font);background:var(--bg);color:var(--text)}
+
+        .nav{padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+        .nav-logo{font-weight:900;font-size:1.3rem;color:var(--text);text-decoration:none;letter-spacing:-0.02em}
+        .nav-logo span{color:var(--accent)}
+        .nav-links{display:flex;gap:24px}
+        .nav-links a{color:var(--muted);text-decoration:none;font-size:0.85rem;font-weight:500;transition:color 0.3s}
+        .nav-links a:hover{color:var(--text)}
+        .nav-links a.active{color:var(--accent)}
+
+        .container{max-width:880px;margin:0 auto;padding:60px 24px 80px}
+        .hero-label{font-family:var(--mono);font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:3px;color:var(--accent);margin-bottom:16px}
+        h1{font-size:clamp(2.2rem,5.5vw,3.2rem);font-weight:900;letter-spacing:-0.03em;line-height:1.1;margin-bottom:20px}
+        h1 span{color:var(--accent)}
+        .subtitle{font-family:var(--serif);font-size:1.15rem;line-height:1.7;color:#c8c4d0;margin-bottom:28px;max-width:660px}
+        .updated{font-family:var(--mono);font-size:0.75rem;color:var(--muted);margin-bottom:48px}
+
+        h2{font-size:1.85rem;font-weight:800;margin:56px 0 20px;letter-spacing:-0.02em;border-left:3px solid var(--accent);padding-left:18px}
+        h3{font-size:1.2rem;font-weight:700;margin:36px 0 10px;color:var(--accent)}
+        p{font-family:var(--serif);font-size:1.05rem;line-height:1.75;color:#c8c4d0;margin-bottom:20px}
+        strong{color:var(--text)}
+        a{color:var(--accent)}
+
+        .methodology-note{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:10px;padding:22px 24px;margin:32px 0;font-size:0.95rem}
+        .methodology-note p{margin-bottom:12px;font-size:0.95rem}
+        .methodology-note p:last-child{margin-bottom:0}
+
+        /* Top-10 entries */
+        .risk{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:26px 26px 22px;margin:18px 0}
+        .risk-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
+        .risk-rank{font-family:var(--mono);font-weight:600;font-size:0.9rem;color:var(--accent);background:rgba(123,104,238,0.12);border:1px solid var(--border);border-radius:8px;padding:4px 10px;flex-shrink:0;letter-spacing:0.5px}
+        .risk-title{font-size:1.25rem;font-weight:800;letter-spacing:-0.01em;line-height:1.25}
+        .risk-tags{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 14px}
+        .risk-tag{font-family:var(--mono);font-size:0.66rem;text-transform:uppercase;letter-spacing:1px;font-weight:600;padding:3px 9px;border-radius:9px;background:var(--surface);border:1px solid var(--border);color:var(--muted)}
+        .risk-tag.impact-high{background:rgba(248,113,113,0.12);color:#f87171}
+        .risk-tag.impact-med{background:rgba(251,191,36,0.12);color:#fbbf24}
+        .risk-tag.money{background:rgba(74,222,128,0.12);color:#4ade80}
+        .risk p{font-size:1.0rem;margin-bottom:14px;line-height:1.7}
+        .risk p:last-child{margin-bottom:0}
+        .risk .lead{color:#c8c4d0}
+        .risk .why strong,.risk .fix strong{color:var(--accent);font-weight:700}
+        .risk .fix{font-family:var(--font);font-size:0.92rem;color:#c8c4d0;background:var(--surface);border-radius:9px;padding:12px 14px;line-height:1.6}
+        .risk code{font-family:var(--mono);font-size:0.85rem;color:var(--accent);background:var(--surface);padding:1px 6px;border-radius:5px}
+
+        .cta-box{background:linear-gradient(135deg,var(--card) 0%,#0d0d1c 100%);border:1px solid var(--border);border-radius:18px;padding:36px 28px;margin:52px 0;position:relative;overflow:hidden}
+        .cta-box::before{content:"";position:absolute;top:-40%;right:-20%;width:360px;height:360px;background:radial-gradient(circle,rgba(123,104,238,0.12) 0%,transparent 60%);pointer-events:none}
+        .cta-box-inner{position:relative;z-index:1}
+        .cta-box h3{color:var(--text);margin-top:0}
+        .cta-box p{font-family:var(--font);font-size:0.95rem;margin-bottom:20px}
+        .cta-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:var(--accent);color:white;text-decoration:none;font-weight:700;font-size:0.95rem;border-radius:10px;transition:all 0.3s}
+        .cta-btn:hover{opacity:0.9;transform:translateY(-1px);box-shadow:0 8px 24px rgba(123,104,238,0.3)}
+
+        .footer{padding:48px 24px;border-top:1px solid var(--border);text-align:center}
+        .footer p{font-family:var(--font);font-size:0.8rem;color:var(--muted);margin:0}
+        .footer a{color:var(--accent);text-decoration:none}
+
+        @media(max-width:600px){
+            .nav-links{gap:14px}
+            .nav{padding:16px 18px}
+            .risk{padding:20px 18px}
+            .risk-head{gap:10px}
+        }
+    </style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGNPGH83M7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZGNPGH83M7');
+</script>
 </head>
 <body>
-<nav class="nav">
-  <a href="/" class="nav-logo">Sec<span>urva</span></a>
-  <div class="nav-links">
-    <a href="/#scanner">Scan</a>
-    <a href="/snapshot" class="hide-xs">Snapshot</a>
-    <a href="/research/">Research</a>
-    <a href="/research/disclosures">Disclosures</a>
-    <a href="https://github.com/babakizo420" target="_blank" rel="noopener" class="hide-xs">GitHub</a>
-  </div>
-</nav>
+    <nav class="nav">
+        <a href="/" class="nav-logo">Sec<span>urva</span></a>
+        <div class="nav-links">
+            <a href="/#scanner">Scan</a>
+            <a href="/snapshot">Snapshot</a>
+            <a href="/research/">Research</a>
+            <a href="/mcp-top-10/" class="active">MCP Top 10</a>
+            <a href="/research/disclosures">Disclosures</a>
+            <a href="/blog">Blog</a>
+        </div>
+    </nav>
 
-<div class="wrap">
-  <div class="kicker">Securva · Original Research<span class="tagp">Draft</span></div>
-  <h1>The MCP Security<br><span>Top 10.</span></h1>
-  <p class="sub">The ten ways Model Context Protocol servers, SDKs, and AI-agent clients actually get broken. Not theory, compiled from a hands-on cross-ecosystem audit and real published CVEs. Each risk comes with the "incomplete-fix tell" we use to find it, and the fix.</p>
+    <div class="container">
+        <div class="hero-label">MCP / AI-tool security</div>
+        <h1>The MCP Security <span>Top 10</span></h1>
+        <p class="subtitle">The Model Context Protocol wires LLMs and agents into real tools, data, and credentials. The risks that actually bite are not exotic - they are the boring, high-blast-radius ones that recur across almost every gateway and server. This is our working Top 10, ranked by business impact, not by CVSS.</p>
+        <div class="updated">Updated 2026-10-29 &middot; Securva AI/MCP security practice &middot; Questions: <a href="mailto:hello@securva.net" style="color:var(--accent);text-decoration:none">hello@securva.net</a></div>
 
-  <div class="anchor"><p style="margin:0"><b>Why this exists, and why it's ours:</b> as AI agents and MCP go mainstream, nobody has written the canonical security checklist for them. We have, because we <b>found the bugs first</b>: published CVEs in widely-used software plus an audit that mapped this exact class across the official Go, .NET, and Swift MCP SDKs, Zed, and VS Code. Receipts, not opinions.</p></div>
+        <h2>How to read this</h2>
+        <p>An MCP server or AI gateway is, in security terms, a <strong>credential store with an API in front of it</strong>. It holds the keys and OAuth tokens your agents use, routes to every tool and data source you have connected, and is often stood up by one engineer with no security review. That is why a single weak default here is rarely "one bug" - it is org-wide blast radius: theft of every credential the component holds, access to every system those credentials reach, and in multi-tenant setups, cross-customer exposure.</p>
+        <p>Each entry below is: <strong>what it is</strong>, <strong>why it matters</strong> in business terms, and a one-line <strong>check / mitigate</strong>. We rank by realistic impact on revenue and data at organizations that actually have budget - a medium-severity flaw in a payment-adjacent agent outranks a high-severity one in software nobody runs. This is a living document; we revise it as the protocol and the deployments mature.</p>
 
-  <div class="risk"><div class="rh"><div class="num">01</div><div class="rt">OAuth credential leak on cross-origin redirect<span class="sev med">High-impact</span></div></div>
-    <div class="lbl">What it is</div><div class="txt">An MCP client's OAuth <b>token / refresh / registration</b> request follows a redirect from the token endpoint using a default auto-redirecting HTTP client with no same-origin clamp. On a cross-origin 307/308 the request body (<code>client_secret</code>, PKCE <code>code_verifier</code>, <code>refresh_token</code>, even an enterprise ID token) is re-POSTed to the attacker's origin.</div>
-    <div class="lbl">The incomplete-fix tell</div><div class="tell txt">A client that clamps redirects on the <b>discovery</b> request but not the credential-bearing token POST (internal inconsistency). Or a fix that ports to one language's SDK but not the others (cross-language parity gap).</div>
-    <div class="lbl">Receipts</div><div class="txt rcpt">Mapped across the official Go, .NET, and Swift SDKs + mark3labs/mcp-go + Zed + VS Code (reported). Parent fixes: Python GHSA-qx49, TS PRs #2901/#2902. Rust &amp; Ruby SDKs show the correct safe-by-default pattern.</div>
-    <div class="lbl">Fix</div><div class="txt">Route credential-bearing OAuth POSTs through a no-redirect (or same-origin-only) HTTP client. Mirror the Rust SDK's <code>stop_redirects</code> / Ruby's origin-guard.</div>
-  </div>
+        <h2>The list</h2>
 
-  <div class="risk"><div class="rh"><div class="num">02</div><div class="rt">Server-chosen authorization server / unbound credentials<span class="sev high">Critical</span></div></div>
-    <div class="lbl">What it is</div><div class="txt">The client sends OAuth credentials (especially a configured confidential <code>client_secret</code>) to a token endpoint the <b>untrusted MCP server</b> chose via discovery, with no binding of the credential to its expected issuer. A malicious server harvests the secret directly, no redirect needed.</div>
-    <div class="lbl">The incomplete-fix tell</div><div class="tell txt">Issuer <i>self-consistency</i> (metadata issuer == fetched URL) is NOT the defense. The real fix binds the configured credential to its expected AS and refuses a server-chosen AS change.</div>
-    <div class="lbl">Receipts</div><div class="txt rcpt">Parent: Python SDK GHSA-qx49-fqc8-xw99 (High). Official Go &amp; .NET SDKs correctly defend it (SEP-2352 binding); the audit confirmed which clients do and don't.</div>
-    <div class="lbl">Fix</div><div class="txt">Bind every configured credential to its expected authorization server; reject a server-initiated AS switch for confidential clients.</div>
-  </div>
+        <div class="risk">
+            <div class="risk-head"><span class="risk-rank">A1</span><span class="risk-title">Session / identity not re-bound on resume</span></div>
+            <div class="risk-tags"><span class="risk-tag impact-high">High impact</span><span class="risk-tag money">Cross-tenant</span></div>
+            <p class="lead">Many MCP servers and gateways issue resumable sessions keyed by a session ID (for SSE / streamable-HTTP transports, reconnects, long-running agents). The flaw: on resume, the server looks the session up by its ID and serves it <strong>without re-checking that the caller is the same authenticated subject the session was created for</strong>. Anyone who obtains, guesses, or forges a session ID inherits another user's authenticated session - a confused-deputy at the protocol layer. A sibling failure is signing/encrypting session IDs with a shared or default secret, which lets an attacker forge valid IDs outright.</p>
+            <p class="why"><strong>Why it matters:</strong> a session is an authenticated channel to tools and data. Hijacking one means acting as the victim - reading their data, invoking their tools - with full attribution to them. In a multi-tenant gateway this is a cross-customer breach, the worst outcome for a SaaS: mass regulatory exposure and notification cost, and it is hard to detect because the action looks legitimate.</p>
+            <p class="fix"><strong>Check / mitigate:</strong> on every resume, re-derive the subject from the trusted auth layer (verified JWT / gateway-set header, never the client-supplied bearer alone) and hard-fail on mismatch; use random per-install session secrets, never a shipped default; apply the check uniformly across all transports and verbs. The leading gateways already do this - bind an owner fingerprint to each session and reject on mismatch - so there is no excuse to ship it open.</p>
+        </div>
 
-  <div class="risk"><div class="rh"><div class="num">03</div><div class="rt">SSRF via attacker-influenced fetch URL<span class="sev high">Critical</span></div></div>
-    <div class="lbl">What it is</div><div class="txt">A server or gateway fetches a URL the caller (or an upstream token/discovery doc) controls, with no scheme/host allowlist and/or redirect-following, reaching internal services and cloud metadata (<code>169.254.169.254</code>).</div>
-    <div class="lbl">The incomplete-fix tell</div><div class="tell txt">A fix that guards one sub-request (ping/realm/auth) but leaves the data-plane fetch (manifest/blob/content) or the redirect unguarded. Validate-by-name then fetch-by-name with no IP pin = DNS-rebinding TOCTOU. IPv4-only resolution = IPv6/AAAA bypass.</div>
-    <div class="lbl">Receipts</div><div class="txt rcpt">IBM mcp-context-forge SSE health-check redirect SSRF; docker/model-runner registry-fetch SSRF-to-IMDS (both incomplete-fixes of prior guards).</div>
-    <div class="lbl">Fix</div><div class="txt">Allowlist scheme + host, pin the resolved IP across validate-and-fetch, block private/link-local ranges on both IPv4 and IPv6, and don't follow redirects on server-side fetches.</div>
-  </div>
+        <div class="risk">
+            <div class="risk-head"><span class="risk-rank">A2</span><span class="risk-title">Broken / incomplete authorization coverage</span></div>
+            <div class="risk-tags"><span class="risk-tag impact-med">Medium impact</span><span class="risk-tag">Data read</span></div>
+            <p class="lead">The server has an authorization policy (scopes, roles, allow/deny, default-deny), but it is enforced on some MCP methods and silently skipped on others. MCP has several method families - tool calls, tool listing, resource reads, prompt fetches, completion. If the policy is wired into the obvious one (tool calls) but not the siblings (resource reads, prompt fetches), a caller denied at the tool layer can still reach data through the un-policied methods. It is especially dangerous when the docs promise the policy applies to "all requests," so operators configure default-deny and believe the route is locked down.</p>
+            <p class="why"><strong>Why it matters:</strong> authentication still gates reaching the server, so this is an authorization-granularity bypass that leaks data, not full unauthenticated access. But on a RAG or data-connected backend, the resources and prompts are exactly the sensitive content the policy was meant to protect. It also fails audits - you cannot attest "least privilege enforced" when enforcement has holes.</p>
+            <p class="fix"><strong>Check / mitigate:</strong> route every method through a single authorization checkpoint the handlers cannot bypass, not a per-handler check that drifts as methods are added; default-deny and fail-closed on policy errors; where the upstream cannot yet enforce per-method authz, restrict the route to the method set you have actually policied.</p>
+        </div>
 
-  <div class="risk"><div class="rh"><div class="num">04</div><div class="rt">JWKS fetch amplification + JKU/X5U SSRF<span class="sev med">Moderate</span></div></div>
-    <div class="lbl">What it is</div><div class="txt">A JWKS client re-fetches remote keys on an attacker-controlled unknown <code>kid</code> (parsed <b>before</b> signature verification, so unauthenticated) with no cooldown or negative cache, an amplification DoS. The JKU/X5U variant takes the key URL from an attacker token header with no allowlist (SSRF).</div>
-    <div class="lbl">The incomplete-fix tell</div><div class="tell txt">A cooldown keyed on a per-<code>kid</code> cache with no global throttle is still vulnerable (rotate the kid). A global-timestamp cooldown mitigates it.</div>
-    <div class="lbl">Receipts</div><div class="txt rcpt">PyJWT CVE-2026-101917 (ours) + the CVE-2026-48524 family; confirmed residuals in Authlib &amp; get-jwks; safe exemplars in panva/jose &amp; jwx.</div>
-    <div class="lbl">Fix</div><div class="txt">Global rate-limit + negative-cache unknown-kid refetches; allowlist any header-supplied JWKS URL.</div>
-  </div>
+        <div class="risk">
+            <div class="risk-head"><span class="risk-rank">A3</span><span class="risk-title">Unauthenticated or network-exposed endpoints</span></div>
+            <div class="risk-tags"><span class="risk-tag impact-high">High impact</span><span class="risk-tag money">Full takeover</span></div>
+            <p class="lead">An MCP server or AI gateway bound to all interfaces with authentication off - either a "dev mode" default shipped to a real network, or a "quick-start" container that binds <code>0.0.0.0</code> with no token required. A related variant is a localhost-only service reachable from a malicious web page via DNS rebinding because it does not validate the Host/Origin header.</p>
+            <p class="why"><strong>Why it matters:</strong> this is the single highest-dollar risk in the category. An unauthenticated attacker who reaches the endpoint can list and invoke every connected tool, register new tool servers, or read the management API - full control of the org's tool-and-data fabric with no credential. Real-world auth-bypass flaws in self-hosted AI gateways have been serious enough to land on CISA's Known Exploited Vulnerabilities catalog.</p>
+            <p class="fix"><strong>Check / mitigate:</strong> never run in an auth-disabled mode on a reachable network; bind to loopback or an internal interface behind an authenticating reverse proxy; require the same auth on the MCP/HTTP transport as on the admin API (parity); validate Host/Origin to defeat DNS rebinding; refuse to start, or alarm loudly, when auth is off and the bind is non-loopback.</p>
+        </div>
 
-  <div class="risk"><div class="rh"><div class="num">05</div><div class="rt">Unauthenticated tool-dispatch to exec / file sinks (RCE)<span class="sev high">Critical</span></div></div>
-    <div class="lbl">What it is</div><div class="txt">A server exposes a tool that reaches a command / eval / file read-write sink, dispatchable with no auth (or before the auth/approval gate) on the released version and default config.</div>
-    <div class="lbl">The incomplete-fix tell</div><div class="tell txt">Read the sink to the metal: host <code>exec</code> vs a forwarded/gated sandbox (not the same risk). Confirm the sink ships in a <b>release</b>, not just <code>main</code>. Check auth-transport parity (an auth that exists on stdio but got dropped on the HTTP transport).</div>
-    <div class="lbl">Fix</div><div class="txt">Authenticate the transport, gate tool dispatch before any sink, and never wire a raw host-exec/file sink to an unauthenticated tool.</div>
-  </div>
+        <div class="risk">
+            <div class="risk-head"><span class="risk-rank">A4</span><span class="risk-title">SSRF via tool / connector outbound fetch</span></div>
+            <div class="risk-tags"><span class="risk-tag impact-high">High impact</span><span class="risk-tag money">Cloud creds</span></div>
+            <p class="lead">A tool or gateway fetches a URL that the caller or configuration influences - an image URL, a webhook, a "fetch this page" tool, a registered server address, an OCI/registry pull - with only a scheme check and no egress controls. The request can be pointed at internal services or at the cloud instance-metadata endpoint (<code>169.254.169.254</code>).</p>
+            <p class="why"><strong>Why it matters:</strong> pointing the fetch at instance metadata lets an attacker steal the component's cloud role credentials - and the gateway's role is usually broad. That is a direct path from "my agent can summarize a web page" to "attacker has our cloud account." It is also the most common single class across self-hosted AI gateways today.</p>
+            <p class="fix"><strong>Check / mitigate:</strong> egress allowlist; block RFC-1918 + link-local + the metadata IP; pin the resolved IP for the life of the request to defeat DNS rebinding; disable or strictly validate redirects; at the instance level, require IMDSv2 with a low hop limit as defense in depth.</p>
+        </div>
 
-  <div class="risk"><div class="rh"><div class="num">06</div><div class="rt">Broken auth / scope / tenant isolation (BOLA)<span class="sev high">High</span></div></div>
-    <div class="lbl">What it is</div><div class="txt">A tool or route is reachable cross-tenant / cross-user with no ownership check, or a scope gate that a sibling helper skips.</div>
-    <div class="lbl">The incomplete-fix tell</div><div class="tell txt">Enumerate <b>all</b> gate-helper names first, a sibling like <code>userHasGroupPermission</code> won't contain the substring you grepped. A lone narrow authz fix has higher residual odds than a batch sweep.</div>
-    <div class="lbl">Fix</div><div class="txt">Centralize the ownership/scope check; make every route and helper go through it.</div>
-  </div>
+        <div class="risk">
+            <div class="risk-head"><span class="risk-rank">A5</span><span class="risk-title">Excessive agency / over-broad tool scopes</span></div>
+            <div class="risk-tags"><span class="risk-tag impact-high">High impact</span><span class="risk-tag">Blast radius</span></div>
+            <p class="lead">The agent or MCP server is granted far more access than its task needs - a database admin role when it only reads one table, a write-everything OAuth scope when it only posts to one channel, a shell tool when it only needs to read files. This is not a single bug; it is the multiplier that turns every other item on this list from an incident into a catastrophe.</p>
+            <p class="why"><strong>Why it matters:</strong> when a prompt-injection or a session hijack lands, the damage equals the union of everything the agent's credentials can touch. The same compromise against a least-privilege agent is contained; against a god-mode agent it exfiltrates the data store or pushes malicious code. Over-privilege is the difference between a near-miss and a breach-notification.</p>
+            <p class="fix"><strong>Check / mitigate:</strong> enumerate the scopes/roles actually used versus granted; scope tokens per tool, read-only by default, short-lived; put a human-in-the-loop approval on destructive actions; produce a privilege matrix (what each tool can do, what the task requires) and close the gaps.</p>
+        </div>
 
-  <div class="risk"><div class="rh"><div class="num">07</div><div class="rt">Tool-poisoning &amp; indirect prompt injection<span class="sev high">High</span></div></div>
-    <div class="lbl">What it is</div><div class="txt">Tool descriptions, metadata, or results are attacker-controllable and flow into the model as instructions, steering the agent into calling a tool with attacker-chosen arguments (e.g. a malicious backend URL). The realistic MCP attacker needs no network access, just a poisoned document or record the agent later reads.</div>
-    <div class="lbl">Fix</div><div class="txt">Treat every tool argument and header as attacker-controllable in an agent context; don't ingest untrusted tool metadata as trusted instructions; isolate and label tool output.</div>
-  </div>
+        <div class="risk">
+            <div class="risk-head"><span class="risk-rank">A6</span><span class="risk-title">Secrets &amp; tokens in MCP configs (credential sprawl)</span></div>
+            <div class="risk-tags"><span class="risk-tag impact-high">High impact</span><span class="risk-tag money">Credential theft</span></div>
+            <p class="lead">Long-lived API keys and OAuth tokens stored in plaintext config files, committed to repositories, synced to dotfile backups, written to logs, or forwarded verbatim to downstream tools. The MCP ecosystem's local-config conventions make this pervasive - the secrets that unlock every connected SaaS tend to sit in a world-readable JSON file.</p>
+            <p class="why"><strong>Why it matters:</strong> credential theft is the real monetizable outcome of many otherwise "low" bugs. Any read primitive - a path traversal, an SSRF, a log leak, a stray git history - becomes full SaaS/cloud account takeover the moment it touches the config. This is often the quiet step between a modest finding and a full breach.</p>
+            <p class="fix"><strong>Check / mitigate:</strong> use a secret manager or OS keychain, not config files; prefer short-lived tokens; never log credentials; scan configs and git history for secrets; restrict and audit any endpoint that can read stored server credentials.</p>
+        </div>
 
-  <div class="risk"><div class="rh"><div class="num">08</div><div class="rt">Secret leakage into tool output, logs, or model context<span class="sev med">Moderate</span></div></div>
-    <div class="lbl">What it is</div><div class="txt">Tokens/keys get serialized into tool output, logs, or the model's context (where a prompt-injection can then exfiltrate them).</div>
-    <div class="lbl">The incomplete-fix tell</div><div class="tell txt">A serialization fix is complete only if <b>every</b> serializer routes through the redacting DTO, a left-intact struct JSON tag after a secret-exposure fix is a sibling-serializer gap.</div>
-    <div class="lbl">Fix</div><div class="txt">Redact at a single serialization boundary; never place raw credentials into model-visible context.</div>
-  </div>
+        <div class="risk">
+            <div class="risk-head"><span class="risk-rank">A7</span><span class="risk-title">Prompt injection via tool output / indirect injection</span></div>
+            <div class="risk-tags"><span class="risk-tag impact-high">High impact</span><span class="risk-tag">Exfiltration</span></div>
+            <p class="lead">Untrusted content the agent ingests - a web page, an email, a support ticket, a document, a code comment, or the output of one tool fed into the next - carries instructions the model treats as commands and acts on with the user's own authority. The canonical danger is the "lethal trifecta": access to private data, exposure to untrusted content, and an outbound channel to exfiltrate - present at once.</p>
+            <p class="why"><strong>Why it matters:</strong> this is the hardest class to fully fix and the one attackers reach for first, because the injection surface is anywhere untrusted text enters context. The outcome is silent data exfiltration, unauthorized transactions, or poisoned automations, all of which "look legitimate" because the agent did them.</p>
+            <p class="fix"><strong>Check / mitigate:</strong> there is no single patch - treat it as architecture. Trust-boundary untrusted content away from tool-calling authority; break the trifecta (remove the exfil channel, or require human approval on outbound/sensitive tool calls); never auto-execute tool calls derived from untrusted output; constrain and validate what the model is allowed to do rather than relying on telling it to behave.</p>
+        </div>
 
-  <div class="risk"><div class="rh"><div class="num">09</div><div class="rt">Insecure defaults &amp; DNS-rebinding / transport mismatch<span class="sev high">High</span></div></div>
-    <div class="lbl">What it is</div><div class="txt">An HTTP/SSE MCP server ships open-by-default, bound to <code>0.0.0.0</code> with an empty/weak token and auto-approve on, or lacks <code>Origin</code>/<code>Host</code> validation (DNS-rebinding), or carries auth on stdio but not the HTTP transport.</div>
-    <div class="lbl">The incomplete-fix tell</div><div class="tell txt">A "documented open-by-default" repeatedly declared intentional is a by-design dead end, but an <i>undocumented</i> weak default + a missing rebinding guard is a real finding.</div>
-    <div class="lbl">Fix</div><div class="txt">Secure defaults (loopback bind, required token, no auto-approve), validate <code>Origin</code>/<code>Host</code>, and keep auth parity across every transport.</div>
-  </div>
+        <div class="risk">
+            <div class="risk-head"><span class="risk-rank">A8</span><span class="risk-title">Unvalidated tool inputs &rarr; command / SQL injection</span></div>
+            <div class="risk-tags"><span class="risk-tag impact-high">High impact</span><span class="risk-tag">RCE / data</span></div>
+            <p class="lead">A tool takes model- or user-supplied arguments and passes them into a shell command, a SQL query, a file path, or an eval without validation or parameterization. The LLM is treated as a trusted caller, so classic injection defenses are skipped - but the "caller" is steering on attacker-influenced input.</p>
+            <p class="why"><strong>Why it matters:</strong> this is the straight line from "the agent can run a tool" to remote code execution, database compromise, or arbitrary file read/write on the host. Because an agent assembles tool arguments dynamically, inputs a human would never type get generated, so the injection surface is wider than a traditional app's.</p>
+            <p class="fix"><strong>Check / mitigate:</strong> treat every tool argument as untrusted; parameterize queries, avoid shell string-interpolation (use argument arrays, never a shell), validate and canonicalize file paths, never eval; least-privilege the tool's own execution context so a successful injection is contained.</p>
+        </div>
 
-  <div class="risk"><div class="rh"><div class="num">10</div><div class="rt">Path traversal in file-handling tools<span class="sev med">Moderate</span></div></div>
-    <div class="lbl">What it is</div><div class="txt">A tool that reads or writes files builds the path from attacker input (a tool argument, a filename in a response) with only a lexical check, allowing escape outside the intended directory.</div>
-    <div class="lbl">The incomplete-fix tell</div><div class="tell txt">Read the guard to the metal: a <code>tagError()</code>/<code>assert()</code> that looks log-only may actually <b>throw</b> (type <code>: never</code>) and be safe, while a named "validate" may only log. Confirm halt-vs-continue by control flow, not by the function's name. Watch for the symlink-escape the resolver's own docs wave off.</div>
-    <div class="lbl">Receipts</div><div class="txt rcpt">Audited across figma-developer-mcp and the reference filesystem servers (guards found complete, the method confirmed).</div>
-    <div class="lbl">Fix</div><div class="txt">Canonicalize + contain to an allowed root (and handle symlinks), on every path-building tool.</div>
-  </div>
+        <div class="risk">
+            <div class="risk-head"><span class="risk-rank">A9</span><span class="risk-title">Supply-chain: malicious servers &amp; tool-description poisoning</span></div>
+            <div class="risk-tags"><span class="risk-tag impact-med">Medium-high impact</span><span class="risk-tag">Supply chain</span></div>
+            <p class="lead">Trust placed in third-party MCP servers and in the tool <em>descriptions</em> themselves. Classes include tool poisoning (malicious instructions hidden in a tool's description/schema that the model reads as guidance), rug-pull (a server that mutates its description after you approved it), and tool-shadowing / "line-jumping" (one server's description overriding or intercepting another's tool). The description is untrusted content fed to the model with tool-calling authority - indirect injection delivered through protocol metadata, invisible in most UIs.</p>
+            <p class="why"><strong>Why it matters:</strong> a poisoned popular server backdoors many victims at once, and a rug-pull defeats one-time review. As teams install servers via package runners with little scrutiny, the gateway becomes a software-supply-chain entry point into everything it fronts.</p>
+            <p class="fix"><strong>Check / mitigate:</strong> pin server versions/hashes; review tool descriptions as untrusted input and monitor them for drift; sandbox third-party servers; prefer first-party or vetted servers for anything touching money or sensitive data.</p>
+        </div>
 
-  <h2>How to use this</h2>
-  <div class="card"><div class="desc">Building an MCP server, SDK, or agent? Run every item against your code. Shipping an AI product and need it checked? That is exactly the audit <b>Securva</b> does, we wrote the list because we found the bugs. Each risk here maps to a real finding, a detection rule, and a one-line fix. <b>Measured, reproduced, fixable.</b></div></div>
+        <div class="risk">
+            <div class="risk-head"><span class="risk-rank">A10</span><span class="risk-title">Missing audit logging / no attribution of agent actions</span></div>
+            <div class="risk-tags"><span class="risk-tag impact-med">Medium impact</span><span class="risk-tag money">Compliance</span></div>
+            <p class="lead">No tamper-evident record of which agent, acting on whose behalf, called which tool with what arguments and what result. You cannot answer "what did the agent actually do, and why." This is nearly universal in early deployments and acute in regulated sectors.</p>
+            <p class="why"><strong>Why it matters:</strong> it is not exploited directly - it is the enabler. Every other item here becomes undetectable and unprovable without attributed logs; incident response is blind, breach scope cannot be established, and audits (SOC 2, GDPR, Nigeria's NDPA) fail on the "can you demonstrate what happened" question. It is the difference between "we contained it and can prove the blast radius" and "we have no idea."</p>
+            <p class="fix"><strong>Check / mitigate:</strong> log every tool call with identity (agent + on-behalf-of user), arguments, outcome, and timestamp; make the log immutable/append-only with retention; ensure it is sufficient to reconstruct an incident and to satisfy your compliance regime.</p>
+        </div>
 
-  <div class="pagefoot">Compiled from original cross-ecosystem MCP security research by Kingsley Olukanni. Severity labels are indicative; each item is grounded in a reproduced finding or a public advisory.</div>
-</div>
+        <h2>How we use this</h2>
+        <div class="methodology-note">
+            <p><strong>This list is the checklist behind our MCP / AI-gateway audit.</strong> We review the component in front of your models and agents against every item above - auth-transport parity, session and identity binding, egress/SSRF controls, privilege scope, credential storage, authorization coverage, injection-resistant tool design, supply-chain posture, and audit logging - on your actual deployment and configuration, with authorized validation.</p>
+            <p><strong>Defensible, not sensational.</strong> The entries here are grounded in real, recurring issues across self-hosted AI gateways and MCP servers and in how the best-run projects have fixed them. Where we would need to invent a number to make a point, we describe the risk qualitatively instead. The ranking is by business impact, which is why the exposed-gateway and credential items sit near the top.</p>
+        </div>
 
-<footer class="footer">
-  <p>Securva is open source. A <a href="https://blessedops.com" target="_blank" rel="noopener">BlessedOps Group</a> project.</p>
-</footer>
+        <div class="cta-box">
+            <div class="cta-box-inner">
+                <h3>Running MCP servers or an AI gateway in front of real data?</h3>
+                <p>We audit the AI/MCP layer the way attackers actually approach it, and hand you a prioritized, proven remediation plan plus an attestation you can give enterprise security reviewers. Scoped to your stack - gateways, MCP servers, agent tools, and the credentials they hold.</p>
+                <a href="mailto:hello@securva.net?subject=MCP%20%2F%20AI-gateway%20security%20audit" class="cta-btn">Book an MCP security audit &rarr;</a>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        <p>Securva &middot; MCP Security Top 10 &middot; Built by <a href="/">Securva</a> at <a href="https://pejji.com">Pejji Agency</a> &middot; <a href="mailto:hello@securva.net">hello@securva.net</a></p>
+    </footer>
 </body>
 </html>
