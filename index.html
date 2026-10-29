@@ -67,8 +67,11 @@
         .cta-box{text-align:center;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px;margin-bottom:40px}
         .cta-box h3{font-size:1.1rem;margin-bottom:8px}
         .cta-box p{color:var(--muted);font-size:0.85rem;margin-bottom:16px}
-        .cta-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:10px;background:#25D366;color:white;text-decoration:none;font-weight:700;font-size:0.9rem;transition:all 0.3s}
+        .cta-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+        .cta-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:10px;color:white;text-decoration:none;font-weight:700;font-size:0.9rem;transition:all 0.3s}
         .cta-btn:hover{opacity:0.9;transform:translateY(-1px)}
+        .cta-primary{background:var(--accent)}
+        .cta-whatsapp{background:#25D366}
 
         /* Vendor Sweep promo - compact secondary */
         .vendor-promo{max-width:820px;margin:0 auto 60px;padding:0 24px}
@@ -154,7 +157,7 @@
             <a href="/research/">Research</a>
             <a href="/research/disclosures">Disclosures</a>
             <a href="#blog" class="hide-xs">Blog</a>
-            <a href="https://github.com/babakizo420/headerguard" target="_blank" rel="noopener" class="hide-mobile">GitHub</a>
+            <a href="/book">Book a call</a>
         </div>
     </nav>
 
@@ -186,10 +189,13 @@
 
         <div class="cta-box" id="cta-box" style="display:none">
             <h3>Need help fixing these?</h3>
-            <p>Pejji builds secure, NDPA-compliant websites for Nigerian businesses. We can fix your security headers and get you to an A.</p>
-            <a href="https://wa.me/2349044526924?text=Hi%20Pejji!%20I%20just%20scanned%20my%20site%20on%20Securva%20and%20need%20help%20fixing%20my%20security%20headers." class="cta-btn" target="_blank" rel="noopener">
-                Chat with Pejji on WhatsApp
-            </a>
+            <p>Book a free intro call and we will walk through your results and what it takes to get to an A. Securva and Pejji build secure, NDPA-compliant websites for Nigerian businesses.</p>
+            <div class="cta-row">
+                <a href="/book" class="cta-btn cta-primary">Book a call</a>
+                <a href="https://wa.me/2349044526924?text=Hi%20Pejji!%20I%20just%20scanned%20my%20site%20on%20Securva%20and%20need%20help%20fixing%20my%20security%20headers." class="cta-btn cta-whatsapp" target="_blank" rel="noopener">
+                    Chat on WhatsApp
+                </a>
+            </div>
         </div>
     </div>
 
