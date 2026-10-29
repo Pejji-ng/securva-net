@@ -27,8 +27,8 @@
         .nav{padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
         .nav-logo{font-weight:900;font-size:1.3rem;color:var(--text);text-decoration:none;letter-spacing:-0.02em}
         .nav-logo span{color:var(--accent)}
-        .nav-links{display:flex;gap:24px}
-        .nav-links a{color:var(--muted);text-decoration:none;font-size:0.85rem;font-weight:500;transition:color 0.3s}
+        .nav-links{flex-wrap:wrap;justify-content:flex-end;row-gap:8px;display:flex;gap:24px}
+        .nav-links a{white-space:nowrap;color:var(--muted);text-decoration:none;font-size:0.85rem;font-weight:500;transition:color 0.3s}
         .nav-links a:hover{color:var(--text)}
         .nav-links a.active{color:var(--accent)}
 
@@ -105,7 +105,7 @@
 
         @media(max-width:600px){
             .stat-grid{grid-template-columns:repeat(2,1fr)}
-            .nav-links{gap:14px}
+            .nav-links{flex-wrap:wrap;justify-content:flex-end;row-gap:8px;gap:14px}
             .sector-table,.orgs-table{font-size:0.82rem}
             .sector-table th,.sector-table td,.orgs-table th,.orgs-table td{padding:10px 8px}
         }

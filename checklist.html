@@ -31,8 +31,8 @@
         .nav{padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
         .nav-logo{font-weight:900;font-size:1.3rem;color:var(--text);text-decoration:none;letter-spacing:-0.02em}
         .nav-logo span{color:var(--accent)}
-        .nav-links{display:flex;gap:24px}
-        .nav-links a{color:var(--muted);text-decoration:none;font-size:0.85rem;font-weight:500;transition:color 0.3s}
+        .nav-links{flex-wrap:wrap;justify-content:flex-end;row-gap:8px;display:flex;gap:24px}
+        .nav-links a{white-space:nowrap;color:var(--muted);text-decoration:none;font-size:0.85rem;font-weight:500;transition:color 0.3s}
         .nav-links a:hover{color:var(--text);text-decoration:none}
 
         /* Hero */
@@ -101,8 +101,8 @@
 
         @media(max-width:600px){
             .nav{padding:16px 20px}
-            .nav-links{gap:14px}
-            .nav-links a{font-size:0.8rem}
+            .nav-links{flex-wrap:wrap;justify-content:flex-end;row-gap:8px;gap:14px}
+            .nav-links a{white-space:nowrap;font-size:0.8rem}
             .hide-xs{display:none}
             .hero{padding:48px 20px 32px}
             .hero h1{font-size:1.85rem}
