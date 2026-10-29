@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book a Call | Securva</title>
-    <meta name="description" content="Book a free intro call with Securva. Tell us what you need - website security scan, NDPA compliance, or an AI and MCP security review - and we will reach out to set a time.">
-    <meta property="og:title" content="Book a Call with Securva">
-    <meta property="og:description" content="A free 20-minute intro call. Tell us what you need and we will reach out to schedule a time that works.">
+    <title>Get a Free Security Review | Securva</title>
+    <meta name="description" content="Get a free security review from Securva. Send your details - website security scan, NDPA compliance, or an AI and MCP security review - and we will email you a written assessment and quote. No call required.">
+    <meta property="og:title" content="Get a Free Security Review | Securva">
+    <meta property="og:description" content="Send your details and we will email you a written security assessment and a quote. No call required.">
     <meta property="og:type" content="website">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23030308'/><path d='M50 15L20 30V50C20 68 32 82 50 90C68 82 80 68 80 50V30L50 15Z' stroke='%237B68EE' stroke-width='3' fill='none'/><circle cx='50' cy='48' r='8' fill='%237B68EE' opacity='0.6'/></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -102,26 +102,68 @@
 </script>
 </head>
 <body>
-    <nav class="nav">
-        <a href="/" class="nav-logo">Sec<span>urva</span></a>
-        <div class="nav-links">
-            <a href="/#scanner">Scan</a>
-            <a href="/snapshot">Snapshot</a>
-            <a href="/vendor-check" class="hide-xs">Vendors</a>
-            <a href="/research/">Research</a>
-            <a href="/mcp-top-10/" class="hide-xs">MCP Top 10</a>
-            <a href="/book">Book a call</a>
-        </div>
+    <style>
+    .snav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 22px;border-bottom:1px solid var(--border,#1a1a30);background:var(--bg,#030308);position:relative;z-index:60;font-family:var(--font,'Cabinet Grotesk',system-ui,sans-serif)}
+    .snav__logo{font-weight:900;font-size:1.3rem;color:var(--text,#F0EDF7);text-decoration:none;letter-spacing:-0.02em;flex-shrink:0;line-height:1}
+    .snav__logo span{color:var(--accent,#7B68EE)}
+    .snav__logo:hover{text-decoration:none}
+    .snav__menu{display:flex;align-items:center;gap:15px}
+    .snav__menu a{white-space:nowrap;color:var(--muted,#6a6680);text-decoration:none;font-size:0.8rem;font-weight:500;transition:color .2s}
+    .snav__menu a:hover{color:var(--text,#F0EDF7);text-decoration:none}
+    .snav__cta{background:var(--accent,#7B68EE);color:#fff;padding:9px 15px;border-radius:9px;font-weight:700;font-size:0.78rem;white-space:nowrap}
+    .snav__cta:hover{opacity:.9;color:#fff}
+    .snav__burger{display:none;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:42px;height:42px;background:transparent;border:1px solid var(--border,#1a1a30);border-radius:9px;cursor:pointer;padding:0;flex-shrink:0}
+    .snav__burger span{display:block;width:20px;height:2px;background:var(--text,#F0EDF7);border-radius:2px;transition:transform .25s,opacity .25s}
+    .snav__burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .snav__burger.open span:nth-child(2){opacity:0}
+    .snav__burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+    @media(max-width:819px){
+      .snav__burger{display:flex}
+      .snav__menu{position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:var(--surface,#0A0A12);border-bottom:1px solid var(--border,#1a1a30);padding:6px 20px 16px;max-height:0;overflow:hidden;opacity:0;pointer-events:none;transition:max-height .3s ease,opacity .2s ease;box-shadow:0 18px 40px rgba(0,0,0,.5)}
+      .snav__menu.open{max-height:85vh;opacity:1;pointer-events:auto}
+      .snav__menu a{padding:15px 4px;font-size:1rem;border-bottom:1px solid var(--border,#1a1a30)}
+      .snav__menu a:last-child{border-bottom:none}
+      .snav__cta{margin-top:14px;text-align:center;padding:15px;font-size:0.98rem;border-radius:9px}
+    }
+    </style>
+    <nav class="snav">
+      <a href="/" class="snav__logo">Sec<span>urva</span></a>
+      <button class="snav__burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="snav-menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="snav__menu" id="snav-menu">
+        <a href="/#scanner">Scan</a>
+        <a href="/snapshot">Snapshot</a>
+        <a href="/vendor-check">Vendors</a>
+        <a href="/research/">Research</a>
+        <a href="/mcp-top-10/">MCP Top 10</a>
+        <a href="/research/disclosures">Disclosures</a>
+        <a href="/blog/">Blog</a>
+        <a href="/book" class="snav__cta">Free security review</a>
+      </div>
     </nav>
+    <script>
+    (function(){
+      var b=document.querySelector('.snav__burger'), m=document.getElementById('snav-menu');
+      if(!b||!m)return;
+      function close(){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');b.setAttribute('aria-label','Open menu');}
+      b.addEventListener('click',function(){
+        var open=m.classList.toggle('open');b.classList.toggle('open',open);
+        b.setAttribute('aria-expanded',open?'true':'false');
+        b.setAttribute('aria-label',open?'Close menu':'Open menu');
+      });
+      m.addEventListener('click',function(e){if(e.target.tagName==='A')close();});
+    })();
+    </script>
 
     <header class="hero">
-        <div class="hero-tag">FREE INTRO CALL</div>
-        <h1>Book a call with <span>Securva</span></h1>
-        <p class="lead">A free 20-minute call to talk through your security or NDPA compliance needs. No pressure, no obligation - we will tell you straight whether we can help and what it would take.</p>
+        <div class="hero-tag">FREE SECURITY REVIEW</div>
+        <h1>Get a free <span>security review</span></h1>
+        <p class="lead">Send us your details and we will email you back a written assessment of your biggest security and NDPA compliance gaps - plus a quote if you want us to fix them. No call required, no pressure.</p>
         <div class="benefits">
-            <div class="benefit"><span class="benefit-check">+</span><span>A clear read on where your biggest risks are</span></div>
+            <div class="benefit"><span class="benefit-check">+</span><span>A written read on where your biggest risks are</span></div>
             <div class="benefit"><span class="benefit-check">+</span><span>Plain-English next steps, whether or not you hire us</span></div>
-            <div class="benefit"><span class="benefit-check">+</span><span>NDPA compliance questions answered directly</span></div>
+            <div class="benefit"><span class="benefit-check">+</span><span>NDPA compliance gaps flagged directly</span></div>
             <div class="benefit"><span class="benefit-check">+</span><span>A scoped quote if there is a fit</span></div>
         </div>
     </header>
@@ -129,11 +171,11 @@
     <section class="container">
         <div class="form-card">
             <h2>Tell us what you need</h2>
-            <p class="form-intro">Fill this in and we will reach out by email to set a time that works. This is an intake form - we schedule the call with you directly, not an automatic calendar booking.</p>
+            <p class="form-intro">Fill this in and we will email you a written assessment and a quote, usually within a couple of working days. This is an intake form - you get a written response by email, not a live calendar booking.</p>
             <form id="book-form" action="https://api.web3forms.com/submit" method="POST">
                 <input type="hidden" name="access_key" value="098e89e5-22db-4cde-92b4-c1ebd8125940">
-                <input type="hidden" name="subject" value="Securva - New Book-a-Call request">
-                <input type="hidden" name="from_name" value="Securva Book-a-Call">
+                <input type="hidden" name="subject" value="Securva - Free security review request">
+                <input type="hidden" name="from_name" value="Securva Free Security Review">
                 <!-- Honeypot: bots fill this, humans never see it -->
                 <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
 
@@ -164,24 +206,24 @@
                     <textarea id="details" name="details" placeholder="What are you trying to solve? Any deadline or context helps."></textarea>
                 </div>
                 <div class="field">
-                    <label for="besttime">Best time to reach you <span class="opt">(optional)</span></label>
-                    <input type="text" id="besttime" name="best_time" placeholder="e.g. weekday mornings, WAT">
+                    <label for="prefer">Prefer to talk? <span class="opt">(optional)</span></label>
+                    <input type="text" id="prefer" name="prefer_to_talk" placeholder="Mention it here and we will set up a call instead.">
                 </div>
 
-                <button type="submit" class="submit-btn" id="submit-btn">Request my call</button>
-                <p class="small">We use your details only to schedule and prepare for the call. NDPC compliant. No spam.</p>
+                <button type="submit" class="submit-btn" id="submit-btn">Get my free review</button>
+                <p class="small">We use your details only to prepare your review and reply. NDPC compliant. No spam.</p>
             </form>
-            <div id="form-success" class="form-success">Thanks - we have your request. Kingsley will reach out by email shortly to set a time. If it is urgent, message us on WhatsApp below.</div>
+            <div id="form-success" class="form-success">Thanks - we have your details. Kingsley will email you a written security review and a quote shortly. If it is urgent, message us on WhatsApp below.</div>
             <div id="form-error" class="form-error">Something went wrong sending that. Please email <a href="mailto:hello@securva.net">hello@securva.net</a> or use WhatsApp below.</div>
         </div>
     </section>
 
-    <p class="alt-contact">Prefer to skip the form? Message us on <a href="https://wa.me/2349044526924?text=Hi%20Securva!%20I%27d%20like%20to%20book%20an%20intro%20call." target="_blank" rel="noopener">WhatsApp</a> or email <a href="mailto:hello@securva.net">hello@securva.net</a>.</p>
+    <p class="alt-contact">Prefer to skip the form? Message us on <a href="https://wa.me/2349044526924?text=Hi%20Securva!%20I%27d%20like%20a%20free%20security%20review." target="_blank" rel="noopener">WhatsApp</a> or email <a href="mailto:hello@securva.net">hello@securva.net</a>.</p>
 
     <section class="container">
         <div class="who">
             <h3>Who you are talking to</h3>
-            <p>Securva is built by the team at BlessedOps Group. Your call is with Kingsley Olukanni, who runs our security research and client work - not a sales rep reading a script.</p>
+            <p>Securva is built by the team at BlessedOps Group. Your review is written by Kingsley Olukanni, who runs our security research and client work - not a sales rep reading a script.</p>
         </div>
     </section>
 
@@ -220,12 +262,12 @@
                         success.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     } else {
                         btn.disabled = false;
-                        btn.textContent = 'Request my call';
+                        btn.textContent = 'Get my free review';
                         errorBox.classList.add('show');
                     }
                 }).catch(function(){
                     btn.disabled = false;
-                    btn.textContent = 'Request my call';
+                    btn.textContent = 'Get my free review';
                     errorBox.classList.add('show');
                 });
             });

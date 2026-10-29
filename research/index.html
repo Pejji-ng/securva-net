@@ -166,16 +166,59 @@
 </script>
 </head>
 <body>
-    <nav class="nav">
-        <a href="/" class="nav-logo">Sec<span>urva</span></a>
-        <div class="nav-links">
-            <a href="/#scanner">Scan</a>
-            <a href="/snapshot">Snapshot</a>
-            <a href="/research/" class="active">Research</a>
-            <a href="/research/disclosures">Disclosures</a>
-            <a href="/blog">Blog</a>
-        </div>
+    <style>
+    .snav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 22px;border-bottom:1px solid var(--border,#1a1a30);background:var(--bg,#030308);position:relative;z-index:60;font-family:var(--font,'Cabinet Grotesk',system-ui,sans-serif)}
+    .snav__logo{font-weight:900;font-size:1.3rem;color:var(--text,#F0EDF7);text-decoration:none;letter-spacing:-0.02em;flex-shrink:0;line-height:1}
+    .snav__logo span{color:var(--accent,#7B68EE)}
+    .snav__logo:hover{text-decoration:none}
+    .snav__menu{display:flex;align-items:center;gap:15px}
+    .snav__menu a{white-space:nowrap;color:var(--muted,#6a6680);text-decoration:none;font-size:0.8rem;font-weight:500;transition:color .2s}
+    .snav__menu a:hover{color:var(--text,#F0EDF7);text-decoration:none}
+    .snav__cta{background:var(--accent,#7B68EE);color:#fff;padding:9px 15px;border-radius:9px;font-weight:700;font-size:0.78rem;white-space:nowrap}
+    .snav__cta:hover{opacity:.9;color:#fff}
+    .snav__burger{display:none;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:42px;height:42px;background:transparent;border:1px solid var(--border,#1a1a30);border-radius:9px;cursor:pointer;padding:0;flex-shrink:0}
+    .snav__burger span{display:block;width:20px;height:2px;background:var(--text,#F0EDF7);border-radius:2px;transition:transform .25s,opacity .25s}
+    .snav__burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .snav__burger.open span:nth-child(2){opacity:0}
+    .snav__burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+    @media(max-width:819px){
+      .snav__burger{display:flex}
+      .snav__menu{position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:var(--surface,#0A0A12);border-bottom:1px solid var(--border,#1a1a30);padding:6px 20px 16px;max-height:0;overflow:hidden;opacity:0;pointer-events:none;transition:max-height .3s ease,opacity .2s ease;box-shadow:0 18px 40px rgba(0,0,0,.5)}
+      .snav__menu.open{max-height:85vh;opacity:1;pointer-events:auto}
+      .snav__menu a{padding:15px 4px;font-size:1rem;border-bottom:1px solid var(--border,#1a1a30)}
+      .snav__menu a:last-child{border-bottom:none}
+      .snav__cta{margin-top:14px;text-align:center;padding:15px;font-size:0.98rem;border-radius:9px}
+    }
+    </style>
+    <nav class="snav">
+      <a href="/" class="snav__logo">Sec<span>urva</span></a>
+      <button class="snav__burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="snav-menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="snav__menu" id="snav-menu">
+        <a href="/#scanner">Scan</a>
+        <a href="/snapshot">Snapshot</a>
+        <a href="/vendor-check">Vendors</a>
+        <a href="/research/">Research</a>
+        <a href="/mcp-top-10/">MCP Top 10</a>
+        <a href="/research/disclosures">Disclosures</a>
+        <a href="/blog/">Blog</a>
+        <a href="/book" class="snav__cta">Free security review</a>
+      </div>
     </nav>
+    <script>
+    (function(){
+      var b=document.querySelector('.snav__burger'), m=document.getElementById('snav-menu');
+      if(!b||!m)return;
+      function close(){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');b.setAttribute('aria-label','Open menu');}
+      b.addEventListener('click',function(){
+        var open=m.classList.toggle('open');b.classList.toggle('open',open);
+        b.setAttribute('aria-expanded',open?'true':'false');
+        b.setAttribute('aria-label',open?'Close menu':'Open menu');
+      });
+      m.addEventListener('click',function(e){if(e.target.tagName==='A')close();});
+    })();
+    </script>
 
     <div class="container">
         <div class="hero-label">Ongoing infrastructure research</div>
@@ -461,7 +504,7 @@
         <div class="methodology-note">
             <p><strong>What we do:</strong> DNS enumeration (Amass + DNSX + crt.sh), live-host probing (httpx), HSTS + security-header coverage analysis (per-host), legacy-stack fingerprinting (ASP.NET / IIS version detection from response signatures), ASN ownership mapping, sector classification.</p>
             <p><strong>What we don't do:</strong> exploitation, authenticated scanning, internal-network probing, data extraction, or any form of active intrusion. Everything on this page is observable from a non-privileged outside position - the same position a potential attacker has on day one.</p>
-            <p><strong>Cadence:</strong> portal refreshes monthly. Methodology details in the <a href="/blog/nigerian-attack-surface-2026-04.html" style="color:var(--accent)">companion blog post</a>. Quarterly deep-dive PDF reports start Q2 2026.</p>
+            <p><strong>Cadence:</strong> portal refreshes monthly. Methodology details in the <a href="/blog/nigerian-attack-surface-2026-04.html" style="color:var(--accent)">companion blog post</a>. Quarterly deep-dive PDF reports available on request.</p>
         </div>
 
         <h2>What the data means for you</h2>
@@ -470,7 +513,7 @@
         <p>Your organization is on the list. The aggregate is public; the per-org detail is not. If you want the full 42-checkpoint scan for your organization - HSTS coverage per host, legacy-stack list, exposed-subdomain map, NDPA 2023 compliance gaps, remediation roadmap - that's our <a href="/snapshot" style="color:var(--accent)">Securva Snapshot</a> product. Starts at $10 USD.</p>
 
         <h3>If you're a journalist, researcher, or regulator</h3>
-        <p>The data is free to cite. Email <a href="mailto:hello@securva.net" style="color:var(--accent)">hello@securva.net</a> with the specific sector / time window you need and we'll send the backing data. We're also drafting a quarterly "State of Nigerian Infrastructure Security" PDF report - first edition lands Q2 2026. Email to be on the notification list.</p>
+        <p>The data is free to cite. Email <a href="mailto:hello@securva.net" style="color:var(--accent)">hello@securva.net</a> with the specific sector / time window you need and we'll send the backing data. We're also preparing a quarterly "State of Nigerian Infrastructure Security" PDF report. Email to be on the notification list.</p>
 
         <h3>If you're one of the orgs above and want to understand what you actually look like</h3>
         <p>Same email. We do coordinated first-party disclosure for free on request - no public shaming, no media, no monetization of the finding. Rotation window standard 14 days.</p>

@@ -67,10 +67,59 @@
 </script>
 </head>
 <body>
-    <nav class="nav">
-        <a href="/" class="nav-logo">Sec<span>urva</span></a>
-        <a href="/" class="back">&larr; Back to scanner</a>
+    <style>
+    .snav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 22px;border-bottom:1px solid var(--border,#1a1a30);background:var(--bg,#030308);position:relative;z-index:60;font-family:var(--font,'Cabinet Grotesk',system-ui,sans-serif)}
+    .snav__logo{font-weight:900;font-size:1.3rem;color:var(--text,#F0EDF7);text-decoration:none;letter-spacing:-0.02em;flex-shrink:0;line-height:1}
+    .snav__logo span{color:var(--accent,#7B68EE)}
+    .snav__logo:hover{text-decoration:none}
+    .snav__menu{display:flex;align-items:center;gap:15px}
+    .snav__menu a{white-space:nowrap;color:var(--muted,#6a6680);text-decoration:none;font-size:0.8rem;font-weight:500;transition:color .2s}
+    .snav__menu a:hover{color:var(--text,#F0EDF7);text-decoration:none}
+    .snav__cta{background:var(--accent,#7B68EE);color:#fff;padding:9px 15px;border-radius:9px;font-weight:700;font-size:0.78rem;white-space:nowrap}
+    .snav__cta:hover{opacity:.9;color:#fff}
+    .snav__burger{display:none;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:42px;height:42px;background:transparent;border:1px solid var(--border,#1a1a30);border-radius:9px;cursor:pointer;padding:0;flex-shrink:0}
+    .snav__burger span{display:block;width:20px;height:2px;background:var(--text,#F0EDF7);border-radius:2px;transition:transform .25s,opacity .25s}
+    .snav__burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .snav__burger.open span:nth-child(2){opacity:0}
+    .snav__burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+    @media(max-width:819px){
+      .snav__burger{display:flex}
+      .snav__menu{position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:var(--surface,#0A0A12);border-bottom:1px solid var(--border,#1a1a30);padding:6px 20px 16px;max-height:0;overflow:hidden;opacity:0;pointer-events:none;transition:max-height .3s ease,opacity .2s ease;box-shadow:0 18px 40px rgba(0,0,0,.5)}
+      .snav__menu.open{max-height:85vh;opacity:1;pointer-events:auto}
+      .snav__menu a{padding:15px 4px;font-size:1rem;border-bottom:1px solid var(--border,#1a1a30)}
+      .snav__menu a:last-child{border-bottom:none}
+      .snav__cta{margin-top:14px;text-align:center;padding:15px;font-size:0.98rem;border-radius:9px}
+    }
+    </style>
+    <nav class="snav">
+      <a href="/" class="snav__logo">Sec<span>urva</span></a>
+      <button class="snav__burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="snav-menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="snav__menu" id="snav-menu">
+        <a href="/#scanner">Scan</a>
+        <a href="/snapshot">Snapshot</a>
+        <a href="/vendor-check">Vendors</a>
+        <a href="/research/">Research</a>
+        <a href="/mcp-top-10/">MCP Top 10</a>
+        <a href="/research/disclosures">Disclosures</a>
+        <a href="/blog/">Blog</a>
+        <a href="/book" class="snav__cta">Free security review</a>
+      </div>
     </nav>
+    <script>
+    (function(){
+      var b=document.querySelector('.snav__burger'), m=document.getElementById('snav-menu');
+      if(!b||!m)return;
+      function close(){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');b.setAttribute('aria-label','Open menu');}
+      b.addEventListener('click',function(){
+        var open=m.classList.toggle('open');b.classList.toggle('open',open);
+        b.setAttribute('aria-expanded',open?'true':'false');
+        b.setAttribute('aria-label',open?'Close menu':'Open menu');
+      });
+      m.addEventListener('click',function(e){if(e.target.tagName==='A')close();});
+    })();
+    </script>
     <article>
         <div class="tag">Research</div>
         <h1>We Scanned 20 Nigerian Enterprises. 64% Lack Basic Security Headers.</h1>
